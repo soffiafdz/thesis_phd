@@ -1,0 +1,13 @@
+plots/
+data/*.mnc
+data/qc_db.sqlite3
+data/volumes
+data/regist99
+data/raw/adni
+data/raw/hcp
+data/raw/nacc
+data/raw/ppmi
+data/raw/preventad
+data/derivatives
+data/raw/deprecated
+scripts/deprecated
