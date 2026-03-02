@@ -1,0 +1,89 @@
+# Data and outputs (not distributed; see README for data access)
+# .gitkeep files are tracked to preserve directory structure on clone.
+# lavaan model definitions (*.txt) are source files and ARE tracked.
+data/*
+!data/**/
+!data/**/.gitkeep
+models/fits/
+models/results/
+models/diagnostics/
+!models/lavaan/
+outputs/*
+!outputs/**/
+!outputs/**/.gitkeep
+logs/*
+!logs/**/
+!logs/**/.gitkeep
+
+# R session files
+.Rhistory
+.Rapp.history
+.RData
+.RDataTmp
+.Ruserdata
+.Renviron
+
+# renv library cache (only renv.lock is tracked)
+renv/library/
+renv/staging/
+renv/cellar/
+renv/sandbox/
+renv/python/
+
+# Quarto / knitr build artifacts
+.quarto/
+_freeze/
+*_cache/
+*_files/
+*.knit.md
+*.utf8.md
+
+# LaTeX intermediates (but not source templates like title.tex)
+*.aux
+*.log
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+
+# Rendered documents (rebuild from source)
+*.pdf
+*.html
+*.docx
+*.rtf
+
+# LaTeX output from gt/quarto (but not source templates like title.tex)
+outputs/**/*.tex
+
+# R CMD build / check
+/*.tar.gz
+/*.Rcheck/
+
+# RStudio
+.Rproj.user/
+rsconnect/
+
+# Plots generated at console
+Rplots.pdf
+
+# Conda environment (only environment.yml is tracked)
+.conda/
+__pycache__/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Misc
+*.otter.*
+.envrc
+.lintr
