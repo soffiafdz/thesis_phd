@@ -1,0 +1,1482 @@
+---
+title: "QRATER: a collaborative and centralized imaging quality control web-based application"
+author:
+  - name: "Sofia Fernandez-Lozano, M.Sc."
+    affiliations:
+      - ref: neuro
+      - ref: bic1
+    corresponding: true
+  - name: "Mahsa Dadar, Ph.D."
+    affiliations:
+      - ref: douglas
+      - ref: psych
+  - name: "Cassandra Morrison, Ph.D."
+    affiliations:
+      - ref: neuro
+      - ref: bic2
+  - name: "Ana Manera, M.D."
+    affiliations:
+      - ref: neuro
+      - ref: bic2
+  - name: "Daniel Andrews, M.Sc."
+    affiliations:
+      - ref: bic2
+      - ref: biomed
+  - name: "Reza Rajabli, M.Sc."
+    affiliations:
+      - ref: bic2
+      - ref: biomed
+  - name: "Victoria Madge, M.Sc."
+    affiliations:
+      - ref: bic2
+      - ref: biomed
+  - name: "Etienne St-Onge, Ph.D."
+    affiliations:
+      - ref: neuro
+      - ref: bic2
+  - name: "Neda Shaffie, M.Sc."
+    affiliations:
+      - ref: bic2
+      - ref: biomed
+  - name: "Alexandra Livadas, B.S."
+    affiliations:
+      - ref: neuro
+      - ref: bic2
+  - name: "Vladimir Fonov, Ph.D."
+    affiliations:
+      - ref: neuro
+      - ref: bic2
+  - name: "D. Louis Collins, Ph.D."
+    affiliations:
+      - ref: neuro
+      - ref: bic2
+      - ref: biomed
+  - name: "Alzheimer's Disease Neuroimaging Initiative (ADNI)"
+affiliations:
+  - id: neuro
+    name: "Department of Neurology and Neurosurgery, McGill University"
+  - id: bic1
+    name: "McConnel Brain Imaging Centre, Montreal Neurological Institute and Hospital"
+  - id: douglas
+    name: "Douglas Mental Health University Institute"
+  - id: psych
+    name: "Department of Psychiatry, McGill University"
+  - id: bic2
+    name: "McConnell Brain Imaging Centre, Montreal Neurological Institute and Hospital"
+  - id: biomed
+    name: "Department of Biomedical Engineering, McGill University"
+date: "2024"
+bibliography: references.bib
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-summary: "Show code"
+    self-contained: true
+    theme: cosmo
+  pdf:
+    toc: false
+    number-sections: true
+    documentclass: article
+    papersize: letter
+    geometry:
+      - margin=1in
+    fontsize: 11pt
+    include-in-header:
+      text: |
+        \usepackage{float}
+        \floatplacement{figure}{H}
+        \usepackage{longtable}
+        \usepackage{booktabs}
+        \usepackage{array}
+        \usepackage{makecell}
+        \setlength{\LTleft}{\fill}
+        \setlength{\LTright}{\fill}
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: true
+keywords: ["Quality control", "MRI", "Linear registration", "Quality assessment"]
+abstract: |
+  Quality control (QC) is an important part of all scientific analyses, including neuroscience. With manual curation considered the gold standard, there remains a lack of available tools that make manual neuroimaging QC accessible, fast, and easy. In this article we present Qrater, a containerized web-based Python application that enables viewing and rating any type of image for QC purposes. Qrater functionalities allow collaboration between various raters on the same dataset which can facilitate completing large QC tasks. Qrater was used to evaluate QC rater performance on three different magnetic resonance (MR) image QC tasks by a group of raters having different amounts of experience. The tasks included QC of raw MR images (10,196 images), QC of linear registration to a standard template (10,196 images), and QC of skull segmentation (6,968 images). We measured the proportion of failed images, average rating time per image, intra- and inter-rater agreement, as well as the comparison against QC using a conventional method. The median time spent rating per image differed significantly between raters (depending on rater experience) in each of the three QC tasks. Evaluating raw MR images was slightly faster using Qrater than an image viewer (expert: 99 vs. 90 images in 63 min; trainee 99 vs 79 images in 98 min). Reviewing the linear registration using Qrater was twice faster for the expert (99 vs. 43 images in 36 min) and three times faster for the trainee (99 vs. 30 images in 37 min). The greatest difference in rating speed resulted from the skull segmentation task where the expert took a full minute to inspect the volume on a slice-by-slice basis compared to just 3 s using Qrater. Rating agreement also depended on the experience of the raters and the task at hand: trained raters' inter-rater agreements with the expert's gold standard were moderate for both raw images (Fleiss' Kappa = 0.44) and linear registration (Fleiss' Kappa = 0.56); the experts' inter-rater agreement of the skull segmentation task was excellent (Cohen's Kappa = 0.83). These results demonstrate that Qrater is a useful asset for QC tasks that rely on manual evaluation of QC images.
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Load required packages
+library(here)
+library(data.table)
+library(readr)
+library(stringr)
+library(lubridate)
+library(hms)
+library(ggplot2)
+library(ggforce)
+library(cowplot)
+library(irr)
+library(gt)
+library(knitr)
+library(rstatix)
+
+# Set default options
+knitr::opts_chunk$set(
+  fig.align = "center",
+  out.width = "100%",
+  dpi = 300
+)
+
+# --- gt table styling ---
+style_manuscript_table <- function(gt_tbl, table_type = "main") {
+  if (table_type == "main") {
+    font_size <- "10pt"
+  } else {
+    font_size <- "9pt"
+  }
+  gt_tbl <- gt_tbl |>
+    sub_missing(missing_text = "-") |>
+    tab_options(
+      table.font.size = font_size,
+      column_labels.font.size = font_size,
+      column_labels.font.weight = "bold",
+      latex.use_longtable = TRUE
+    ) |>
+    cols_align(align = "right", columns = everything())
+  # Left-align the first visible column (named "label" in gtsummary tables)
+  col_names <- gt_tbl[["_boxhead"]]$var[gt_tbl[["_boxhead"]]$type == "default"]
+  gt_tbl |> cols_align(align = "left", columns = col_names[1])
+}
+
+
+
+```
+
+# Introduction
+
+The first step in any kind of neuroscientific analysis is data curation. Completing quality assessment (QA) and quality control (QC), that is, ensuring the data was acquired correctly and that the quality of the data meets established standards set for the specific project is essential for reliable analysis. Specifically in neuroimaging, motion artifacts introduced in magnetic resonance imaging (MRI) acquisition can compromise the results in structural [@alexander2016subtle; @ducharme2016trajectories; @gilmore2021variations], diffusion [@yendiki2014spurious], and functional [@power2012spurious] analyses. While the effects of some acquisition artifacts can be minimized to some extent in preprocessing (e.g., intensity non-uniformity or radio frequency inhomogeneity), other artifacts like ringing patterns induced by motion or signal-loss might not be fixable. Such cases need to be identified and excluded from the analysis.
+
+The visual inspection of data for the assessment of data quality is a painstaking and time-consuming process that is susceptible to inter-rater and test-retest variability. One of the first initiatives to address this problem was the Quality Assurance Protocol (QAP) by the International Neuroimaging Data-sharing Initiative (INDI) [@shehzad2015preprocessed]. Aiming to identify potential sources of artifacts, noise and bias, the QAP comprises several image-quality metrics (IQMs) for structural and functional MRI data. Several automatic and semi-automatic QC tools have been developed for the assessment of MRI data. While automatic tools rely on algorithms and predefined criteria to automatically classify images based on their quality, semi-automatic tools combine similar algorithmic analysis with human inspection to arrive at a final decision. Pizarro et al. obtained 80% accuracy using a support vector machine algorithm to automatically categorize the structural 3D-MRIs into "usable" or "not-usable" after being trained on a set of volumetric and artifact-based IQMs combined with expert visual inspection as the ground-truth [@pizarro2016automated]. Building upon the IQMs proposed in the QAP, MRIQC [@esteban2017mriqc] is a semi-automatic quality assessment tool that automatically extracts 64 IQMs from a T1-weighted (T1w) or T2-weighted (T2w) structural image and, from these metrics, yield a binary classification of the scan's quality. MRIQC also includes a system of visual reports that aids manual investigation. The reports and their "Rating widget" can be used for detailed evaluation of the images flagged by the classifier or the identification of images that deviate from the group distributions of IQMs. Garcia et al. trained a Deep Learning model from a detailed manual QC-ed dataset to detect structural MRI artifacts [@garcia2022brainqcnet]. Their network, BrainQCNet, showed good performance in identifying good against poor quality scans while also reducing the computational resources required compared to other tools (1 minute to process a scan with BrainQCNet using GPU).
+
+QA/QC does not apply only to the inspection of raw images; quality must also be verified after different processing steps such as image registration or tissue segmentation [@gedamu2008automated; @niso2022open; @provins2023quality]. Neuroimaging tools often have implemented features that aid the QA of their processing results: CAT12 offers the quantification of essential image parameters and a visualization tool that can be used to identify outliers [@gaser2022cat]; analysis tools from FSL [@jenkinson2012fsl] like FAST, SIENA, and FEAT produce HTML analysis reports for user inspection; FreeSurfer [@reuter2012within] has the QA Tools script that can be used to verify all the steps in the FreeSurfer recon-all stream. FreeSurfer also produces the Euler number, a quantitative measure of the topological complexity of the reconstructed surface that out-performed other IQMs in identifying images deemed "unusable" by human raters [@rosen2018quantitative]. Qoala-T is a supervised-learning tool that works with Freesurfer's segmentation and produces a single measure of scan quality ranging from 0 to 100 [@klapwijk2019qoala]. For the QC of image-to-template registration, DARQ [@fonov2022darq] and RegQCNET [@senneville2020regqcnet], two deep learning tools trained on expert manual QC, have proved to be effective in the identification of misregistered images based on the estimated distance to the stereotaxic space.
+
+While automatic and semi-automatic tools reduce the significant time burden of QC in large datasets, most are designed specifically for a particular task (e.g., evaluating image quality or image registration) or imaging modality (e.g., diffusion or functional MRI), and they do not fully replace the need for visual inspection since some form of human evaluation is still needed to rate the uncertain results. For these cases and for the tasks where an automatic tool is not available (e.g., ROI segmentations performed outside FreeSurfer, inspection for incidental findings), manual curation is still the most reliable approach to QC [@monereo2021quality].
+
+QA/QC protocols for the manual inspection of structural and functional MRI data have also been developed using a variety of tools like Freesurfer [@backhausen2016quality], pyfMRIQC [@williams2023inter] and MRIQC together with fMRIprep [@provins2023quality]. Even with the most detailed protocols, the usual strategy when doing visual inspection involves opening the QA tool or the generated report and logging the assessment in a separate file, conventionally a spreadsheet, repeating the process for each case to evaluate. When collaborating, individual QC files from each reviewer have to then be shared and merged. This process is both time-inefficient and difficult to do in a collaborative way.
+
+VisualQC is a medical imaging library designed to assist the manual QA/QC of a variety of structural and functional MRI tasks [@raamana2023visualqc]. It was developed to assess raw scan quality, volumetric segmentation and cortical parcellation and spatial alignment. Another tool that addresses these processing steps is Mindcontrol [@keshavan2018mindcontrol], a web-based dashboard that permits the collaborative assessment of brain segmentation QC in real-time. Recently, experts have turned towards citizen science as a viable resource. Benhajali et al. [@benhajali2020standardized] designed and validated a brain registration QC protocol that achieved good reliability by aggregating the ratings of non-experts recruited by a crowdsourcing platform. Similarly, Keshavan et al. used non-experts recruited online to amplify expertly labeled data for training a Deep Learning model that could predict data quality as well as specialized algorithms [@keshavan2019combining].
+
+In this paper, we introduce Qrater (Quality rater), a web-based Python application to aid QC by visual inspection. Qrater was designed to enable multiple users to simultaneously perform visual inspection of images in large databases from both local and remote computers quickly and easily.
+
+# Methods
+
+We present Qrater, a novel QA/QC tool for image data. We evaluated its performance in a series of tasks encompassing three distinct and common steps in the processing of MRI data: QC of raw MRIs, QC of linear registration of MRIs, and QC of tissue segmentation. A summary schema of the three QC tasks done in this project is presented in @fig-flowchart.
+
+```{r}
+#| label: fig-flowchart
+#| fig-cap: "Flowchart summarizing the QC tasks for raw MRI, linear registration and skull segmentation."
+#| out-width: "80%"
+
+knitr::include_graphics(here("plots/qrater_diagram.png"), error = FALSE) |>
+  suppressWarnings()
+```
+
+## Qrater
+
+Built with Flask and managed with Docker, Qrater is a visual inspection tool from which the user can view, search, and inspect image files, record comments or notes in a user-friendly interface through the web browser. It includes image enhancement features that facilitate and speed up the visual inspection process including a magnifying glass, built-in image controls for brightness, saturation, and contrast, and key-bindings for navigation and rating (@fig-interface). All these features were implemented with JavaScript and remain consistent across all modern browsers. Its integrated WSGI HTTP server, MySQL database and Redis backend-server enables simultaneous rating by multiple users on datasets of tens of thousands of images without bottlenecks or latency issues. A detailed technical report describing Qrater's architecture, deployment, and main features is included in the supplementary materials (S1).
+
+```{r}
+#| label: fig-interface
+#| fig-cap: "Overview of the Qrater interface as viewed in the browser. A) Shows a user's rating window for an example linear registration QC task with transverse, sagittal, and coronal perspectives of slices in an MRI volume. Colour-coded ratings from other users are indicated above the image viewer. A magnifying glass function allows users to zoom in on the images. A comment box and predefined ratings facilitate rating and description. B) The datasets are organized in cards indicating the number of rated images. C) Shows the tabular list of images from an open dataset in which column visibility can be toggled. A search field on the top right helps users quickly find specific images. D) Shows key bindings for faster rating. E) Shows sliders to adjust brightness, contrast, and saturation to facilitate visual inspection. Note that these sliders do not alter the image files."
+#| out-width: "100%"
+
+knitr::include_graphics(here("plots/qraterGUI_2.png"), error = FALSE) |>
+  suppressWarnings()
+```
+
+Whether installed locally on a personal computer or in a High-Performing Computer (HPC) cluster, Qrater can be accessed remotely by multiple users simultaneously using a secure login procedure (e.g., SSH). Qrater works with personal user credentials to protect data and ease collaboration. Various users can visually inspect the same images without interfering with each other---up to eight users simultaneously rating the same dataset in our testing. Users can view the recorded QC rating given by others within the image viewer or on the searchable built-in database. In contrast, when working on private datasets, it is possible to restrict the visibility of the ratings to none, one, or more collaborators.
+
+Qrater works with any kind of generated 2D image in any format supported by the web browser (e.g. JPEG or PNG) and thus it can be used for the QA/QC of raw structural, functional or diffusion MRI and PET or any processing step from which QC images or reports can be produced. This generalizability makes it highly interoperable, as it can easily integrate with other automatic or semi-automatic tools to streamline QA workflows.
+
+## Raters
+
+Eleven raters, including two experts and nine trainees, participated in at least one of the tasks. The two imaging experts were highly experienced in MRI data processing and QC (Expert-1: 30+ years; Expert-2: 10+ years). All raters were members of the same research team and were familiar with the data and processing steps involved in the project.
+
+The raters performed their QC remotely on their own personal computers, thus the hardware used was different for each rater. Raters could set the brightness and contrast as they saw fit, either by adjusting their monitor or using the built-in image controls.
+
+## Datasets
+
+The MRI data used in the following experiments came from five open datasets:
+
+1) **NACC**: The Uniform dataset from the National Alzheimer's Coordinating Center (NACC) contains longitudinal data collected from the 29 Alzheimer's Disease Centers funded by the National Institute of Aging with cognitive status ranging from cognitively normal to mild cognitive impairment to dementia. The Biomarker and Imaging dataset is a subset of the Uniform Data Set participants for which 1.5T and 3T MRI and biomarker data in the form of CSF values for aBeta, P-tau and T-tau are available [@beekly2007national]. While there was an internal NACC QA committee and each center had an appointed QC officer responsible for ensuring data quality before submission, we were unable to find QA/QC process details specific for the imaging data.
+
+2) **ADNI**: The Alzheimer's Disease Neuroimaging Initiative (ADNI), led by Micheal W. Weiner, MD, is a multicenter and multi-scanner study of the progression of Alzheimer's disease (AD). Launched in 2003 as a public-private partnership, ADNI intended to test whether MRI, clinical assessments and other biomarkers can be combined to accurately measure the progression of the disease [@mueller2005alzheimers] (www.adni-info.org). ADNI data includes 1.5T and 3T scans of normal controls, individuals with mild cognitive impairment or AD patients. QC is done at the Mayo Clinic on two levels: ensuring adherence to the protocol parameters, and series-specific imaging quality. Scan quality is graded by trained raters following a 4-level scale: 1-3 are deemed acceptable and 4 as failure. We did not use this rating information in the experiments below.
+
+3) **PPMI**: The Parkinson Progression Marker Initiative (PPMI) is a public--private partnership funded by the Michael J. Fox Foundation for Parkinson's Research and other funding partners (www.ppmi-info.org/fundingpartners). PPMI is a multi-center and multi-scanner, observational and longitudinal study designed to identify Parkinson's disease biomarkers [@marek2011parkinson]. PPMI data includes 1.5T and 3T scans of normal controls and de novo Parkinson's patients. Imaging data undergoes quality inspection that includes de-identification of the participant's protected information, completeness of the image files, and adherence to the approved imaging protocol and parameters.
+
+4) **HCP**: The Human Connectome Project (HCP) is a large-scale project aimed at mapping the structural and functional connectivity of the healthy, adult human brain. HCP data comes from healthy adults [@vanessen2013wuminn]. All structural scans, FreeSurfer segmentations and surface outputs are manually viewed and their scan quality is rated by experienced raters. Brain anomalies are noted and further reviewed by a radiologist. As of release LS2.0, a subject QC measure is released that flags subjects and sessions with notable issues not severe enough to warrant exclusion. The possible issues include anatomical anomalies, surface imperfections, issues in the myelin map, FNIRT issues, and processing deviations done to improve processing results. We did not use this information in the experiments below.
+
+5) **PREVENT-AD**: The Pre-symptomatic Evaluation of Novel or Experimental Treatments for Alzheimer's Disease (PREVENT-AD, http://www.prevent-alzheimer.ca) aims to follow the clinical progression of healthy individuals with a parental history of AD dementia [@tremblay2021open]. A single rater performed visual QC of the raw anatomical images via de PREVENT-AD LORIS study interface [@das2012loris]; QC status and comments were saved directly in this interface but were not used in the experiments below.
+
+A summary table with the imaging parameters for these datasets is presented in @tbl-params.
+
+```{r}
+#| label: tbl-params
+#| tbl-cap: "Summary table of the open datasets used for the different QC tasks (Raw MRI, linear registration, and skull segmentation) and their imaging parameters. For the NACC dataset, a single imaging protocol is not available since it is a collection of scans from several AD centers."
+
+params <- fread(here("data/raw/databases_params.csv"))
+params <- params[Dataset != "Previous QC"]
+
+params |>
+  gt() |>
+  style_manuscript_table()
+```
+
+## Generated QC Images
+
+We generated a mosaic image using mincpik (from minctools v2.0, https://bic-mni.github.io/) in JPEG format for each volume to be inspected. For these images, 60 thumbnail sub-images of 256x256 pixels each were extracted from axial, sagittal, and coronal slices (20 thumbnails each) throughout the volume. The slices were selected to show representative views covering the brain from bottom to top (axial), left to right (sagittal), and back to front (coronal) for most general QC tasks. The 60 individual slices were concatenated in a single file of 2560x1536 pixels. Our anecdotal experience working with such mincpik generated images has shown that 60 images is sufficient for most whole brain QA tasks. Of course, custom QC images can be generated to facilitate specific QC/QA tasks.
+
+This image generation process was used for the three QC tasks. The mosaic images for the linear registration task contained the registered volume in standard space with the contours of the stereotaxic template overlaid in red. For the skull segmentation task, the skull voxels were labelled in red. Additionally, 2D projections of three perspectives of 3D renderings of the segmented skull were included alongside the MRI slices. An example of the images for each QC task is shown in supplementary material S2.
+
+## QC Training
+
+While not specific to Qrater, the team of experts designed a protocol and developed training material for the QC of raw MRI data, linear registration, and skull segmentation (available in the supplementary materials S3-S5). For raw MRI, the QC criteria focused on field-of-view, noise, motion, and intensity uniformity. For the linear registration, QC criteria was based on the one used by Dadar et al. [@dadar2018validation], which focused on symmetry, rotation, and scaling. A set of videos was created with instructions and examples of what artifacts to look for both tasks that the trainees could consult at any time. A set of transcripts of the videos extracted with summarize.tech are available as supplementary materials S6-8.
+
+All trainees were introduced to Qrater and given time to familiarize themselves with the application and the available features that could be used (e.g. zoom, brightness, keyboard shortcuts, etc.). There were instructional meetings before the start of each QC task where the experts explained the protocol in detail and follow-up meetings in which the experts answered questions arising during the task and the questionable cases were reviewed by the whole team.
+
+## Rating Agreement
+
+Intra- and inter-rater agreements between only two raters were assessed with Cohen's chance-corrected kappa coefficient [@landis1977measurement]. By accounting for agreement by chance, Cohen's kappa is stricter and yields lower values than the Sørensen-Dice coefficient often used to measure agreement in segmentations (e.g., for a Pass/Fail QC decision applied in a dataset of 100 images, if two raters agree on 75 of the images, Cohen's Kappa would be equal to 0.5, whereas Dice Kappa would be equal to 0.75). For the inter-rater agreement of groups we used Fleiss' Kappa, an extension of Cohen's Kappa for evaluating the agreement of three or more raters [@fleiss2003measurement]. Like Cohen's Kappa, Fleiss' Kappa measures the degree to which the seen agreement exceeds what would be expected by chance. For both Cohen's and Fleiss' Kappas, we labeled the agreement according to the following standard ranges of values: "Slight": 0.00-0.20; "Fair": 0.21-0.40; "Moderate": 0.41-0.60; "Substantial": 0.61-0.80; and "Excellent": 0.81-1.00 [@landis1977measurement].
+
+## Time Measurements
+
+Raters were not aware that their timing would be measured, and they were allowed to complete the tasks at their own pace. Every rating had a timestamp marking the date and time it was recorded. Timestamps in Qrater have a discretization of one second. We used the time difference of successive timestamps as an indirect measure of the time spent rating one image, including any action in-between like zooming-in or recording a comment. Gaps longer than 15 minutes were assumed to be time spent away from the task and thus discarded. The time to finish a QC task was then defined as the sum of the time spent rating all images.
+
+Due to the non-normal distribution of the timing data in all QC tasks (statistically significant Shapiro-Wilk tests), we employed medians and non-parametric tests for their analysis. Multiple analyses on the same QC experiment were corrected for multiple comparisons with the False Discovery Rate (FDR), using the Benjamini-Hochberg procedure. When relevant, both uncorrected and corrected p-values are reported.
+
+## QC with Qrater
+
+### Raw MR Images
+
+The first QC task consisted of evaluating the quality of raw MR images. First, we assessed the inter-rater variability agreement between a group of trainees and an expert with a set of 99 pre-selected cases from the NACC, balanced to include clear passes, clear failures, and borderline Pass/Fail data. We also measured the usability of Qrater for collectively rating a complete dataset by doing QC on all the ADNI data. Both datasets are described below.
+
+(Note that previous QC performed by the NACC and ADNI teams were not taken into account at any time during this task.)
+
+#### Balanced Dataset
+
+Expert-2 first pre-selected 338 cases from the NACC dataset with varying degrees of quality marked in a previous QC process which Expert-1 QCed without prior knowledge of the distribution of Passes and Fails. Based on both experts' ratings, Expert-2 selected the final 99 cases that would be evaluated by the trainees. The 99 selected cases included a balanced set of passing and failing images, i.e., the first 33 clear passes (agreed by both experts), the first 33 clear fails (agreed by both experts), and the first 33 borderline cases (where the two experts disagreed on the QC status). The images' names with identifying information were changed before inspection.
+
+Expert-1 reviewed the selected 99 images on two separate occasions using Qrater to estimate the intra-rater expert agreement. While Expert-1 was not blinded to the case identifiers between these two QC sessions, to minimize learning effects, the sessions were separated by a two-week delay. To arrive at a consensus ratings' gold-standard, Expert-1 reexamined the images that had a different QC status between these two sessions.
+
+The balanced dataset was loaded into 9 separate private datasets (i.e. datasets visible by only one rater) in Qrater to be evaluated by the trainees (Raters 1 to 9). None of the raters were informed of the Pass/Fail distribution of the cases until after all raters had completed the task. We measured the inter-rater agreement of the trainees and the expert's gold-standard. We compared the median time it took to rate a single image and the QC sessions' total times across raters and evaluated the time differences between "Pass" and "Fail" images using the Wilcoxon rank-sum test. Effect sizes were calculated using the Wilcoxon effect size r (Z statistic divided by the square root of the sample size). Finally, we examined if there was a relationship between the median time the trainees spent rating an image and the number of images agreed with Expert-1's gold standard using Spearman's rank correlation.
+
+#### ADNI Data
+
+We used Qrater to perform QC on the 10,196 raw 3D T1w brain MRIs available from the ADNI dataset (ADNI-1, ADNI-2, ADNI-3, and ADNI-GO). Expert-2 divided the generated mosaic images into eight separate private sub-datasets (n = ~1275 images) to be inspected and rated by eight raters: Expert-1 and Raters 1 to 7 (Rater-8 and Rater-9 did not participate). The images were not stratified by diagnostic group and there was no overlap between each rater's private sub-dataset.
+
+To retain as much data as possible the QC protocol for this portion only was slightly modified allowing raters to assign "Warning" to the cases containing artifacts that might be correctable in downstream processing steps or that would not interfere with specific analysis.
+
+We measured the median time spent rating a single image and the time taken to complete the exercise by each rater. Using the Kruskal-Wallis test by ranks, we also determined whether there was a difference in the median times per image across QC labels. The effect size for this difference was measured with eta squared (η²).
+
+### Linear Registration of MR Images
+
+The second QC task consisted of evaluating the usability of Qrater in assessing the quality of the linear registration of the minimally processed brain MRIs into stereotactic space, a common step in many preprocessing pipelines. Like the raw MRI task, QC was done on a subset of data representing a balanced proportion of passing and failing images and the complete data available from ADNI.
+
+All the linear registrations in this task were done using the Revised BestLinReg algorithm from the MRITOTAL technique [@dadar2018validation]. As standard space we utilized the MNI-ICBM152-2009c template [@fonov2011unbiased].
+
+#### Balanced Dataset
+
+Using the QC records from data analyzed in another project [@dadar2018validation], Expert-2 selected 99 cases from the ADNI, PPMI, HCP and PREVENT-AD databases randomly to build a balanced set of passing and failing images: 33 clear passes, 33 clear fails, and 33 borderline Pass/Fail cases. The latter were defined as datasets with prior QC status that differed between experts. Expert-1 inspected these selected images in two separate sessions separated by a two-week delay to estimate the expert intra-rater agreement. Expert-1 re-examined the images with differing QC status between the two sessions to obtain a consensus gold-standard.
+
+The balanced dataset was loaded in Qrater as private datasets to be evaluated by the trainees (Raters 1 to 8). None of the raters were informed of the Pass/Fail distribution of the cases until after all raters had completed the task. We measured the inter-rater agreement between the expert's gold standard and the trainees.
+
+We measured the median time spent rating a single image and the QC sessions' total times across all raters and evaluated the time differences between "Pass" and "Fail" images using the Wilcoxon rank-sum test and Wilcoxon effect size r. Finally, we examined if there was a relationship between the median time the trainees spent rating an image and the number of images agreed with Expert-1's gold standard using Spearman's rank correlation.
+
+#### ADNI Data
+
+Eight trainees (Raters 1 to 8) evaluated the linear registrations to standard stereotaxic space of the same 10,196 T1w brain MRIs from the ADNI dataset. Expert-2 randomly divided the mosaic QC images into separate datasets to be visually inspected and QC-ed as "Pass" or "Fail". We measured the median time spent rating a single image and the time taken to complete the exercise by each rater. We then compared the median time per image between "Pass" and "Fail" images using the Wilcoxon rank-sum test and Wilcoxon effect size r.
+
+### Skull Segmentation from MR Images
+
+Lastly, we used Qrater to examine the performance of the segmentation of the skull tissue from T1w head MRIs. Using an adapted version of the random forest BISON tissue classification pipeline [@dadar2021bison] trained with simulated MRI data and manual labels from Brainweb20 [@aubert2006twenty] to segment bone, we segmented the skull on a subset of the ADNI dataset.
+
+It was impossible to create a balanced dataset since this was the first time that a segmentation of this kind was QCed. For this reason, only the two experts participated in this task.
+
+#### ADNI Data
+
+Expert-2 performed QC on the complete output from the skull segmentation pipeline (N = 6,968). A random subsample of 1,746 cases were also inspected by Expert-1 to evaluate inter-rater reliability. We calculated the median time taken by both experts to QC a single skull segmentation and compared the time between "Pass" and "Fail" images, using the Wilcoxon rank-sum test and Wilcoxon effect size r.
+
+## Comparison with a Conventional Image Viewer
+
+Finally, we compared the performance of our approach of rating mosaic images in Qrater against a more conventional/traditional visual inspection method of opening the MRI volumes in a viewer and recording the QC label in a spreadsheet in a separate window. Specifically, we explored the proportion of data that could be evaluated using this conventional method in the same amount of time that was needed when using Qrater.
+
+The viewer used for these tasks was register (https://www.mcgill.ca/bic/software/visualization/register), a minc tool that enables the user to scroll through and view the transverse, sagittal and coronal slices of each 3D image volume.
+
+### Raw MRI
+
+Expert-1 and Rater-1 rated again the 99 cases from the balanced dataset using register. Each rater recorded the time it took them to complete the dataset using Qrater. The timer started after the first volume was opened and the QC was done in one sitting until the timer stopped. For a fair comparison, the initial set-up of building a directory with all 99 volumes and preparing the QC spreadsheet was performed beforehand. We calculated the inter-rater agreement between expert and trainee using this method, as well as their intra-rater agreement with the ratings given using Qrater.
+
+### Linear Registration
+
+We applied the Revised BestLinReg algorithm to the raw volumes of the 99 cases of the balanced dataset. Expert-1 and Rater-1 inspected the resulting registrations using register.
+
+Specifically, they examined the transverse, sagittal and coronal slices of the MNI-ICBM152-2009c template in the first column, the synced registered dataset in the second column, and a mixed merged view of these two volumes in the third column. They could select the color map (grey, hot metal, spectral, red, blue, green) and the window/level for the template and registered data. In the overlap column, they could change the mixing level between the two volumes using a slider. All images were synced in their stereotaxic coordinates; placing the cursor in one image would show the same coordinate in all other images. A timer with their respective QC times using Qrater was set for each rater and the QC was done in one sitting until its end following the same procedure as with the raw MRI task.
+
+Given that the reproduced registrations were significantly different to those used in the Qrater experiment (i.e. obvious failures on cases that were previously marked as successful, and vice versa) we only calculated the inter-rater agreement between expert and trainee using register.
+
+### Skull Segmentation
+
+Only Expert-1 evaluated the segmentations using register. The procedure consisted of using the image viewing tool register to simultaneous view the original full head MRI, the segmented voxels given by the algorithm, and the overlap between the two. Since we were interested only in the approximate relative magnitude of time saved, and not in the exact amount of time saved, a small subsample of 6 randomly selected cases was deemed sufficient. Timing was measured with a stopwatch.
+
+## Data and Code Availability
+
+Qrater is made available under the GNU General Public License (GPL) version 3.0 and the source code and documentation are publicly available online on Github (https://github.com/soffiafdz/qrater). There is also a Docker image of Qrater available on Docker Hub (https://hub.docker.com/r/soffiafdz/qrater).
+
+The QC ratings, including the labels assigned to the complete dataset of ADNI, timing and agreement data together with the scripts required to reproduce all analyses in this paper are also uploaded to Github under a GPL-3.0 license (https://github.com/soffiafdz/qrater_analysis). The QA/QC protocols generated by the experts for the different tasks are included as supplementary material.
+
+Given that we did not obtain from the dataset owners explicit permission to redistribute the data in any shape or form we cannot share the generated QC mosaic images. For similar reasons, since the training videos made by the experts include examples of ADNI data and we did not obtain consent from trainees, we cannot publicly share the training videos.
+
+# Results
+
+```{r}
+#| label: load-data
+
+# Load all required RDS files
+acq_388 <- read_rds(here("data/derivatives/acquisition_388_dt.rds"))
+acq_99 <- read_rds(here("data/derivatives/acquisition_99_dt.rds"))
+acquis <- read_rds(here("data/derivatives/acquisition_dt.rds"))
+reg_99 <- read_rds(here("data/derivatives/registration_99_dt.rds"))
+regis <- read_rds(here("data/derivatives/registration_dt.rds"))
+reg_pre <- read_rds(here("data/derivatives/registration_premeeting_dt.rds"))
+rskull <- read_rds(here("data/derivatives/segmentation_dt.rds"))
+
+# Load agreement data
+acq_99_count <- read_rds(here("data/derivatives/qc_count_acq_dt.rds"))
+acq_99_corr <- read_rds(here("data/derivatives/qc_corr_acq_dt.rds"))
+reg_99_count <- read_rds(here("data/derivatives/qc_count_reg_dt.rds"))
+reg_99_corr <- read_rds(here("data/derivatives/qc_corr_reg_dt.rds"))
+```
+
+## QC with Qrater
+
+### Raw MR Images: Balanced Dataset
+
+```{r}
+#| label: acq-388-analysis
+
+# Inter-rater agreement: Experts on 338 images
+acq_388_kappa <- kappa2(acq_388[, .(Expert1, Expert2)])
+```
+
+The balanced dataset of raw MRIs was constructed from the QC of a subset (n=338) of images from the NACC dataset QCed by Expert-1 and Expert-2. The experts showed fair agreement on their evaluation (K = `r round(acq_388_kappa$value, 2)`; Z = `r round(acq_388_kappa$statistic, 2)`, p < 0.001), and 99 images were selected from their agreements and disagreements. These selected images did not differ significantly in age, sex or proportion of neurodegeneration compared to the complete subset of inspected images (@tbl-demog-nacc).
+
+```{r}
+#| label: tbl-demog-nacc
+#| tbl-cap: "Demographic information of the initial 338 images and the selected 99 images from the NACC data that would form the balanced dataset for the raw MRI QC task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported."
+
+read_rds(here("data/derivatives/nacc_demog_gt.rds")) |>
+  style_manuscript_table()
+```
+
+```{r}
+#| label: acq-99-agreement
+
+# Prepare data for agreement analysis
+acq_99_exp <- acq_99[Session %in% c("First", "Second"),
+                     .(Image = Image_case, Session, Rating)]
+acq_99_exp_wide <- dcast(acq_99_exp, Image ~ Session, value.var = "Rating")
+
+# Intra-rater agreement: Expert between sessions
+acq_99_kappa_expert <- kappa2(acq_99_exp_wide[, .(First, Second)])
+
+# Matrix of ratings for Fleiss' Kappa
+acq_99_bin <- acq_99[!Session %in% c("First", "Second"),
+                     .(Image = Image_case, Rater, Rating)]
+acq_99_bin[Rating == "Pass", Rating := "1"]
+acq_99_bin[Rating == "Fail", Rating := "0"]
+acq_99_bin[, Rating := as.integer(Rating)]
+acq_99_wide <- dcast(acq_99_bin, Image ~ Rater, value.var = "Rating")[, -1]
+
+# Inter-rater agreement
+acq_99_kappa_raters <- kappam.fleiss(acq_99_wide)
+```
+
+After visual inspection in two QC sessions, Expert-1 agreed with themself on 91/99 ratings, thus presenting an excellent intra-rater agreement with a Cohen's kappa value of `r round(acq_99_kappa_expert$value, 2)` (Z=`r round(acq_99_kappa_expert$statistic, 2)`; p <0.001). Expert-1 re-examined the eight images that had discrepant ratings between the two evaluations and identified four as "Pass" and four as "Fail" as final decisions. The resulting gold standard for the raw MRI QC task consisted of 69 "Pass" and 30 "Fail". The unbalanced Pass:Fail ratio is accounted for by using Cohen's chance-corrected Kappa.
+
+In the assessment of inter-rater agreement between Expert-1's gold standard and the 9 trainees we observed moderate agreement with a Fleiss' kappa value of `r round(acq_99_kappa_raters$value, 2)` (Z = `r round(acq_99_kappa_raters$statistic, 1)`; p < 0.001). Ratings on 29 of the 99 cases had full agreement amongst all 10 raters (@fig-raw-agreement). From these 29 images, 21 were selected as "Pass" cases, five were selected as borderline cases, and one "Fail" case was marked as "Pass". The two images marked as "Fail" by all raters were both from the selected "Fail" cases. All trainees agreed on 27 of the 69 cases with Expert-1's rating of "Pass", but only 2 cases with Expert-1's rating of "Fail". At least eight of the raters agreed on 67 of the 99 cases. The detailed inter-rater agreement of the expert and the trainees as a confusion matrix of the percentage of agreement between each rater are shown in the supplementary material S9.
+
+```{r}
+#| label: fig-raw-agreement
+#| fig-cap: "Inter-rater agreement data from the raw MRI QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
+#| fig-width: 10
+#| fig-height: 8
+
+# Prepare data for plotting
+acq_agree <- acq_99[Session == "First", .(Image_case, First = Rating)
+                    ][acq_99[Session == "Second", .(Image_case, Second = Rating)],
+                      on = "Image_case"
+                    ][First == Second, .(Image = Image_case, Expert = "*")]
+
+acq_exp1 <- acq_agree[acq_99[Session == "Consensus", .(Image = Image_case, Rating)],
+                      on = "Image"]
+acq_exp1[is.na(Expert), Expert := "\u2020"]
+acq_exp1[Expert == "*", GS := Rating]
+acq_exp1[Expert == "\u2020" & Rating == "Fail", GS := "rFail"]
+acq_exp1[Expert == "\u2020" & Rating == "Pass", GS := "rPass"]
+
+acq_99_n <- acq_99[Rater != "Expert01", .N, .(QC_orig, Image = Image_case, Rating)]
+acq_99_plot <- acq_exp1[, .(Image, GS)][acq_99_n, on = "Image"]
+acq_99_plot[, `:=`(
+  Image = factor(Image,
+                 levels = c(acq_99_plot[GS %like% "Pass"][Rating == "Pass"][order(N), Image],
+                            acq_99_plot[GS %like% "Fail"][Rating == "Fail"][order(-N), Image])),
+  GS = factor(GS, levels = c("Pass", "rPass", "Fail", "rFail"),
+              labels = sprintf("Expert: %s", c("Pass", "Pass (after revision)",
+                                               "Fail", "Fail (after revision)"))))]
+
+# Create plots
+p_pass <- ggplot(acq_99_plot[QC_orig == "Pass"], aes(Image, N, fill = Rating)) +
+  theme_classic() +
+  theme(text = element_text(size = 9), legend.position = "left") +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_manual(values = c("#9d0000", "#028202")) +
+  scale_y_continuous(breaks = 1:9) +
+  scale_x_discrete(labels = 1:99) +
+  facet_col(vars(GS), scales = "free", space = "free") +
+  labs(title = 'Selected "Pass" Cases', x = "Cases", y = "Ratings", fill = "Trainees\nratings")
+
+p_bline <- ggplot(acq_99_plot[QC_orig == "Borderline"], aes(Image, N, fill = Rating)) +
+  theme_classic() +
+  theme(text = element_text(size = 9), legend.position = "none") +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_manual(values = c("#9d0000", "#028202")) +
+  scale_y_continuous(breaks = 1:9) +
+  scale_x_discrete(labels = 1:99) +
+  facet_col(vars(GS), scales = "free", space = "free") +
+  labs(title = 'Selected Borderline Cases', x = "Cases", y = "Ratings")
+
+p_fail <- ggplot(acq_99_plot[QC_orig == "Fail"], aes(Image, N, fill = Rating)) +
+  theme_classic() +
+  theme(text = element_text(size = 9), legend.position = "none") +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_manual(values = c("#9d0000", "#028202")) +
+  scale_y_continuous(breaks = 1:9) +
+  scale_x_discrete(labels = 1:99) +
+  facet_col(vars(GS), scales = "free", space = "free") +
+  labs(title = 'Selected "Fail" Cases', x = "Cases", y = "Ratings")
+
+plot_grid(p_pass, p_bline, p_fail, nrow = 1, rel_widths = c(1.3, 1, 1))
+```
+
+Expert-1 took 1 hr, 42 min and 14 s to finish their first session of QC. Their second session was faster, taking them 1hr, 2 min and 40 s. Expert-1 spent a median of 44 s per image the first session, but spent a median 25 s per image in their second session (V = 3,778.5; r = 0.541; p~adj~ < 0.001). Trainees spent different amounts of time completing the 99 cases. Their QC sessions time ranged from 49 min to 5 hr 27 min. Trainees' median times per image ranged from 15 s to 3 min. All raters spent more time before passing an image than failing it, but the significance did not survive correction for multiple comparisons (47 s vs. 41 s; W = 126,898; r = 0.064; p = 0.042, p~adj~ = 0.504). The effect size of this comparison increased when looking only at the trainee's data (64 s vs. 42.5 s; W = 87,330; r = 0.097 p = 0.005, p~adj~ = 0.071). None of the time differences between "Pass" and "Fail" images were significant when looking at the individual rater levels. The measurements of time for all raters for the balanced dataset including the number of rests from their task are summarized in the supplementary materials (S10).
+
+While there were only 9 trainees, there was a significant correlation between the total time it took the trainees to complete their QC and their agreement with Expert-1 (S = 28; rho = 0.767; p = 0.021).
+
+### Raw MR Images: ADNI Data
+
+The demographics of the ADNI data are presented in @tbl-demog-adni. From the 10,196 QC images evaluated by Expert-1 & Raters 1, 92% were deemed passable ("Pass" = 9,387; "Warning" = 491; "Fail" = 319), with acceptance rates ranging from 81 to 99% across the different raters for their respective subsets. Strictness varied among the raters with Expert-1 being the least strict, flagging only 9 images and not marking any as "Warning". Trainees marked between 0.5% and 4% of their subsets of data as "Fail" and between 2% and 7% as "Warning".
+
+```{r}
+#| label: tbl-demog-adni
+#| tbl-cap: "Demographic information of the 10,196 images from the ADNI data that were QCed in the raw MRI and linear registration tasks. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported. Some of the missing information was due to the subjects that were dropped from ADNI and whose information is no longer maintained in their dataset."
+
+read_rds(here("data/derivatives/adni_demog_gt.rds")) |>
+  style_manuscript_table()
+```
+
+The median time spent on each image was only 11 s, which was a significant decrease compared to the median of 51 s these same raters took on the balanced dataset of selected cases (W = 1,408,928; r = 0.270; p < 0.001, p~adj~ < 0.001). The average time of the raters to complete their QC was 10 hr and 4 min. Expert-1 was the quickest, taking 4 hrs and 9 min to complete their QC. The time of the trainees ranged between 4 hr, 23 min and 22 hr 32 min. Raters took different amounts of time to rate an image depending on the rating given (Pass: 10 s, Warning: 19 s, Fail: 17 s; X² = 158.54; eta² = 0.015; p < 0.001, p~adj~ < 0.001). Post-hoc analysis using Dunn's test of multiple comparisons showed significant differences between "Fail" and "Pass" (Z = 7.219; p < 0.001) and "Pass" and "Warning" (Z = -10.598; p < 0.001), but not between "Warning" and "Fail" (Z = -1.095; p = 0.137). The time data for all raters who performed the QC of ADNI data and the post-hoc analysis are presented in the supplementary materials (S11 and S12).
+
+### Linear Registration: Balanced Dataset
+
+The demographic information for the preselected "Pass", "Fail" and borderline cases of linear registration is shown on @tbl-demog-linreg.
+
+\newpage
+
+```{r}
+#| label: tbl-demog-linreg
+#| tbl-cap: "Demographic information of the selected 99 images that would form the balanced dataset for the linear registration QC task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported."
+
+read_rds(here("data/derivatives/linreg99_demog_gt.rds")) |>
+  cols_label(
+    label = "Lin. Reg. Selected Cases",
+    stat_1 = "ADNI, N = 72",
+    stat_2 = "HCP, N = 11",
+    stat_3 = "PPMI, N = 11",
+    stat_4 = "PREVENT-AD, N = 5"
+  ) |>
+  text_transform(
+    locations = cells_body(columns = "label"),
+    fn = function(x) gsub("Mild Cognitive Impairment", "Mild Impairment", x)
+  ) |>
+  style_manuscript_table() |>
+  tab_options(table.font.size = "9pt", column_labels.font.size = "9pt")
+```
+
+```{r}
+#| label: reg-99-agreement
+
+# Prepare data for agreement analysis
+reg_99_bin <- copy(reg_99)
+reg_99_bin[Rating == "Pass", Rating := "1"]
+reg_99_bin[Rating == "Fail", Rating := "0"]
+reg_99_bin[, Rating := as.integer(Rating)]
+
+# Expert First v Second session
+reg_99_exp <- dcast(reg_99_bin[Session %in% c("First", "Second")],
+                    Image ~ Session, value.var = "Rating")
+reg_99_kappa_expert <- kappa2(reg_99_exp[, .(First, Second)])
+
+# Matrix of ratings for Fleiss' Kappa
+reg_99_wide <- dcast(reg_99_bin[!Session %in% c("First", "Second")],
+                     Image ~ Rater, value.var = "Rating")[, -1]
+reg_99_kappa_raters <- kappam.fleiss(reg_99_wide)
+```
+
+Expert-1 showed an excellent intra-rater agreement evaluating these cases agreeing on 93 of the 99 images with a Cohen's Kappa value of `r round(reg_99_kappa_expert$value, 2)` (Z = `r round(reg_99_kappa_expert$statistic, 2)`, p < 0.001). The re-examination of the 6 conflicting images resulted in 5 "Fail" and 1 "Pass". The gold standard for linear registration resulted in 62 "Fail" and 37 "Pass" (@fig-linreg-agreement). The unbalanced Pass:Fail ratio is accounted for by using Cohen's chance corrected Kappa.
+
+The 8 trainees had moderate agreement with Expert-1's ratings (K = `r round(reg_99_kappa_raters$value, 2)`; Z = `r round(reg_99_kappa_raters$statistic, 1)`; p < 0.001). They fully agreed with the gold-standard in 52 of the 99 cases (44 "Fail" and 8 "Pass"). In 15 other cases, all but one rater agreed with the QC label (eight out of nine raters on 11 "Fail" and 4 "Pass" cases). There was complete agreement amongst raters on 29 of the 33 preselected "Fail" cases; only one trainee marked as "Pass" the other 4 preselected "Fail" cases. Raters unanimously marked as "Fail" one of the selected "Pass" cases and 14 of the preselected borderline cases. However, of the 33 preselected "Pass" cases, only eight obtained "Pass" with complete agreement. The detailed inter-rater agreement in the form of the percentage of agreement between Expert-1 and the trainees is presented as a confusion matrix in the supplementary material S13.
+
+```{r}
+#| label: fig-linreg-agreement
+#| fig-cap: "Inter-rater agreement data from the linear registration QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
+#| fig-width: 10
+#| fig-height: 8
+
+# Prepare data for plotting
+reg_agree <- reg_99[Session == "First", .(Image, First = Rating)
+                    ][reg_99[Session == "Second", .(Image, Second = Rating)],
+                      on = "Image"
+                    ][First == Second, .(Image, Expert = "*")]
+
+reg_exp1 <- reg_agree[reg_99[Session == "Consensus", .(Image, Rating)], on = "Image"]
+reg_exp1[is.na(Expert), Expert := "\u2020"]
+reg_exp1[Expert == "*", GS := Rating]
+reg_exp1[Expert == "\u2020" & Rating == "Fail", GS := "rFail"]
+reg_exp1[Expert == "\u2020" & Rating == "Pass", GS := "rPass"]
+
+reg_99_n <- reg_99[Rater != "Expert01", .N, .(QC_orig, Image, Rating)]
+reg_99_plot <- reg_exp1[, .(Image, GS)][reg_99_n, on = "Image"]
+reg_99_plot[, `:=`(
+  Image = factor(Image,
+                 levels = c(reg_99_plot[GS %like% "Pass"][Rating == "Pass"][order(N), Image],
+                            reg_99_plot[GS %like% "Fail"][Rating == "Fail"][order(-N), Image])),
+  GS = factor(GS, levels = c("Pass", "rPass", "Fail", "rFail"),
+              labels = sprintf("Expert: %s", c("Pass", "Pass (after revision)",
+                                               "Fail", "Fail (after revision)"))))]
+
+# Create plots
+p_pass <- ggplot(reg_99_plot[QC_orig == "Pass"], aes(Image, N, fill = Rating)) +
+  theme_classic() +
+  theme(text = element_text(size = 9), legend.position = "left") +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_manual(values = c("#9d0000", "#028202")) +
+  scale_y_continuous(breaks = 1:8) +
+  scale_x_discrete(labels = 1:99) +
+  facet_col(vars(GS), scales = "free", space = "free") +
+  labs(title = 'Selected "Pass" Cases', x = "Cases", y = "Ratings", fill = "Trainees\nratings")
+
+p_bline <- ggplot(reg_99_plot[QC_orig == "Borderline"], aes(Image, N, fill = Rating)) +
+  theme_classic() +
+  theme(text = element_text(size = 9), legend.position = "none") +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_manual(values = c("#9d0000", "#028202")) +
+  scale_y_continuous(breaks = 1:8) +
+  scale_x_discrete(labels = 1:99) +
+  facet_col(vars(GS), scales = "free", space = "free") +
+  labs(title = 'Selected Borderline Cases', x = "Cases", y = "Ratings")
+
+p_fail <- ggplot(reg_99_plot[QC_orig == "Fail"], aes(Image, N, fill = Rating)) +
+  theme_classic() +
+  theme(text = element_text(size = 9), legend.position = "none") +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  scale_fill_manual(values = c("#9d0000", "#028202")) +
+  scale_y_continuous(breaks = 1:8) +
+  scale_x_discrete(labels = 1:99) +
+  facet_col(vars(GS), scales = "free", space = "free") +
+  labs(title = 'Selected "Fail" Cases', x = "Cases", y = "Ratings")
+
+plot_grid(p_pass, p_bline, p_fail, nrow = 1, rel_widths = c(1.3, 1, 1))
+```
+
+Both Expert-1's QC sessions were completed in similar times (39 min and 56 s & 35 min and 25 s). The QC sessions' time from Raters 1 to 8 ranged from 36 min to 3 h, 19 min. All trainees spent less than one minute before assigning a rating with a median of 24 s to either pass or fail an image (W = 99,852; r = 0.006; p = 0.851). The difference was still absent when looking at only the trainees' time data (29 s for both ratings; W = 58,110; r = 0.029; p = 0.420). The time measurements for the expert and trainees are presented in supplementary material S14. The relationship between the QC session times of the trainees and their inter-rater agreement with the expert's gold standard was non-significant (S = 87.018; rho = -0.036; p = 0.933).
+
+### Linear Registration: ADNI Data
+
+Partway through the evaluation of the ADNI data, trainees reported an unexpected high proportion of failed images. On average, raters were flagging 40% of the images (27% marked as "Fail" and 13% marked as a temporary "Warning") which contrasted to the 1-5% expected rate of failure of our registration algorithm [@dadar2018validation]. The task was suspended and the experts met with the trainees to have a deep technical discussion of linear registration and the reasons behind potential failures. The decision criteria was explicitly defined and codified before the trainees went back and restarted their QC. Close to a quarter of the images that had been inspected before the interruption ended with a QC label different to the one previously assigned (supplementary material S15). In the end, raters passed 94% of the data ("Pass" = 9,635; "Fail" = 561) with pass rates ranging from 90% to 98% across the trainees.
+
+The median time raters spent on each image was 8 s, a significant decrease from the 29 s these same raters spent per image on the balanced dataset (W = 1,485,919; r = 0.271; p < 0.001, p~adj~ < 0.001). The average time to complete the QC for this dataset was 7 h, 54 min, ranging from 3 hr, 39 min to 11 h, 30 min. The time spent per image varied based on the image rating assigned (i.e., a "Passing" or "Failing" image). Raters took significantly longer to fail an image than to pass one (16 s vs. 8 s; W = 3,434,646, r = 0.119; p < 0.001, p~adj~ < 0.001). The table with the time data for the trainees is shown in the supplementary material S16.
+
+### Skull Segmentation
+
+The demographic information for both the complete set of subjects from ADNI whose skull segmentations were inspected by Expert-2 and the subset of segmentations that were evaluated by both Experts is presented in @tbl-demog-skull.
+
+```{r}
+#| label: tbl-demog-skull
+#| tbl-cap: "Demographic information of the 6,968 images evaluated by Expert-2 and the subset of 1,746 images evaluated by both experts from the ADNI data that were QCed in the skull segmentation task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported. Some of the missing information was due to the subjects that were dropped from ADNI and whose information is no longer maintained in their dataset."
+
+read_rds(here("data/derivatives/skull_demog_gt.rds")) |>
+  style_manuscript_table()
+```
+
+```{r}
+#| label: skull-agreement
+
+# Inter-rater reliability
+rskull_qc <- dcast(rskull, Image ~ Rater, value.var = "Rating")
+rskull_kappa_experts <- kappa2(rskull_qc[, .(Expert01, Expert02)])
+```
+
+Only 52% (3,674) of the 6,968 output images of the skull segmentation analysis were marked as "Pass" QC by Expert-2. A similar proportion of "Pass" images resulted from the ratings of Expert-1, who passed 54% (947) of their subset of 1,746 images.
+
+Evaluating the same 1,746 QC mosaics and 2D representations of the 3D models, Expert-1 and Expert-2 showed excellent inter-rater agreement, agreeing on 1,606 and yielding a Cohen's kappa value of `r round(rskull_kappa_experts$value, 2)` (Z=`r round(rskull_kappa_experts$statistic, 0)`; p < 0.05).
+
+This QC task was completed the fastest among the three tasks. Failing an image was significantly faster than passing it for both experts (Expert-1: mean of 3.2 s vs. 4.4 s; W = 313,240; r = 0.149; p < 0.001, p~adj~ < 0.001; Expert-2: mean of 2.7 s vs. 3.7 s; W = 4,607,049; r = 0.221; p < 0.001, p~adj~ < 0.001). Given the low variance in rating times, means are reported instead of medians. The timing data of the experts is available in the supplementary material S17.
+
+## QC with a Conventional Image Viewer
+
+### Raw MR Images
+
+Since we expected conventional QC to take longer than Qrater, Expert-1 was instructed to do the visual inspection with register of the 99 preselected MRI cases with a timer set to 1 h, 3 min, or the time it took them to complete the QC of these images using Qrater. They managed to complete QC of 90 volumes before the time ran out. Calculating they spent on average 42 s per volume, it would have taken them 1 h, 10 min to complete the whole set. From the 90 inspected volumes, they agreed with their gold-standard on 74 showing moderate intra-rater agreement (82%; K = 0.568; Z = 5.42; p < 0.001).
+
+The time-limit for Rater-1 was set to 1 h, 38 min. They could finish QC on 79 volumes. Spending 1 min, 14 s per volume, they would have completed the 99 volumes in approximately 2 hr. They had fair intra-rater agreement as they agreed with the ratings given on Qrater on 53 cases (71%; K = 0.339; Z = 3.22; p = 0.001).
+
+The inter-rater agreement between expert and trainee using register was moderate; they agreed on the ratings given to 66 out of the 79 cases inspected by both of them (84%; K = 0.598; Z = 5.38; p < 0.001), slightly higher compared to the 73.74% obtained using Qrater (S8).
+
+### Linear Registration
+
+Expert-1 used register to inspect the overlap of the MRI volumes and the standard template for the 99 preselected cases of linear registration. The timer was set to 36 min, the time in which they completed the QC using Qrater. Under the time-limit they inspected 43 cases. Following the same timing of 50 s per case, we estimate 1 hr 23 min for them to complete the 99 cases.
+
+While the time-limit for Rater-1 was similar to the expert, in 37 minutes the trainee managed to complete QC on 30 cases, or less than a third of the data. Spending on average 1 min 14 on each volume, they would have completed the 99 cases in around 2 hr.
+
+Expert and trainee had substantial inter-rater agreement using register, agreeing on 26 out of the 30 cases inspected by both (90%; Kappa = 0.713; Z = 3.9; p < 0.001), which was slightly higher to the 83.84% of agreement using Qrater (S13).
+
+### Skull Segmentation
+
+Inspecting a random subset of 6 pairs of MR volumes and skull labels with register took a total of 6 min 45 s for Expert-1. It took them one minute per volume to evaluate the segmentation by scrolling through and inspecting the transverse and coronal slices, and in some cases also the axial slices. To complete a similar proportion of images QCed with Qrater using this method it would have taken them approximately 29 hours of active work.
+
+# Discussion
+
+## The Application
+
+Quality control is an important and non-trivial process for neuroimaging. The reliability and validity of study results and conclusions depend on good data quality and the accuracy of the analysis performed. In this article we introduce Qrater, a containerized web-based application that facilitates the often-neglected task of QC by visual curation of images.
+
+While other semi-automatic tools focus on quantifying IQMs and generating visual reports, Qrater's purpose focuses entirely on the process of visual curation. Qrater streamlines this process by letting the user inspect the data and record the QC assessment in a single application with its interface and built-in database. Similar to previous HTML-based QC tools from FSL, SPM and MRIQC, Qrater leverages web service technologies in the form of HTML documents and web browser with a Rating Widget where the user can record a quality label and the presence of predefined artifacts. Qrater adds to this functionality and that of other visual inspection tools like VisualQC [@raamana2023visualqc], with its collaboration features. Datasets can be organized and assigned to different people. Images can be inspected by a team of raters with them being able to see each other's assessments in real-time. These features are particularly useful for training purposes. Experts can use the application to assign QC datasets to their trainees and oversee their live evaluation process.
+
+Since Qrater displays generated images for visual QC, Qrater compliments the automatic quantification of IQMs. Since QC images can be generated for specific QC decisions for PET, CT scans, ultrasound, and other modalities, Qrater is also versatile.
+
+In this paper we limited our tests to evaluation of rating times and inter-subject agreement with three different MRI QC tasks. These three tasks represent several standard steps in neuroimaging analysis: inspection of raw data quality, examination of an intermediary preprocessing step, and the evaluation of the results from a segmentation algorithm.
+
+## Raw MR Images
+
+The inter-rater agreement of the experts' evaluation of the initial 338 images of the NACC dataset was the lowest among all of the QC tasks. The low Kappa coefficient was relatively unimportant given that we were specifically interested in the cases of disagreement between the experts. Expert-1 showed an excellent intra-rater agreement on the repeated sessions of the pre-selected cases of raw MRIs. This result might be in partly affected by practice, given the test-retest exercise consisted of the second and third time that Expert-1 had rated the same images. Despite these multiple evaluations, the expert marked as "Pass" 13 of the 33 cases that both they and Expert-2 had previously deemed as "Obvious Failure" and failed one of the "Obvious Pass" cases. This result demonstrates that despite more than 30 years of QC experience looking at hundreds of thousands of images, expert QC judgment remains highly subjective -- and not only for borderline cases. As noted in by Provins et al., this subjectivity in interpreting the QC rules can be reduced with carefully written visual QC protocols with precise assessment criteria tailored to specific analyses [@provins2023quality].
+
+With a Fleiss' Kappa of 0.44, the inter-rater agreement of the balanced dataset between all raters was only slightly higher than the inter-rater expert agreement. Despite the fact that a third of the data was specifically selected to be questionable cases that had already been shown to produce disagreement between experts, the performance of the trainees was only slightly lower to what is present in the literature. The MRIQC team evaluated the inter-rater agreement of the QC of 100 images by two raters and had a Cohen's Kappa value of 0.51 with binarized (e.g., pass/fail) ratings [@esteban2017mriqc]. When the trainees from Rosen et al. performed a similar exercise training three raters for the QC of structural MRI, they had a mean Kappa value of 0.64 in the training phase [@rosen2018quantitative].
+
+The trainees recorded qualitative findings as comments independently of the rating given. Despite a disagreement on the QC label, raters who marked images as "Pass" often recorded the same artifacts in the comments as the raters who marked those same images as "Fail". Such qualitative agreement in the comments indicates that there is likely a subjective threshold difference between raters rather than a gross misidentification of artifacts. In the follow-up discussion, several raters mentioned that they passed an image when the artifact found was thought to be mild enough (e.g., in the cases of intensity non-uniformity) to be corrected in downstream preprocessing. This is another case where the differences due to subjective interpretation of the rules might have been avoided with more precise and carefully worded QC decision rules. Future QC training protocols may need to specifically focus on agreeing on a level of strictness and precise decision criteria for rating selection in each QC task to ensure similar rating decisions between raters.
+
+Time measurements varied greatly between the different raters, particularly on this first task. Such variability was expected given the different amounts of QC expertise of the different participants. The trainees who had higher agreement (+80%) with the expert were also the ones who took the longest time +4 h. This result was confirmed with the significant correlation between completion time and agreement with the expert.
+
+Raters' median times evaluating the ADNI dataset were greatly reduced compared to their times on the balanced dataset. The reduction in time was expected due to several factors: the trainees' lack of expertise and subsequent training effects, their knowledge that their performance would be measured and compared, and the fact that the images were intentionally pre-selected to produce doubt. This change was also observed in Expert-1, who took less time to Pass an image with each subsequent QC exercise (40 s on their first test-retest session, 25 s on their second, and 3 s on the ADNI data). This striking difference might be due to the intention of carefully building a gold standard for the rest of the raters when evaluating the balanced dataset, in contrast to just applying the already-defined rules when they were inspecting the ADNI data.
+
+Since ADNI data has already gone through QC before being made public, we expected a very high rate of "Pass"-marked scans. Still, we instructed raters to look for issues related to field-of-view, wrap-around, noise, and movement artifacts because our quality thresholds for these characteristics were different from those used by the ADNI team. Raters failed 3% of the complete dataset, which fell within our initial expectations. Nonetheless, even with the knowledge that the ADNI team had already completed QC, raters additionally marked close to 5% of the dataset as "Warning".
+
+## Linear Registration
+
+Both rater performance (as measured by rating time) and rater agreement improved in the QC of linear registration compared to the QC of raw MRI. Expert-1 had excellent intra-rater agreement (K = 0.87), comparable to Expert-2 who had an intra-rater agreement on 93% evaluated on 1000 datasets [@dadar2018validation]. The inter-rater agreement of the trainees with the expert's gold-standard also improved compared to that in the raw data QC task (K = 0.56 vs K = 0.44). Our raters' inter-rater agreement was similar to that of Benhajali et al., on which expert rater's Cohen's Kappa ranged from 0.4 to 0.68 on a similar validation dataset comprising 35 Fail, 35 Maybe, and 30 OK images based on one expert rater [@benhajali2020standardized].
+
+## Skull Segmentation
+
+The third experiment to evaluate skull segmentations further demonstrates the flexibility and efficiency of our image-based QC approach. Due to the experimental nature of our skull segmentation tool under development, the "Pass" to "Fail" ratio was, as expected, the lowest among all three experiments. This ratio was consistent for both experts. Even with the large number of failed images, the inter-rater agreement between the two experts was the highest among all tasks, being even comparable to the intra-rater agreement of Expert-1 in the raw MRI and linear registration test-retest tasks. Both expert raters took less than five seconds on most of the images before assigning a rating. Failing an image was, on average, faster than passing one. These impressive speeds were possible due to the design of our QC image that included 3D renderings of the segmented skull surface that greatly facilitated the QC task, partly because holes in the skull reconstruction were easily visible. Essentially, as soon as a segmentation error was found, the dataset could be failed without the need to examine all images within the mosaic. Both experts focused on the generated skull surface renderings, which demonstrates that designing an appropriate QC image can make the specific QC task much easier, and more efficient.
+
+## Comparison with Conventional Methods
+
+After using Qrater, an expert and a trainee compared its usability by repeating the three QC tasks using the conventional method of manually inspecting the MR volumes with a dedicated 3D viewer software (i.e., register, from the minc toolkit). While evaluating the volumes with register was indeed slower than using Qrater for both raters, we did not find the stark difference we were expecting, especially for Expert-1, who managed to QC more than 90% of the data in the same amount of time as in Qrater. Notably, this expert has decades of experience using register for QC and this was their fourth time inspecting the same images, so a learning or memory effect might be present despite week-long delays between trials interleaved with evaluations of different data.
+
+QC of linear registration demonstrated the effectiveness of Qrater. The expert was twice as fast performing QC using Qrater compared to manually inspecting the overlap of the volume and the standard template in a conventional viewer. Qrater was even more beneficial for the trainee, giving them a threefold increase in speed compared to the traditional approach. This advantage did not compromise reliability, given that the inter-rater agreement between Rater-1 and Expert-1 remained comparable for both methods.
+
+We obtained the biggest difference in speed for the last task of QC for the skull segmentations, where Expert-1 required a 30-fold increase in time to evaluate the segmentations by visualizing the volumes of the labels with the conventional register visualization tool than they did with the mosaics and Qrater.
+
+The inter-rater agreement between Expert and Rater was higher on both raw and linear registration tasks using the conventional method. While surprising, this increased agreement could have resulted from both the reduced number of inspected images and the practice obtained from the repeated evaluations of the same subset of data.
+
+Qrater has significantly improved the way we complete QC in our laboratory. According to the expert raters, some of Qrater's features such as the key-bindings, magnification, and quick loading times, helped them to complete QC of the images in a time-efficient manner. The brief time spent on the skull segmentation task (which covered ~7,000 images) demonstrates that the Qrater system offers a time-efficient and effective method to complete manual QC. Such QC tasks take much longer if the raters must use a general visualization tool to investigate the data on a slice-by-slice basis. The instance currently installed on our servers holds more than 100,000 images organized in 48 open and restricted datasets from different research projects with more than 44,000 ratings already recorded without compromising speed or functionality.
+
+## Limitations
+
+Qrater is not without limitations. One notable aspect is its dependance on the generation of task-specific QC images outside the application. While this allows versatility across various manual QC tasks, Qrater currently relies on visual inspection and does not yet take advantage of any automatically extracted quality metrics or automatic prediction of QC status.
+
+Given the large amount of generated QC mosaic images, we opted for JPEG as the file format in a practical trade-off between file size and image quality. JPEG is a lossy format, and its compression could have produced small artifacts in the image QC that could be confused with small susceptivity or flow artifacts. While these subtle changes may not be readily noticeable to the human eye, especially in a protocol focused on identifying gross artifacts rather than fine-grained intensity variations, in the future we would consider opting for a format with lossless compression like PNG, given that both JPEG and PNG images are supported in Qrater.
+
+Additionally, the remote nature of all ratings introduces factors beyond our control, such as varying internet speeds and differences in computer hardware among raters that might have influenced their performance, in both time and quality, when doing their QC tasks. Relatedly, when measuring the rater's timing, we were limited to the time differences between the latest recorded ratings. Using this indirect measure of decision-making time could have been influenced by trainee raters completing a second pass for verification or providing detailed comments.
+
+Furthermore, blinding was not enforced for Expert-1 and Rater-1 during test-retest sessions, leading to the possibility of bias due to memory, even though the sessions were separated by at least two weeks.
+
+We also lacked a practical way to precisely measure the time when these two raters used register as a conventional method. Each rater determined their allotted time based on their own times using Qrater, and while efforts were made to conclude assessments when the timer stopped, a level of subjectivity and self-regulation may have influenced the results.
+
+# Conclusion
+
+In this article we presented Qrater, a novel web-based Python application for QC by image curation. From the different benchmark tests comprising various tasks done by users with different amounts of expertise, we found that designing and implementing QC protocols and training is a difficult task. Clearly defined instructions and quality thresholds are essential to reducing subjectivity in ratings to produce reliable QC results. Qrater is a valuable tool that can complement existing semi-automatic tools, ease collaboration and training for QC, making the task more accessible to beginners and faster for experienced raters.
+
+# Acknowledgments {.unnumbered}
+
+- This investigation was supported (in part) by (an) award(s) from the International Progressive MS Alliance, award reference number PA-1412-02420, a grant from the Canadian Institutes of Health Research, and a donation from the Famille Louise & Andre Charron.
+
+- Data collection and sharing for this project was funded by the Alzheimer's Disease Neuroimaging Initiative (ADNI) (National Institutes of Health Grant U01 AG024904) and DOD ADNI (Department of Defense award number W81XWH-12-2-0012). ADNI is funded by the National Institute on Aging, the National Institute of Biomedical Imaging and Bioengineering, and through generous contributions from the following: AbbVie, Alzheimer's Association; Alzheimer's Drug Discovery Foundation; Araclon Biotech; BioClinica, Inc.; Biogen; Bristol-Myers Squibb Company; CereSpir, Inc.; Cogstate; Eisai Inc.; Elan Pharmaceuticals, Inc.; Eli Lilly and Company; EuroImmun; F. Hoffmann-La Roche Ltd and its affiliated company Genentech, Inc.; Fujirebio; GE Healthcare; IXICO Ltd.; Janssen Alzheimer Immunotherapy Research & Development, LLC.; Johnson & Johnson Pharmaceutical Research & Development LLC.; Lumosity; Lundbeck; Merck & Co., Inc.; Meso Scale Diagnostics, LLC.; NeuroRx Research; Neurotrack Technologies; Novartis Pharmaceuticals Corporation; Pfizer Inc.; Piramal Imaging; Servier; Takeda Pharmaceutical Company; and Transition Therapeutics. The Canadian Institutes of Health Research is providing funds to support ADNI clinical sites in Canada. Private sector contributions are facilitated by the Foundation for the National Institutes of Health (www.fnih.org). The grantee organization is the Northern California Institute for Research and Education, and the study is coordinated by the Alzheimer's Therapeutic Research Institute at the University of Southern California. ADNI data are disseminated by the Laboratory for Neuro Imaging at the University of Southern California.
+
+- PPMI data was obtained from the Parkinsons Progression Markers Initiative (PPMI) database (www.ppmi-info.org/data). For up-to-date information on the study, visit www.ppmi-info.org. PPMI is sponsored and partially funded by the Michael J Fox Foundation for Parkinsons Research and funding partners, including AbbVie, Avid Radiopharmaceuticals, Biogen, Bristol-Myers Squibb, Covance, GE Healthcare, Genentech, GlaxoSmithKline (GSK), Eli Lilly and Company, Lundbeck, Merck, Meso Scale Discovery (MSD), Pfizer, Piramal Imaging, Roche, Servier, and UCB (www.ppmi-info.org/fundingpartners).
+
+- HCP data was obtained from the Human Connectome Project, WUMinn Consortium (Principal Investigators: David Van Essen and Kamil Ugurbil; 1U54MH091657) funded by the 16 NIH Institutes and Centers that support the NIH Blueprint for Neuroscience Research; and by the McDonnell Center for Systems Neuroscience at Washington University.
+
+- PREVENT-AD data were obtained from the Pre-symptomatic Evaluation of Novel or Experimental Treatments for Alzheimer's Disease (PREVENT-AD, http://www.prevent-alzheimer.ca) program data release 3.0 (2016-11-30). Data collection and sharing for this project were supported by its sponsors, McGill University, the Fonds de Research du Quebec -- Sante, the Douglas Hospital Research Centre and Foundation, the Government of Canada, the Canadian Foundation for Innovation, the Levesque Foundation, and an unrestricted gift from Pfizer Canada.
+
+# Conflict of Interest Statement {.unnumbered}
+
+We declare that none of the authors involved in this work have any conflicts of interest to disclose.
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
+{{< pagebreak >}}
+
+# Supplementary Materials {.unnumbered}
+
+```{=latex}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+```
+
+## S1. Technical report of Qrater {.unnumbered}
+
+Qrater is a python application designed to facilitate the rating of quality control (QC) images within a web browser. This report describes in detail the technical aspects of Qrater's including its architecture and the technologies used.
+
+### Architecture {.unnumbered}
+
+*Core Technologies*
+
+- Qrater web service
+    - Python 3.9. Qrater is developed using Python, a versatile, simple, and readable coding language with extensive libraries.
+    - Flask 2.0.1. Flask is a minimalistic web framework for python. Its flexibility and simplicity allow for easy integration with other components and extensions.
+    - Gunicorn 20.1. Gunicorn, a Python WSGI HTTP server, is employed in Qrater to serve the Flask application and make it accessible to the web browser.
+- Multiple tasks management
+    - Redis 6.2.4. To handle multiple concurrent users, Redis works within Qrater's deployment as a message broker, enabling the management of multiple worker instances of the web-application. This setup permits Qrater to handle multiple simultaneous users.
+- Database
+    - pyMySQL 1.0.2. Data management in Qrater is handled through this MySQL client library written in Python. This data includes, but it's not limited to imaging data and their metadata, registered users, and QC labels and qualitative comments.
+    - SQLAlchemy 1.4.20. This ORM python library manages Qrater's database operations and interactions.
+
+*Containerization and deployment*
+
+Qrater, the Flask-based web application, is available as a Docker image (https://hub.docker.com/r/soffiafdz/qrater).
+
+Qrater's full deployment, however, relies on the use of other services. These dependencies consisting of a MySQL database, for data storage and management, and Redis, for the management of the concurrent Qrater worker's processes, are also available as Docker images: MySQL:8.0.25 and Redis:6.2.4-alpine.
+
+To streamline the deployment of these three interconnected services, we utilize Docker Compose. Docker Compose manages the multiple Docker containers needed for Qrater with a single configuration file. This setup allows that the Flask application, the MySQL database, Redis, and the multiple worker instances are correctly configured and can communicate seamlessly with each other.
+
+### Remote Access and Security {.unnumbered}
+
+Once Qrater is running, it is accessible on a specific port of the computer it is running on. With SSH port forwarding, remote access is possible giving the possibility to multiple users to access the application on the host from different locations.
+
+Qrater contains different measures to not compromise data security. To use Qrater, each user has to register within the application with a username and a password. When loading data, it can be marked as private restricting its access only to specific users. The data contained in private datasets including its ratings will be accessible only to those selected by the data owner.
+
+### Frontend Development {.unnumbered}
+
+The interface of Qrater is built using Bootstrap, a front-end framework that offers pre-designed components and a responsive grid system. This ensures the application is visually consistent and works across different devices, web browsers and screen sizes.
+
+*Image Viewer*
+
+Qrater's built-in image viewer includes several features written in JavaScript to aid in the QC process:
+
+- Image Editing: From a drop-down with sliders, users can adjust image attributes such as contrast, brightness, and saturation.
+- Magnifying glass: There is a feature to activate a magnifying glass over the image. It is moved by the cursor and the level of zooming can be adjusted.
+- Keyboard key-bindings: These shortcuts are implemented to improve the efficiency of the QC process, allowing users to perform actions quickly without relying on the mouse. These were coded using the mousetrap library.
+
+*Data Management*
+
+QC data can be accessed within the browser in the form of tables, using jQuery's DataTables plugin, which provides functionalities like:
+
+- Viewing: Displaying data in a structured table format.
+- Sorting: Users can sort data by different columns to organize information.
+- Filtering: The plugin supports filtering options to narrow down data sets based on criteria.
+- Searching: A search box allows users to quickly locate specific records within the data table.
+
+### Conclusion {.unnumbered}
+
+In conclusion, Qrater is a practical and efficient tool designed to simplify the rating of quality control (QC) images through a user-friendly web interface. Its utilization of Flask, Gunicorn, Redis, and Docker Compose ensures robust performance and seamless integration of essential services, making it a reliable solution for managing QC processes and data effectively.
+
+\newpage
+
+## S2. QC mosaic image examples {.unnumbered}
+
+```{r}
+#| label: fig-qc-images
+#| fig-cap: "Example images selected for the three QC tasks. A) Mosaic containing 60 slices of raw (native) MRI data of the brain of one subject (20 axial slices, 20 sagittal slices, and 20 coronal slices). B) For the stereotaxic registration task, 60 MR image slices (20 axial slices, 20 sagittal slices, and 20 coronal slices) from the subject's MRI scan, resampled into the standard stereotaxic coordinate system, with the standard template's cortical boundaries overlaid in red. C) For the segmentation task, 60 brain MR image slices from one subject (20 axial slices, 20 sagittal slices, and 20 coronal slices). In the 2D images comprising the mosaic, we highlighted the segmented skull tissue in red. To the right of the mosaic, we show six 2D representations of 3D reconstructions of the subject's skull."
+#| out-width: "100%"
+
+knitr::include_graphics(here("plots/QC_images.png"), error = FALSE) |>
+  suppressWarnings()
+```
+
+\newpage
+
+## S3. QC protocol - raw MRI {.unnumbered}
+
+The task was designed to assess whether the trainees could accurately QC raw MRI. Once everyone had finished the QC of the selected cases, they would receive the QC labels assigned by the expert. Some brief explanations on the reasoning behind the more challenging cases were also shared. A secondary goal was to assure matching levels of strictness between all raters before moving forward with the QC of large datasets as ADNI and UKBiobank.
+
+Trainees were instructed to leave qualitative commentary for QA and/or the cases which they were not sure if they had correctly identified the issue with the scan. These comments served two purposes: 1) they were placeholders that would allow them to return and review these specific images, and 2) that the experts could have an idea of what types of artifacts are more challenging to detect and might require further clarification.
+
+The overall QC criteria consisted of:
+
+- Coverage: For a scan to pass, the entire brain (including the occipital and frontal poles, the superior convexity and the base of the cerebellum as well as left-right coverage) has to be within the volume. Some of the 3D acquisition might have a very tight Anterior-Posterior Field of View, cutting the occipital (or frontal poles) and the transverse acquisitions often cut the base of the cerebellum. For both cases, the datasets should be failed, along with an "Incomplete Coverage" comment.
+- Movement: Slight movement artifacts (slight ringing) can be accepted as most of the processing pipelines used in the lab can deal with them. However, the trainee should leave a "slight movement" comment since those cases should not be used in specific analyses (e.g., deformation-based morphometry (DBM) or cortical thickness.
+- Noise: Slightly noisy scans could similarly be accepted along with a comment, as the processing pipelines can deal with them.
+- Intensity non-uniformity artifacts: Our implementation of N3 or N4 might not be able to deal with severe non-uniformity, therefore, those cases should fail. Trainees should include a "non-uniformity artifact" comment. Problematic cases often have one of two issues: 1) the lowest slices are affected by signal loss (due to the imperfect volume excitation pulse), or 2) there's a very strong AP inhomogeneity due to the nose or forehead being very close to the coil, and thus having a very bright signal.
+- Data should not be failed if the GM/WM contrast is diminished. Nonetheless, the trainee should leave a "low GM/WM contrast" comment.
+
+\newpage
+
+## S4. QC protocol - linear registration {.unnumbered}
+
+For the QC of linear registration of MRI to a standard template, the criteria to pass or fail an image was the following:
+
+- Rotations and translations of the image.
+    - Check the brain rotation primarily about the Left-Right axis.
+    - Errors in rotation can be noticed by looking at the frontal lobe, specifically the orbital frontal contour; one sign of failure is the outline of the registration cutting through eyes and surrounding muscles or through occipital fat.
+    - Check that the occipital area, tentorium and cerebellum fit the contours.
+- Scaling of the image.
+    - Inferior-Superior axis -- inferior/superior stretching or shrinking of the entire image; the contour should (roughly) fit the top of the cerebrum and the bottom of the orbito-frontal area and the bottom of the temporal lobes. The cerebellum can be ignored.
+    - Left-Right axis -- left/right stretching or shrinking of the entire image. It can be seen best on coronal and transverse slices.
+    - Anterior-Posterior axis -- anterior/posterior stretching or shrinking of the entire image. It can be seen best in transverse and sagittal slices.
+- Symmetry of the image
+    - Check the coronal and transverse images for left-right symmetric contour fits.
+    - Occipital or frontal patellia are possible (one side larger than the other) and this cannot be fixed by linear registration and should pass if the rest of the image is good.
+
+Notes regarding limitations of linear registration:
+
+- The template contour is fixed and never changes between images: It is only the MR image volume that is scaled, rotated, and translated to fit that fixed contour.
+- All voxels along an axis are increased or decreased in size by the same amount, thus a perfect contour fit along the full length of any axis should not be expected. Subjects with non-average brain shapes may have imperfect contour fits but are still QC passes.
+- There are no skew parameters in linear registration, so no shearing of the volume is done to account for asymmetric brain shapes.
+
+Contour problems to ignore (in most cases), summarized:
+
+- Inferior cerebellum contour issues linked to non-average cerebellum shape/size and the limitations of linear registration.
+- Ventricles not outlined perfectly.
+- Contour dent in \~superior occipital lobe -- this is an idiosyncrasy from the ADNI template and should be ignored.
+- Somewhat imperfect contour fits generally (i.e., little bits of brain sticking outside the contour in some places) -- non-linear registration will fix this.
+- There is no tentorium contour line in sagittal slices near the midline in the ADNI template contours.
+- Look for the occipital-cerebellar notch in the contour pressing into the anterior tentorium viewed from the sagittal perspective near the midline.
+
+\newpage
+
+## S5. QC protocol - skull segmentation {.unnumbered}
+
+The main goal of the skull segmentation was to use its output as a feature in longitudinal registration. The QC task was done in order to build a library for the training of an automatic tool. QC labels were limited to "Pass" and "Fail".
+
+A successful segmentation was defined as having at least 95% of the top half of the skull properly segmented. Up to three holes of less than 2 cm2 were allowed for a segmentation to pass QC.
+
+\newpage
+
+## S6. Technical summary of the training video for raw MRI {.unnumbered}
+
+In this video, the speaker examines different MRI cases and evaluates their image quality. They observe various artifacts, signal drop-off, and non-uniformities, but overall, most of the cases shown pass the quality control (QC) criteria. The speaker leaves comments for the anomalies observed, suggesting further investigation during the processing QC stage. The speaker then focuses on the eligibility of different data sets for passing MRI acquisition quality control. They highlight various aspects that are commonly considered, including features like high intensity voxels that limit dynamic range, slight ringing artifacts, and the presence of fat in specific anatomical regions. The speaker explains how these factors can influence the quality of the images and whether they would meet the requirements for quality control.
+
+(00:00:00 - 00:05:00). The speaker states that the goal is to demonstrate how to perform quality control (QC) on raw MRI data using the Qrater software. The software displays JPEG images of specific subjects, with each subject having one JPEG image per imaging modality. The images show different planes---axial, sagittal, and coronal---providing a comprehensive view of the brain anatomy. During QC, several checks are performed, including assessing the intensities to ensure the image is neither too dark nor too bright. The coverage of the brain from left to right, front to back, and top to bottom is also evaluated, along with the absence of artifacts caused by movement, flow, or wrap around. Multiple examples are shown to illustrate both passing and thresholded passing data sets, highlighting the importance of assessing image quality before further processing.
+
+(00:05:00 - 00:10:00). The speaker highlights the importance of intensity normalization in the image processing pipeline to correct for brightness discrepancies. They examine images with good coverage and dynamic intensity range, but observe dark areas in the white matter indicating vascular lesions. Despite this, the overall quality of the images is deemed satisfactory. The speaker also mentions bright artifacts in the scalp due to fat content and explains the wraparound artifact caused by a small field of view. Lastly, they examine a case with a bright artifact in the front of the brain and note that while the coverage is good, the intensities appear dark for the rest of the brain. It is unclear if this specific case should pass the QC.
+
+(00:10:00 - 00:15:00). The speaker points out that certain artifacts, such as brightness at the front and darkness at the back of an image, can be corrected by the imaging processing pipeline, allowing the data set to pass QC. However, if the artifact is severe, like very bright pixels in certain areas and very dark regions in others, the data set may fail QC. They explain that dynamic range reduction due to these artifacts makes it challenging for intensity normalization and non-uniform correction steps to correct them. The speaker emphasizes the importance of examining the processed data to determine if the intensity contrast is acceptable before making a final decision. They also mention other artifact issues, like wrap-around artifacts and odd brain shape, which can impact the QC evaluation. Overall, these observations highlight the need for careful assessment and potential warnings in certain cases when evaluating MRI scans.
+
+(00:15:00 - 00:20:00) The speaker evaluates the coverage, intensities, and presence of artifacts in different MRI scans. They note that while some MRI scans show brightness or wraparound artifacts, they believe that the non-uniformity correction and intensity normalization procedures can address these issues. They also mention that one image shows a tilted head and signal dropout near the mouth, likely due to dental work, but determine that it still passes quality control. In another one, they observe brightness due to a wraparound artifact at the shoulders, but note that the rest of the image has good homogeneity and no artifacts. Finally, they mention a case with good coverage and intensities, but notice a lack of signal in the back of the neck without an explanation.
+
+(00:20:00 - 00:25:00). They notice that some parts of the neck are missing in certain images, and although they are unsure of the reason, they decide to leave a warning comment for the quality control (QC) process. In another scan, they observe a dark image with wraparound artifacts, but since it does not affect the brain, it will pass the QC. They also mention the possibility of a failed coil or the nose being close to the coil as reasons for a bright nose in one of the images. However, they believe that the non-uniformity correction and intensity normalization procedures will fix the dark image. Overall, despite some concerns, the speaker decides to pass these images for QC but leaves comments to keep track of any potential issues.
+
+(00:25:00 - 00:30:00). The MRI QC expert observes that the nose wraps around the MRI scan presented but it doesn't affect the image intensity, which is a good thing. They also note the presence of large ventricles, which is typical in cases of Alzheimer's disease or other neurodegenerative diseases. They point out a vitamin E capsule taped to the patient's scalp to indicate the right side of the brain for analysis. Overall, they find that the scans have good image quality, large ventricles, and no movement or noise artifacts, indicating that they pass the MRI QC assessment.
+
+(00:30:00 - 00:35:00). The speaker mentions that a particular scan has excellent anatomical detail and passes QC despite a small wraparound artifact around the nose. Another scan with a similar artifact also passes QC due to good coverage and intensity without any noise or movement artifacts. They also discuss a scan with dark intensities but decide to pass it since the wraparound artifact does not affect the brain. However, another scan with a bright nose and ringing artifacts fails QC due to motion artifacts that cannot be corrected. Lastly, they mention a scan with a subtle degradation of intensities and recommend further investigation of the acquisition parameters before making a final determination.
+
+(00:35:00 - 00:40:00). The speaker notes that an MRI scan has a reduced dynamic range, likely due to a short TE, and another has bright voxels around the scalp. They also mention a scan with reduced intensity contrast and a wraparound effect, which doesn't affect the brain. Additionally, they highlight a dark image with bright pixels at the nose, indicating reduced intensity range. Finally, they mention a case with good coverage but signal dropout in the mouth, possibly due to dental work, and an unidentified bright object resembling a bump on the head. These observations will be noted for further analysis during the image processing quality control.
+
+(00:40:00 - 00:45:00). The speaker notes that some data sets have good coverage and intensities, while others exhibit brightness variations and movement artifacts. Despite these issues, most of the data sets pass the quality control (QC) criteria. The speaker adds comments regarding the observed anomalies, such as intensity inhomogeneity, wrap-around artifacts, and noise, to be checked during the processing QC stage. However, one data set with a very bright nose is noted but deemed acceptable. Overall, the speaker concludes that most of the reviewed data sets meet the QC standards, with minor issues that can be addressed in the processing QC.
+
+(00:45:00 - 00:50:00). The speaker examines several MRI scans and evaluates their quality. The first dataset has a thick, bright scalp, but the brain's intensities are homogeneous and free of artifacts, so it passes quality control (QC). However, in another dataset, there is a lack of contrast in the brain, indicating a potential issue with the echo time (TE) and repetition time (TR) of the acquisition. This dataset fails QC. The speaker also comes across datasets with intensely non-uniformly bright scalps, but overall, the quality is good, and they pass QC. A dataset with a bright voxel in an unusual location is flagged for further investigation, but the intensities are generally good. The speaker also notes signal dropout in the mouth and low contrast in the white matter, but these factors do not impact the brain's assessment.
+
+(00:50:00 - 00:55:00). The speaker examines different MRI scans and assesses their image quality. The first one shows a bright nose but overall looks good. Another shows a dark image, possibly due to a bright nose again, but it passes the quality check. Some have reduced dynamic range or signal drop off, possibly influenced by dental work. Another shows dark images, likely caused by a bright nose on a slice not shown. A few scans have bright wraparound of the nose and lips, but still pass with some comments. A final one shows a structure in the brain, which could be the thick dura mater or bone, but the image quality is still deemed as good.
+
+(00:55:00 - 01:00:00). The speaker points out ring artifacts and noise in some scans, while others show good coverage and intensities. They also mention the presence of non-uniformity, vascular disease, ventricles, and brain atrophy in certain cases. Additionally, a scan with a bright marker taped to the skin is noted, which affects the dynamic range of the rest of the brain. Overall, some scans pass the MRI quality control (QC) while others do not, with comments highlighting specific issues for further consideration during processing.
+
+(01:00:00 - 01:05:00). The speaker points out common elements in the reviewed cases such as bright skin markers, intense markers that reduce dynamic range, slight ringing artifacts, and the presence of fat in certain areas of the body. The speaker explains how these factors can affect the overall quality of the images and whether they would pass or fail the quality control. They encourage viewers to reach out with any further questions.
+
+\newpage
+
+## S7. Technical summary of the training video for linear registration {.unnumbered}
+
+In the video titled "QC linear stx reg2", the speaker discusses quality control of linear stereotactic registration. They demonstrate the use of the Qrater program to analyze different databases of images and evaluate the quality of stereotactic registration. The speaker examines various data sets, assessing the fit and symmetry of brain contours. They highlight cases where the registration passes or fails, identifying specific errors such as incorrect orientation or scaling. The speaker also discusses issues with z-scaling, rotation, and overall size of the data set. They emphasize the importance of checking scaling, contours, and symmetry to ensure the quality of the MRI scans.
+
+(00:00:00 - 00:05:00). The speaker discusses quality control of linear stereotactic registration. They explain that stereotactic space is defined by specific points, but manual identification of these points is difficult, so automatic techniques have been developed. To ensure proper transformation and registration of subject data to stereotactic space, quality control is necessary. The speaker introduces the Qrater program, which allows them to analyze different databases of images. They demonstrate how to evaluate the quality of stereotactic registration by visually assessing the fit of the contour of the unbiased stereotactic template to the MRI image. They emphasize the importance of checking the overall orientation and size of the data set, as well as ensuring that the cortex fits well with the data. The speaker showcases several slices of data and points out areas where the registration seems to align well and areas where there are slight differences.
+
+(00:05:00 - 00:10:00). The speaker examines several data sets to assess the fit and symmetry of brain contours. The first example shows a well-fitting and symmetrical data set, with only a slight extension in the back indicating some residual variability. Another data set with atrophy also fits well, except for some areas where cerebrospinal fluid is present. Overall, these are considered Pass. However, the speaker also demonstrates cases where the QC fails, such as when the brain contours exceed the MRI image vertically or when the entire temporal lobe is outside the contour. These failures are attributed to issues with z-scaling. The speaker demonstrates how to add comments and mark these cases as failures.
+
+(00:10:00 - 00:15:00). The speaker reviews different images and evaluates their registration success. They highlight cases where the registration passes, fails catastrophically, or has specific errors such as incorrect orientation or scaling. The speaker examines the symmetry and contour fit of various brain regions and identifies issues like misregistration and scaling errors. They also point out cases where the MRI does not align correctly with the contour. Overall, they provide a detailed analysis of the registration quality for each image.
+
+(00:15:00 - 00:20:00). The speaker discusses various issues and failures in the quality control of MRI scans. They point out instances where the z scale is too small, causing the data to fail. They also highlight cases where the overall size of the data set is too small in various dimensions. In some cases, the brain appears too large and extends past the contours. There are also instances where the intensity of the image is not aligned with the MRI contours. The speaker identifies problems with rotation, scale, and fit, ultimately leading to failures in the quality control process.
+
+(00:20:00 - 00:25:00). The speaker discusses the issue of rotation in MRI images. They point out that the rotations in the images seem to be okay, with the orientation of the brain looking good. However, there are some concerns about the scaling and rotation, as the tectorium and cerebellum do not fit well in the sagittal images. The speaker also mentions a rotation error related to the orbital frontal contour cutting through the occipital fat. They emphasize the importance of checking the scaling, contours at the top of the brain, base of the cerebellum, and temporal lobes. Additionally, they highlight the need for left-right symmetry in both transverse and coronal images. Overall, these issues should be addressed to ensure the quality of the MRI.
+
+\newpage
+
+## S8. Technical summary of the training video of the follow-up meeting: linear registration of ADNI data {.unnumbered}
+
+In this video, the linear stx QC is examined through various examples of brain images. The reviewer evaluates each case based on scale, intensity, contour fitting, and symmetry. While there is some disagreement among the reviewers regarding the pass or fail status of certain cases, they discuss the limitations of linear registration in handling protrusions or asymmetries in the brain. They emphasize the importance of evaluating the accuracy of linear registration rather than purely relying on the image's appearance. The reviewers also discuss the impact of Z scale on assessing asymmetry, as well as the presence of shear or asymmetry in the Z axis. They analyze different data sets and debate whether certain cases should pass or fail, considering factors such as contour fitting and signal drop-off. The reviewer highlights the need for proper alignment using linear registration and provides detailed analysis and recommendations for improvement based on the intra-rater experiment results. The reviewer also mentions the feedback received from participants regarding the scale and shape of the brain, acknowledging the challenges in accurately judging images with slight deviations from the standard model.
+
+(00:00:00 - 00:05:00). The reviewer goes through several examples of brain images and determines whether they pass or fail the linear stereotactic registration QC. The first example fails due to poor scale and intensity, while the second fails because the brain is too small compared to the contour. Another example fails due to scale issues in the occipital lobe. However, the reviewer finds one example to pass, despite some residual misregistration and a slight extension in the cerebellum. The group discusses the variability in the cerebellum, but ultimately agrees that linear registration is primarily focused on the cerebrum. The reviewer also notes the design scaling as a reason for some failures. Overall, there is some disagreement among the reviewers regarding which cases should pass or fail.
+
+(00:05:00 - 00:10:00). The reviewer discusses the limitations of linear registration in the QC video and highlights that it primarily involves scaling and rotation, which cannot handle protrusions or asymmetries in the brain. They explain that if the scaling and rotation appear correct, there may still be small pieces of the brain sticking out because linear registration is not designed to address this. The reviewer suggests considering this when evaluating images with anatomical abnormalities. Furthermore, they emphasize that failing QC should not be solely based on the image's appearance but rather on the accuracy of linear registration. The subsequent section presents an example of a brain with significant asymmetry, particularly in the occipital area, where the right hemisphere is noticeably smaller. They note that while the left hemisphere fits well, the right side poses challenges in fitting the contour due to its size difference.
+
+(00:10:00 - 00:15:00). The reviewer discusses the Z scale and its impact on the assessment of asymmetry in the brain. They mention that the orientation of the brain seems aligned, but there is a shear or asymmetry in the Z axis. The reviewer questions whether this shear is normal and suggests that it may be due to anatomical variability or local atrophy in the patient's brain. Despite this asymmetry, the reviewer concludes that the overall orientation and scaling of the brain are acceptable, and the images can be passed. They also note that the transforms used in the pipeline do not account for this type of anatomical variability.
+
+(00:15:00 - 00:20:00). The reviewers are examining different data sets and evaluating their quality. They discuss the asymmetry in one data set, with an extension on the frontal and posterior ends, but ultimately agree that it should pass. Another data set presents a borderline case, with a possible issue in the frontal area. The reviewers debate whether to pass or not, but ultimately decide to pass it. However, they note that it is a difficult decision. They encounter a data set where the MRI appears small but fits well, except for some signal drop-off in the occipital area. It is another borderline case, but they lean towards accepting it as it is. They encounter a failure in a data set where the cerebellum appears small and there is an error in the rotation. Finally, they discuss a data set with a possible small rotation error, specifically in the Contour cutting through the occipital fat.
+
+(00:20:00 - 00:25:00). The reviewer examines various data sets and evaluates their performance. In one case, the cerebellum does not fit well, suggesting an issue with the Contour at the Falk. The reviewer also notices a discrepancy with the Z-scale indicating potential problems with scale alignment. Another data set shows local misregistration between the Contour and the gray matter cortex of the MRI, but overall, it fits well. However, some rotation and scale errors are identified in other data sets, causing the Contour to cut into the occipital fat and extend outside the MRI, suggesting a failure. The reviewer highlights the importance of properly aligning the Contour and MRI using linear registration.
+
+(00:25:00 - 00:30:00). The reviewer is discussing the results of the intra-rater experiment for QC on linear stx. They mention that the rotation looks good, and there is a small cerebellum observed in one subject. They comment on various aspects such as Z scale, X scale, Y scale, and Left-Right symmetry. Based on their observations, they determine whether each case should pass or fail QC. They note instances where the Z scale seems short or the contour is outside the brain, leading to a failure. They also mention cases where people failed due to X rotation and Z scale. Overall, they provide a detailed analysis of each case and make recommendations for improvement.
+
+(00:30:00 - 00:35:00). Finally, the reviewer discusses the feedback received from the participants regarding the set scale of the images. Some participants mentioned that the scale appeared small, while others mentioned that the white matter was big. The reviewer then proceeds to analyze the Y scale contour, pointing out that the occipital pole had a slight extension, but overall, the contour seemed to fit the shape of the brain well. The Y scale in the front, back, and temporal lobe also appeared to be reasonably good. However, it is noted that some people might be offended by the Z scale since the cerebellum was not included within the contour. Additionally, the reviewer acknowledges that the shape of the brain being slightly different from the standard model could make it challenging to judge the images accurately.
+
+\newpage
+
+## S9. Matrix of detailed inter-rater agreement of the raw MRI QC task {.unnumbered}
+
+```{r}
+#| label: fig-agreement-raw
+#| fig-cap: "Confusion matrix representing the percentage of agreement between the expert's gold standard ratings represented as E01 and the trainees represented as R01 - R09 for the QC labels given in the raw MRI QC task."
+#| out-width: "80%"
+#| fig-width: 7
+#| fig-height: 6
+
+acq_count_plot <- copy(acq_99_count)
+acq_count_plot[, Perc := as.numeric(gsub("%", "", Perc))]
+ggplot(acq_count_plot, aes(x = Rater2, y = Rater, fill = Perc)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = paste0(round(Perc), "%")), size = 3) +
+  scale_fill_gradient(low = "#c7e9c0", high = "#006d2c",
+                      limits = c(0, 100),
+                      name = "Agreement\n(Percentage)") +
+  labs(x = "Rater", y = "Rater") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0),
+        panel.grid = element_blank())
+```
+
+\newpage
+
+## S10. Time measurements of raters for QC of the balanced dataset of raw MRI {.unnumbered}
+
+```{r}
+#| label: tbl-time-acq99
+#| tbl-cap: "Measurements of the time to complete their raw MRI QC sessions (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the balanced subset of preselected cases for the trainees and for the two sessions performed by the expert (Ses1 & Ses2). Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings. The last row represents the median of the total time, number of rests, and number of \"Pass\" and \"Fail\" images, as well as the median time data by QC label among all raters."
+
+acq_99_time <- read_rds(here("data/derivatives/acq_99_time_dt.rds"))
+acq_99_time[Diff > as.difftime(15*60, units = "secs"), Rest := TRUE]
+acq_99_time[!is.na(Rest), Diff := NA]
+
+acq_99_summ1 <- acq_99_time[, .(N = .N,
+                  Rests = sum(Rest, na.rm = TRUE),
+                  Session = as.character(hms::as_hms(sum(as.numeric(Diff), na.rm = TRUE))),
+                  PvF = suppressWarnings(
+                          wilcox.test(as.numeric(Diff) ~ Rating,
+                                      na.action = na.omit))$p.value), Rater]
+
+acq_99_all1 <- acq_99_summ1[, .(Rater = "All", N = 99,
+                                Rests = round(median(Rests)),
+                                Session = as.character(hms::as_hms(round(median(hms::as_hms(Session))))))]
+acq_99_all1[, PvF := acq_99_time[, wilcox.test(as.numeric(Diff) ~ Rating,
+                                               na.action = na.omit)$p.value]]
+acq_99_summ1 <- rbindlist(list(acq_99_summ1, acq_99_all1), use.names = TRUE)
+
+acq_99_summ2 <- acq_99_time[, .(N = .N,
+                                Median = hms::as_hms(median(as.numeric(Diff), na.rm = TRUE)),
+                                Sd = hms::hms(sd(as.numeric(Diff), na.rm = TRUE))),
+                            .(Rater, Rating)] |>
+                dcast(Rater ~ Rating, value.var = c("N", "Median", "Sd"))
+
+time_format <- "%d:%02.0f (%d:%02.0f)"
+acq_99_summ <- acq_99_summ1[acq_99_summ2, on = "Rater",
+                            .(Rater, Session, Rests,
+                              Pass_N = round(N_Pass),
+                              Pass_Time = sprintf(time_format,
+                                                  lubridate::minute(Median_Pass),
+                                                  lubridate::second(Median_Pass),
+                                                  lubridate::minute(Sd_Pass),
+                                                  lubridate::second(Sd_Pass)),
+                              Fail_N = round(N_Fail),
+                              Fail_Time = sprintf(time_format,
+                                                  lubridate::minute(Median_Fail),
+                                                  lubridate::second(Median_Fail),
+                                                  lubridate::minute(Sd_Fail),
+                                                  lubridate::second(Sd_Fail)),
+                              p = round(PvF, digits = 3))]
+
+# Holm correction
+acq_99_p <- acq_99_summ[, .(Rater, p)]
+acq_99_p[, p_adj := p.adjust(p, method = "holm")]
+acq_99_summ[, p_adj := round(acq_99_p$p_adj, 3)]
+
+acq_99_summ |>
+  gt() |>
+  cols_hide(columns = p) |>
+  cols_label(
+    Rater = "Rater", Session = "Total Time", Rests = "Rests",
+    Pass_N = "N", Pass_Time = "Time",
+    Fail_N = "N", Fail_Time = "Time",
+    p_adj = "p adj."
+  ) |>
+  tab_spanner(label = "Pass", columns = c(Pass_N, Pass_Time)) |>
+  tab_spanner(label = "Fail", columns = c(Fail_N, Fail_Time)) |>
+  style_manuscript_table(table_type = "supplementary")
+```
+
+\newpage
+
+## S11. Time measurements of raters for raw MRI QC of the ADNI dataset {.unnumbered}
+
+```{r}
+#| label: tbl-time-acq-adni
+#| tbl-cap: "Measurements of the time to complete the raw MRI QC of the ADNI data (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the expert and the trainees. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass, Warning and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number of rests as well as the QC label and time data among all raters."
+
+acquis_time <- read_rds(here("data/derivatives/acquis_time_dt.rds"))
+acquis_time[, Rater := stringr::str_replace(Rater, "0", "-")]
+acquis_time[Diff > as.difftime(15*60, units = "secs"), Rest := TRUE]
+acquis_time[!is.na(Rest), Diff := NA]
+
+acquis_summ1 <- acquis_time[, .(N = .N,
+                  Rests = sum(Rest, na.rm = TRUE),
+                  Session = as.character(hms::as_hms(sum(as.numeric(Diff), na.rm = TRUE))),
+                  PvWvF = suppressWarnings(
+                            kruskal.test(as.numeric(Diff) ~ Rating,
+                                         na.action = na.omit))$p.value), Rater]
+
+acquis_all1 <- acquis_summ1[, .(Rater = "All", N = sum(N),
+                                Rests = round(median(Rests)),
+                                Session = as.character(hms::as_hms(round(median(hms::as_hms(Session))))))]
+acquis_all1[, PvWvF := acquis_time[, kruskal.test(as.numeric(Diff) ~ Rating,
+                                                  na.action = na.omit)$p.value]]
+acquis_summ1 <- rbindlist(list(acquis_summ1[order(Rater)], acquis_all1), use.names = TRUE)
+
+acquis_summ2 <- acquis_time[, .(N = .N,
+                                Median = hms::as_hms(median(as.numeric(Diff), na.rm = TRUE)),
+                                Sd = hms::hms(sd(as.numeric(Diff), na.rm = TRUE))),
+                            .(Rater, Rating)] |>
+                dcast(Rater ~ Rating, value.var = c("N", "Median", "Sd"))
+
+# Build summary with Pass, Warning, and Fail columns
+acquis_summ <- acquis_summ1[acquis_summ2, on = "Rater"]
+# Replace NA with 0 for Warning counts
+acquis_summ[is.na(N_Warning), N_Warning := 0L]
+acquis_summ[, `:=`(
+  Pass_N = sprintf("%d (%d%%)", N_Pass, round(N_Pass / N * 100)),
+  Pass_Time = sprintf(time_format,
+                      lubridate::minute(Median_Pass),
+                      lubridate::second(Median_Pass),
+                      lubridate::minute(Sd_Pass),
+                      lubridate::second(Sd_Pass)),
+  Warn_N = sprintf("%d (%d%%)", N_Warning, round(N_Warning / N * 100)),
+  Warn_Time = fifelse(is.na(Median_Warning), "-",
+                sprintf(time_format,
+                        lubridate::minute(Median_Warning),
+                        lubridate::second(Median_Warning),
+                        lubridate::minute(Sd_Warning),
+                        lubridate::second(Sd_Warning))),
+  Fail_N = sprintf("%d (%d%%)", N_Fail, round(N_Fail / N * 100)),
+  Fail_Time = sprintf(time_format,
+                      lubridate::minute(Median_Fail),
+                      lubridate::second(Median_Fail),
+                      lubridate::minute(Sd_Fail),
+                      lubridate::second(Sd_Fail)),
+  p = PvWvF
+)]
+
+# Holm correction
+acquis_p <- acquis_summ[, .(Rater, p)]
+acquis_p[, p_adj := p.adjust(p, method = "holm")]
+acquis_summ[, p_adj := acquis_p$p_adj]
+# Format p-values
+acquis_summ[, p := fifelse(p < 0.001, "<0.001", sprintf("%.3f", p))]
+acquis_summ[, p_adj := fifelse(as.numeric(p_adj) < 0.001, "<0.001", sprintf("%.3f", as.numeric(p_adj)))]
+
+acquis_summ[, .(Rater, Session, Rests, Pass_N, Pass_Time,
+                Warn_N, Warn_Time, Fail_N, Fail_Time, p, p_adj)] |>
+  gt() |>
+  cols_hide(columns = p) |>
+  cols_label(
+    Rater = "Rater", Session = "Total Time", Rests = "Rests",
+    Pass_N = "N", Pass_Time = "Time",
+    Warn_N = "N", Warn_Time = "Time",
+    Fail_N = "N", Fail_Time = "Time",
+    p_adj = "p adj."
+  ) |>
+  tab_spanner(label = "Pass", columns = c(Pass_N, Pass_Time), id = "spanner_pass") |>
+  tab_spanner(label = "Warning", columns = c(Warn_N, Warn_Time), id = "spanner_warn") |>
+  tab_spanner(label = "Fail", columns = c(Fail_N, Fail_Time), id = "spanner_fail") |>
+  style_manuscript_table(table_type = "supplementary") |>
+  tab_options(table.font.size = "8pt", column_labels.font.size = "8pt")
+```
+
+\newpage
+
+## S12. Post-hoc analysis of time differences by QC label in the ADNI data {.unnumbered}
+
+```{r}
+#| label: tbl-posthoc-adni
+#| tbl-cap: "Post-hoc analysis of the time differences by QC label of the ADNI data performed by the Dunn's test of multiple comparisons using rank sums using the Holm method for multiple comparisons. P values in bold are statistically significant."
+
+# Per-rater Dunn's test with Kruskal-Wallis chi-squared
+raters_posthoc <- unique(acquis_time$Rater)
+raters_posthoc <- raters_posthoc[order(raters_posthoc)]
+
+posthoc_list <- lapply(c(raters_posthoc, "All"), function(r) {
+  if (r == "All") {
+    dt_sub <- acquis_time[!is.na(Diff)]
+  } else {
+    dt_sub <- acquis_time[Rater == r & !is.na(Diff)]
+  }
+
+  # Only run if there are at least 3 rating levels (Pass, Warning, Fail)
+  rating_levels <- unique(dt_sub$Rating)
+  if (length(rating_levels) < 3) return(NULL)
+
+  # Kruskal-Wallis chi-squared
+  kw <- suppressWarnings(kruskal.test(as.numeric(Diff) ~ Rating, data = dt_sub))
+
+  # Dunn's test
+  dtest <- suppressMessages(
+    dunn.test::dunn.test(as.numeric(dt_sub$Diff), dt_sub$Rating,
+                         method = "holm", table = FALSE,
+                         list = FALSE, kw = FALSE)
+  )
+
+  data.table(
+    Rater = c(r, rep("", length(dtest$Z) - 1)),
+    Chi_squared = c(round(kw$statistic, 3), rep(NA_real_, length(dtest$Z) - 1)),
+    Z = round(dtest$Z, 3),
+    p = dtest$P,
+    p_adj = dtest$P.adjusted,
+    Comparisons = dtest$comparisons
+  )
+})
+
+posthoc_dt <- rbindlist(posthoc_list)
+posthoc_dt[, p_fmt := fifelse(p < 0.001, "<0.001", sprintf("%.3f", p))]
+posthoc_dt[, p_adj_fmt := fifelse(p_adj < 0.001, "<0.001", sprintf("%.3f", p_adj))]
+
+posthoc_dt[, .(Rater, Chi_squared, Z, p = p_fmt, p_adj = p_adj_fmt, Comparisons)] |>
+  gt() |>
+  cols_hide(columns = p) |>
+  cols_label(
+    Rater = "Rater", Chi_squared = "Chi-squared",
+    Z = "Z", p_adj = "p adj.", Comparisons = "Comparisons"
+  ) |>
+  style_manuscript_table(table_type = "supplementary")
+```
+
+\newpage
+
+## S13. Matrix of detailed inter-rater agreement of the linear registration QC task {.unnumbered}
+
+```{r}
+#| label: fig-agreement-reg
+#| fig-cap: "Confusion matrix representing the percentage of agreement between the expert's gold standard ratings represented as E01 and the trainees represented as R01 - R09 for the QC labels given in the linear registration QC task."
+#| out-width: "80%"
+#| fig-width: 7
+#| fig-height: 6
+
+reg_count_plot <- copy(reg_99_count)
+reg_count_plot[, Perc := as.numeric(gsub("%", "", Perc))]
+ggplot(reg_count_plot, aes(x = Rater2, y = Rater, fill = Perc)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = paste0(round(Perc), "%")), size = 3) +
+  scale_fill_gradient(low = "#c7e9c0", high = "#006d2c",
+                      limits = c(0, 100),
+                      name = "Agreement\n(Percentage)") +
+  labs(x = "Rater", y = "Rater") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 0),
+        panel.grid = element_blank())
+```
+
+\newpage
+
+## S14. Time measurements of raters for QC of the balanced dataset of linear registration {.unnumbered}
+
+```{r}
+#| label: tbl-time-reg99
+#| tbl-cap: "Measurements of the time to complete the linear registration QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the balanced subset of preselected cases for the trainees and for the two sessions performed by the expert (Ses1 & Ses2). Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number of rests as well as the QC label and time data among all raters."
+
+reg_99_time <- read_rds(here("data/derivatives/reg_99_time_dt.rds"))
+reg_99_time[Diff > as.difftime(15*60, units = "secs"), Rest := TRUE]
+reg_99_time[!is.na(Rest), Diff := NA]
+
+reg_99_summ1 <- reg_99_time[, .(N = .N,
+                  Rests = sum(Rest, na.rm = TRUE),
+                  Session = as.character(hms::as_hms(sum(as.numeric(Diff), na.rm = TRUE))),
+                  PvF = suppressWarnings(
+                          wilcox.test(as.numeric(Diff) ~ Rating,
+                                      na.action = na.omit))$p.value), Rater]
+
+reg_99_all1 <- reg_99_summ1[, .(Rater = "All", N = 99,
+                                Rests = round(median(Rests)),
+                                Session = as.character(hms::as_hms(round(median(hms::as_hms(Session))))))]
+reg_99_all1[, PvF := reg_99_time[, wilcox.test(as.numeric(Diff) ~ Rating,
+                                               na.action = na.omit)$p.value]]
+reg_99_summ1 <- rbindlist(list(reg_99_summ1, reg_99_all1), use.names = TRUE)
+
+reg_99_summ2 <- reg_99_time[, .(N = .N,
+                                Median = hms::as_hms(median(as.numeric(Diff), na.rm = TRUE)),
+                                Sd = hms::hms(sd(as.numeric(Diff), na.rm = TRUE))),
+                            .(Rater, Rating)] |>
+                dcast(Rater ~ Rating, value.var = c("N", "Median", "Sd"))
+
+reg_99_summ <- reg_99_summ1[reg_99_summ2, on = "Rater",
+                            .(Rater, Session, Rests,
+                              Pass_N = round(N_Pass),
+                              Pass_Time = sprintf(time_format,
+                                                  lubridate::minute(Median_Pass),
+                                                  lubridate::second(Median_Pass),
+                                                  lubridate::minute(Sd_Pass),
+                                                  lubridate::second(Sd_Pass)),
+                              Fail_N = round(N_Fail),
+                              Fail_Time = sprintf(time_format,
+                                                  lubridate::minute(Median_Fail),
+                                                  lubridate::second(Median_Fail),
+                                                  lubridate::minute(Sd_Fail),
+                                                  lubridate::second(Sd_Fail)),
+                              p = round(PvF, digits = 3))]
+
+reg_99_p <- reg_99_summ[, .(Rater, p)]
+reg_99_p[, p_adj := p.adjust(p, method = "holm")]
+reg_99_summ[, p_adj := round(reg_99_p$p_adj, 3)]
+
+reg_99_summ |>
+  gt() |>
+  cols_hide(columns = p) |>
+  cols_label(
+    Rater = "Rater", Session = "Total Time", Rests = "Rests",
+    Pass_N = "N", Pass_Time = "Time",
+    Fail_N = "N", Fail_Time = "Time",
+    p_adj = "p adj."
+  ) |>
+  tab_spanner(label = "Pass", columns = c(Pass_N, Pass_Time)) |>
+  tab_spanner(label = "Fail", columns = c(Fail_N, Fail_Time)) |>
+  style_manuscript_table(table_type = "supplementary")
+```
+
+\newpage
+
+## S15. Change before and after protocol refinement of linear registration {.unnumbered}
+
+```{r}
+#| label: tbl-prepost
+#| tbl-cap: "Change in QC before and after the interruption of the linear registration QC of the ADNI data. QC labels of the images already evaluated before the task interruption and after the protocol refinement (n and percentage of the total). The images flagged as \"Warning\" were not considered when calculating the number of images changed."
+
+# Compare pre-meeting and final ratings
+reg_pre_final <- reg_pre[regis[, .(Image, Final = Rating, Rater)],
+                         on = .(Image, Rater), nomatch = 0]
+reg_pre_final[, Rater := stringr::str_replace(Rater, "0", "-")]
+
+# Before counts (pre-meeting ratings)
+before_summ <- reg_pre_final[, .(
+  Before_Pass = sum(Rating == "Pass"),
+  Before_Warning = sum(Rating == "Warning"),
+  Before_Fail = sum(Rating == "Fail"),
+  N_total = .N
+), Rater]
+
+# After counts (final ratings) - only Pass/Fail
+after_summ <- reg_pre_final[, .(
+  After_Pass = sum(Final == "Pass"),
+  After_Fail = sum(Final == "Fail")
+), Rater]
+
+# Images changed (excluding Warning from pre-meeting)
+changed_summ <- reg_pre_final[Rating != "Warning", .(
+  Images_changed = sum(Rating != Final)
+), Rater]
+
+prepost <- before_summ[after_summ, on = "Rater"][changed_summ, on = "Rater"]
+
+# Format with n (%)
+prepost[, `:=`(
+  Before_Pass_fmt = sprintf("%d (%d%%)", Before_Pass, round(Before_Pass / N_total * 100)),
+  Before_Warning_fmt = sprintf("%d (%d%%)", Before_Warning, round(Before_Warning / N_total * 100)),
+  Before_Fail_fmt = sprintf("%d (%d%%)", Before_Fail, round(Before_Fail / N_total * 100)),
+  After_Pass_fmt = sprintf("%d (%d%%)", After_Pass, round(After_Pass / N_total * 100)),
+  After_Fail_fmt = sprintf("%d (%d%%)", After_Fail, round(After_Fail / N_total * 100)),
+  Images_changed_fmt = sprintf("%d (%d%%)", Images_changed, round(Images_changed / N_total * 100))
+)]
+
+# Average row
+avg_row <- prepost[, .(
+  Rater = "Average",
+  Before_Pass_fmt = sprintf("%d (%d%%)", round(mean(Before_Pass)), round(mean(Before_Pass / N_total * 100))),
+  Before_Warning_fmt = sprintf("%d (%d%%)", round(mean(Before_Warning)), round(mean(Before_Warning / N_total * 100))),
+  Before_Fail_fmt = sprintf("%d (%d%%)", round(mean(Before_Fail)), round(mean(Before_Fail / N_total * 100))),
+  After_Pass_fmt = sprintf("%d (%d%%)", round(mean(After_Pass)), round(mean(After_Pass / N_total * 100))),
+  After_Fail_fmt = sprintf("%d (%d%%)", round(mean(After_Fail)), round(mean(After_Fail / N_total * 100))),
+  Images_changed_fmt = sprintf("%d (%d%%)", round(mean(Images_changed)), round(mean(Images_changed / N_total * 100)))
+)]
+
+rbindlist(list(
+  prepost[, .(Rater, Before_Pass_fmt, Before_Warning_fmt, Before_Fail_fmt,
+              After_Pass_fmt, After_Fail_fmt, Images_changed_fmt)],
+  avg_row
+)) |>
+  gt() |>
+  cols_label(
+    Rater = "Rater",
+    Before_Pass_fmt = "Pass", Before_Warning_fmt = "Warning", Before_Fail_fmt = "Fail",
+    After_Pass_fmt = "Pass", After_Fail_fmt = "Fail",
+    Images_changed_fmt = "Images changed"
+  ) |>
+  tab_spanner(label = "Before", columns = c(Before_Pass_fmt, Before_Warning_fmt, Before_Fail_fmt)) |>
+  tab_spanner(label = "After", columns = c(After_Pass_fmt, After_Fail_fmt)) |>
+  style_manuscript_table(table_type = "supplementary")
+```
+
+\newpage
+
+## S16. Time measurements for the linear registration QC of the ADNI data {.unnumbered}
+
+```{r}
+#| label: tbl-time-reg-adni
+#| tbl-cap: "Measurements of the time to complete the linear registration QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the ADNI data. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number rests as well as the QC label and time data among all raters."
+
+regis_time <- read_rds(here("data/derivatives/regis_time_dt.rds"))
+regis_time[, Rater := stringr::str_replace(Rater, "0", "-")]
+regis_time[Diff > as.difftime(15*60, units = "secs"), Rest := TRUE]
+regis_time[!is.na(Rest), Diff := NA]
+
+regis_summ1 <- regis_time[, .(N = .N,
+                  Rests = sum(Rest, na.rm = TRUE),
+                  Session = as.character(hms::as_hms(sum(as.numeric(Diff), na.rm = TRUE))),
+                  PvF = suppressWarnings(
+                          wilcox.test(as.numeric(Diff) ~ Rating,
+                                      na.action = na.omit))$p.value), Rater]
+
+regis_all1 <- regis_summ1[, .(Rater = "All", N = sum(N),
+                              Rests = round(median(Rests)),
+                              Session = as.character(hms::as_hms(round(median(hms::as_hms(Session))))))]
+regis_all1[, PvF := regis_time[, wilcox.test(as.numeric(Diff) ~ Rating,
+                                             na.action = na.omit)$p.value]]
+regis_summ1 <- rbindlist(list(regis_summ1[order(Rater)], regis_all1), use.names = TRUE)
+
+regis_summ2 <- regis_time[, .(N = .N,
+                              Median = hms::as_hms(median(as.numeric(Diff), na.rm = TRUE)),
+                              Sd = hms::hms(sd(as.numeric(Diff), na.rm = TRUE))),
+                          .(Rater, Rating)] |>
+               dcast(Rater ~ Rating, value.var = c("N", "Median", "Sd"))
+
+regis_summ <- regis_summ1[regis_summ2, on = "Rater",
+                          .(Rater, Session, Rests,
+                            Pass_N = sprintf("%d (%d%%)", round(N_Pass), round(N_Pass / N * 100)),
+                            Pass_Time = sprintf(time_format,
+                                                lubridate::minute(Median_Pass),
+                                                lubridate::second(Median_Pass),
+                                                lubridate::minute(Sd_Pass),
+                                                lubridate::second(Sd_Pass)),
+                            Fail_N = sprintf("%d (%d%%)", round(N_Fail), round(N_Fail / N * 100)),
+                            Fail_Time = sprintf(time_format,
+                                                lubridate::minute(Median_Fail),
+                                                lubridate::second(Median_Fail),
+                                                lubridate::minute(Sd_Fail),
+                                                lubridate::second(Sd_Fail)),
+                            p = PvF)]
+
+regis_p <- regis_summ[, .(Rater, p)]
+regis_p[, p_adj := p.adjust(p, method = "holm")]
+regis_summ[, p_adj := regis_p$p_adj]
+regis_summ[, p := fifelse(p < 0.001, "<0.001", sprintf("%.3f", p))]
+regis_summ[, p_adj := fifelse(as.numeric(p_adj) < 0.001, "<0.001", sprintf("%.3f", as.numeric(p_adj)))]
+
+regis_summ |>
+  gt() |>
+  cols_hide(columns = p) |>
+  cols_label(
+    Rater = "Rater", Session = "Total Time", Rests = "Rests",
+    Pass_N = "N", Pass_Time = "Time",
+    Fail_N = "N", Fail_Time = "Time",
+    p_adj = "p adj."
+  ) |>
+  tab_spanner(label = "Pass", columns = c(Pass_N, Pass_Time)) |>
+  tab_spanner(label = "Fail", columns = c(Fail_N, Fail_Time)) |>
+  style_manuscript_table(table_type = "supplementary")
+```
+
+\newpage
+
+## S17. Time measurements of experts for the skull segmentation QC of the ADNI data {.unnumbered}
+
+```{r}
+#| label: tbl-time-seg
+#| tbl-cap: "Measurements of the time to complete the skull segmentation QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the ADNI data. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant."
+
+rskull_time <- copy(rskull)
+rskull_time[, Rater := stringr::str_replace(Rater, "0", "-")]
+rskull_time[, Diff := as.numeric(Diff)]
+rskull_time[Diff > 15*60 | Diff < 0, Rest := TRUE]
+rskull_time[!is.na(Rest), Diff := NA]
+
+rskull_summ1 <- rskull_time[, .(N = .N,
+                  Rests = sum(Rest, na.rm = TRUE),
+                  Session = as.character(hms::as_hms(sum(Diff, na.rm = TRUE))),
+                  PvF = suppressWarnings(
+                          wilcox.test(Diff ~ Rating,
+                                      na.action = na.omit))$p.value), Rater]
+
+rskull_summ2 <- rskull_time[, .(N = .N,
+                                Mean = round(mean(Diff, na.rm = TRUE), 1),
+                                Sd = round(sd(Diff, na.rm = TRUE), 1)),
+                            .(Rater, Rating)] |>
+                dcast(Rater ~ Rating, value.var = c("N", "Mean", "Sd"))
+
+rskull_summ <- rskull_summ1[rskull_summ2, on = "Rater",
+                            .(Rater, Session, Rests,
+                              Pass_N = sprintf("%d (%d%%)", N_Pass, round(N_Pass / N * 100)),
+                              Pass_Time = sprintf("%.0f:%02.0f (%.0f:%02.0f)",
+                                                  Mean_Pass %/% 60, Mean_Pass %% 60,
+                                                  Sd_Pass %/% 60, Sd_Pass %% 60),
+                              Fail_N = sprintf("%d (%d%%)", N_Fail, round(N_Fail / N * 100)),
+                              Fail_Time = sprintf("%.0f:%02.0f (%.0f:%02.0f)",
+                                                  Mean_Fail %/% 60, Mean_Fail %% 60,
+                                                  Sd_Fail %/% 60, Sd_Fail %% 60),
+                              p = PvF)]
+
+# Holm correction
+rskull_p <- rskull_summ[, .(Rater, p)]
+rskull_p[, p_adj := p.adjust(p, method = "holm")]
+rskull_summ[, p_adj := rskull_p$p_adj]
+rskull_summ[, p := fifelse(p < 0.001, "<0.001", sprintf("%.3f", p))]
+rskull_summ[, p_adj := fifelse(as.numeric(p_adj) < 0.001, "<0.001", sprintf("%.3f", as.numeric(p_adj)))]
+
+rskull_summ |>
+  gt() |>
+  cols_hide(columns = p) |>
+  cols_label(
+    Rater = "Rater", Session = "Total Time", Rests = "Rests",
+    Pass_N = "N", Pass_Time = "Time",
+    Fail_N = "N", Fail_Time = "Time",
+    p_adj = "p adj."
+  ) |>
+  tab_spanner(label = "Pass", columns = c(Pass_N, Pass_Time)) |>
+  tab_spanner(label = "Fail", columns = c(Fail_N, Fail_Time)) |>
+  style_manuscript_table(table_type = "supplementary")
+```

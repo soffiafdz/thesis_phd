@@ -14,7 +14,7 @@ library("flextable")
 
 ## Recreation
 # Recreate plots if existing
-rec_plots   <- FALSE
+rec_plots   <- TRUE
 
 # Recreate table if existing
 rec_table   <- FALSE
@@ -503,7 +503,7 @@ if (!file.exists(fp_count) | rec_plots) {
     theme_classic() +
     theme(text = element_text(size = 14), legend.position = "right") +
     geom_tile(aes(fill = Count)) + geom_text(aes(label = Perc), size = 3.5) +
-    scale_fill_gradient(low = "white", high = "#028202", limits = c(0, 1)) +
+    scale_fill_gradient(low = "white", high = "#028202", limits = c(0, 100)) +
     labs(y = "Rater", fill = "Agreement\n(Percentage)")
 
   ggsave(fp_count, width = 8, height = 8, units = "in", dpi = 600)
@@ -591,7 +591,7 @@ if (!file.exists(fp_count) | rec_plots) {
     theme_classic() +
     theme(text = element_text(size = 14), legend.position = "right") +
     geom_tile(aes(fill = Count)) + geom_text(aes(label = Perc), size = 3.5) +
-    scale_fill_gradient(low = "white", high = "#028202", limits = c(0, 1)) +
+    scale_fill_gradient(low = "white", high = "#028202", limits = c(0, 100)) +
     labs(y = "Rater", fill = "Agreement\n(Percentage)")
 
   ggsave(fp_count, width = 8, height = 8, units = "in", dpi = 600)
