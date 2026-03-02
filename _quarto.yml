@@ -1,0 +1,58 @@
+project:
+  type: book
+  output-dir: _book
+
+execute:
+  echo: false
+  warning: false
+  message: false
+
+book:
+  title: "Title of Your Thesis"
+  author: "Santiago Fernandez"
+  date: today
+  chapters:
+    - index.qmd
+    - content/abstract_en.qmd
+    - content/abstract_fr.qmd
+    - content/contributions.qmd
+    - content/acknowledgements.qmd
+    - content/introduction.qmd
+    - content/literature.qmd
+    # Paper chapters (to be added when subtrees are ready):
+    # - part: "Paper Chapters"
+    #   chapters:
+    #     - content/chapter2.qmd
+    #     - content/chapter3.qmd
+    #     - content/chapter4.qmd
+    #     - content/chapter5.qmd
+    - content/discussion.qmd
+    - content/conclusions.qmd
+    - content/publications.qmd
+    - content/acronyms.qmd
+  appendices:
+    - content/appendix-chapter3.qmd
+    - content/appendix-chapter4.qmd
+    # Add more as needed per paper chapter
+
+bibliography: references.bib
+
+filters:
+  - _filters/thesis.lua
+
+format:
+  pdf:
+    documentclass: book
+    classoption: [12pt, oneside]
+    include-in-header: _templates/preamble.tex
+    include-before-body: _templates/before-body.tex
+    template-partials:
+      - _templates/title.tex
+    toc: false
+    lof: false
+    lot: false
+    number-sections: true
+    linestretch: 1.5
+    colorlinks: false
+    latex-min-runs: 3
+    keep-tex: true

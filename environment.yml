@@ -1,0 +1,24 @@
+name: thesis_phd
+channels:
+  - conda-forge
+dependencies:
+  # Python
+  - python=3.10
+  - pip
+
+  # R base (packages via renv in each source repo)
+  - r-base=4.5.1
+
+  # Quarto
+  - quarto
+
+  # LaTeX (tectonic auto-downloads packages as needed)
+  - tectonic
+  - latexmk
+
+  # Tools
+  - direnv
+  - mamba
+  - pandoc
+  - make
+  - git
