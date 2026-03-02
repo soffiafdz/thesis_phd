@@ -1,0 +1,12 @@
+# Abstract {.unnumbered}
+
+[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
+If the language of the thesis is neither English nor French (only allowed
+for specific language Units) then a third abstract in the language of the
+thesis is required.
+
+Abstracts in English and French are mandatory and must be text only, i.e.
+no images, special characters (apart from the West European character set
+excluding the "OE" and "oe"), chemical or mathematical formulae, or special
+formatting (e.g. lists, tables). Abstracts have a maximum limit of 4,000
+characters.

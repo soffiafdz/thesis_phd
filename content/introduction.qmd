@@ -1,0 +1,4 @@
+# Introduction
+
+[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
+Clearly state the rationale and objectives of the research.

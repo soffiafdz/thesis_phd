@@ -1,0 +1,6 @@
+# Acronyms {.unnumbered}
+
+- **HVR**: Hippocampal-to-Ventricle Ratio
+- **QC**: Quality Control
+- **CVR**: Cerebrovascular Reactivity
+- **LGCM**: Latent Growth Curve Model

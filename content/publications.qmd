@@ -1,0 +1,4 @@
+# Publications {.unnumbered}
+
+This part is optional, but it gives a nice touch to list all the
+publications (official venues down to poster sessions) throughout your PhD.
