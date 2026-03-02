@@ -11,3 +11,14 @@ data/raw/preventad
 data/derivatives
 data/raw/deprecated
 scripts/deprecated
+
+# Quarto rendered outputs
+manuscript.html
+manuscript.pdf
+manuscript_cache/
+manuscript_files/
+
+*.pdf
+*.docx
+
+final_manuscript*

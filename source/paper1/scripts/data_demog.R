@@ -6,6 +6,7 @@ library("stringr")
 library("magrittr")
 library("lubridate")
 library("gtsummary")
+library("gt")
 
 ### Recreate Tables ###
 rec_tables  <- FALSE
@@ -330,9 +331,27 @@ rm(skull_cases, skull_demog, skull, skull6968, skull1746)
 
 
 ## OUT
+path_out <- here("data/derivatives")
+
+# Helper: convert gtsummary to clean gt (no markdown bold, no footnotes,
+# no line breaks in column labels)
+clean_gt <- function(tbl) {
+  gt_obj <- as_gt(tbl)
+  gt_obj[["_footnotes"]] <- gt_obj[["_footnotes"]][0, ]
+  gt_obj[["_source_notes"]] <- list()
+  # Strip markdown bold and replace \n with ", " in column labels
+  for (i in seq_len(nrow(gt_obj[["_boxhead"]]))) {
+    lbl <- gt_obj[["_boxhead"]]$column_label[[i]]
+    if (is.character(lbl)) {
+      lbl <- gsub("\\*\\*([^*]+)\\*\\*", "\\1", lbl)
+      lbl <- gsub("\\s*\n\\s*", ", ", lbl)
+      gt_obj[["_boxhead"]]$column_label[[i]] <- lbl
+    }
+  }
+  gt_obj
+}
+
 # Raw: NACC data
-nacc_table  <- here("data/derivatives/nacc_demog-table.docx")
-if (!file.exists(nacc_table) | rec_tables) {
 nacc |>
   tbl_summary(by = COHORT,
               label = list(SEX ~ "Sex",
@@ -340,41 +359,29 @@ nacc |>
                            DX ~ "Clinical Label"),
               statistic = all_continuous() ~ "{mean} ({sd})",
               missing_text = "Missing") |>
-  modify_header(label ~ "**Raw MRI**\n**NACC**") |>
-  #modify_spanning_header(c("stat_1", "stat_2", "stat_3") ~ "**Clinical Label**") |>
-  #add_n() |>
+  modify_header(label ~ "**Raw MRI NACC**") |>
   add_p() |>
-  as_flex_table() |>
-  flextable::save_as_docx(path = nacc_table)
-}
-rm(nacc, nacc_table)
+  clean_gt() |>
+  saveRDS(here(path_out, "nacc_demog_gt.rds"))
+rm(nacc)
 
 # Raw & Linear Registration: ADNI data
-adni_table  <- here("data/derivatives/adni-10k_demog-table.docx")
-if (!file.exists(adni_table) | rec_tables) {
 adni_10196[, .(SEX, AGE, DX = factor(DX,
                                      levels = c("CN", "MCI", "Dementia"),
                                      labels = c("Normal Cognition",
                                                 "Mild Cognitive Impairment",
                                                 "Dementia")))] |>
-  tbl_summary(#by = COHORT,
-              label = list(SEX ~ "Sex",
+  tbl_summary(label = list(SEX ~ "Sex",
                            AGE ~ "Age (years)",
                            DX ~ "Clinical Label"),
               statistic = all_continuous() ~ "{mean} ({sd})",
               missing_text = "Missing") |>
-  modify_header(label ~ "**Raw MRI & Lin. Registration**\n**ADNI**") |>
-  #modify_spanning_header(c("stat_1", "stat_2", "stat_3") ~ "**Clinical Label**") |>
-  #add_n() |>
-  #add_p() |>
-  as_flex_table() |>
-  flextable::save_as_docx(path = adni_table)
-}
-rm(adni_10196, adni_table)
+  modify_header(label ~ "**Raw MRI & Lin. Registration ADNI**") |>
+  clean_gt() |>
+  saveRDS(here(path_out, "adni_demog_gt.rds"))
+rm(adni_10196)
 
 # Linear Registration: ADNI & HCP & PPMI & PreventAD data
-reg_table   <- here("data/derivatives/linreg99_demog-table.docx")
-if (!file.exists(reg_table) | rec_tables) {
 reg_99[, .(SEX, AGE, DATABASE,
            DX = factor(DX,
                        levels = c("CN", "MCI", "Dementia", "PD"),
@@ -387,32 +394,22 @@ reg_99[, .(SEX, AGE, DATABASE,
                            DX ~ "Clinical Label"),
               statistic = all_continuous() ~ "{mean} ({sd})",
               missing_text = "Missing") |>
-  modify_header(label ~ "**Lin. Registration**\n**Selected Cases**") |>
-  #modify_spanning_header(c("stat_1", "stat_2",
-                           #"stat_3", "stat_4") ~ "**Database**") |>
-  #add_n() |>
+  modify_header(label ~ "**Lin. Registration Selected Cases**") |>
   add_p() |>
-  as_flex_table() |>
-  flextable::save_as_docx(path = reg_table)
-}
-rm(reg_99, reg_table)
+  clean_gt() |>
+  saveRDS(here(path_out, "linreg99_demog_gt.rds"))
+rm(reg_99)
 
 # Skull segmentation
-skull_table <- here("data/derivatives/skull_demog-table.docx")
-if (!file.exists(skull_table) | rec_tables) {
-  skull_all |>
-    tbl_summary(by = COHORT,
-                label = list(SEX ~ "Sex",
-                             AGE ~ "Age (years)",
-                             DX ~ "Clinical Label"),
-                statistic = all_continuous() ~ "{mean} ({sd})",
-                missing_text = "Missing") |>
-    modify_header(label ~ "**Skull Segmentation**\n**ADNI**") |>
-    #modify_spanning_header(c("stat_1", "stat_2",
-                             #"stat_3", "stat_4") ~ "**Database**") |>
-    #add_n() |>
-    add_p() |>
-    as_flex_table() |>
-    flextable::save_as_docx(path = skull_table)
-}
-rm(skull_all, skull_table, rec_tables)
+skull_all |>
+  tbl_summary(by = COHORT,
+              label = list(SEX ~ "Sex",
+                           AGE ~ "Age (years)",
+                           DX ~ "Clinical Label"),
+              statistic = all_continuous() ~ "{mean} ({sd})",
+              missing_text = "Missing") |>
+  modify_header(label ~ "**Skull Segmentation ADNI**") |>
+  add_p() |>
+  clean_gt() |>
+  saveRDS(here(path_out, "skull_demog_gt.rds"))
+rm(skull_all, path_out, rec_tables)
