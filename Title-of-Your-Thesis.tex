@@ -1,0 +1,440 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  letterpaper,
+  12pt,
+  oneside]{book}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+% McGill thesis preamble
+% Adapted from the McGill thesis LaTeX template
+% https://github.com/juliengs/mcgill-thesis-template
+
+% Big gray chapter numbers
+\usepackage{fix-cm}
+\usepackage{xcolor}
+\usepackage[bf,rm,medium,compact]{titlesec}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[display]
+  {\filleft\Huge\bfseries}
+  {\fontsize{100}{100}\selectfont\textcolor{gray75}\thechapter}
+  {1ex}{}[]
+
+% Format for unnumbered chapters (frontmatter, backmatter)
+\titleformat{name=\chapter,numberless}
+  {\Huge\bfseries}
+  {}
+  {0pt}{}
+
+% Suppress default title page (we use _templates/before-body.tex)
+\renewcommand{\maketitle}{}
+
+% McGill guidelines link command (used in placeholder text)
+\newcommand{\mcgillguidelines}{%
+  \href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}%
+  {Official McGill Guidelines}: }
+\makeatletter
+\@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Title of Your Thesis},
+  pdfauthor={Santiago Fernandez},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+% Intentionally empty: suppresses default Quarto/Pandoc title page.
+% The McGill title page is rendered via _templates/before-body.tex.
+\begin{document}
+\frontmatter
+\maketitle
+
+% McGill title page
+% Conforms to: https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation
+\thispagestyle{empty}
+\begin{center}
+
+\vspace*{0.5cm}
+
+{\bfseries\LARGE Title of Your}
+\vspace{0.15cm}
+
+{\bfseries\LARGE Thesis Goes Here}
+\vspace{1.8cm}
+
+{\large Santiago Fernandez}
+\\Doctor of Philosophy
+
+\vspace{1cm}
+\includegraphics[width=.6\linewidth]{images/mcgill_sig_red.pdf}
+
+\vspace{0.5cm}
+Department of Neurology and Neurosurgery\\
+McGill University\\
+Montreal, Quebec, Canada\\
+
+\vspace{1.5cm}
+\today
+
+\vspace{1.0cm}
+\noindent
+A thesis submitted to McGill University in partial\\
+fulfillment of the requirements of the degree of\\
+Doctor of Philosophy
+
+\vspace{1.0cm}
+{\small \copyright\ Santiago Fernandez, \the\year{}}
+
+\end{center}
+\clearpage
+
+
+\setstretch{1.5}
+\mainmatter
+\frontmatter
+
+\bookmarksetup{startatroot}
+
+\chapter*{Abstract}\label{abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\markboth{Abstract}{Abstract}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: If the language of the thesis is neither English nor
+French (only allowed for specific language Units) then a third abstract
+in the language of the thesis is required.
+
+Abstracts in English and French are mandatory and must be text only,
+i.e. no images, special characters (apart from the West European
+character set excluding the ``OE'' and ``oe''), chemical or mathematical
+formulae, or special formatting (e.g.~lists, tables). Abstracts have a
+maximum limit of 4,000 characters.
+
+\bookmarksetup{startatroot}
+
+\chapter*{Abrégé}\label{abruxe9guxe9}
+\addcontentsline{toc}{chapter}{Abrégé}
+
+\markboth{Abrégé}{Abrégé}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: La même chose en français.
+
+\bookmarksetup{startatroot}
+
+\chapter*{Contribution of Authors}\label{contribution-of-authors}
+\addcontentsline{toc}{chapter}{Contribution of Authors}
+
+\markboth{Contribution of Authors}{Contribution of Authors}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: A doctoral thesis must clearly state the elements of
+the thesis that are considered original scholarship and distinct
+contributions to knowledge.
+
+\begin{itemize}
+\tightlist
+\item
+  Contributions of the student to each chapter must be explicitly
+  stated.
+\item
+  Contributions of any co-authors to each chapter must be explicitly
+  stated.
+\end{itemize}
+
+\bookmarksetup{startatroot}
+
+\chapter*{Acknowledgements}\label{acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+\markboth{Acknowledgements}{Acknowledgements}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: Among other acknowledgements, the student is
+required to declare the extent to which assistance (paid or unpaid) has
+been given by members of staff, fellow students, research assistants,
+technicians, or others in the collection of materials and data, the
+design and construction of apparatus, the performance of experiments,
+the analysis of data, and the preparation of the thesis (including
+editorial help).
+
+\begin{itemize}
+\tightlist
+\item
+  In addition, it is appropriate to recognize the supervision and advice
+  given by the thesis supervisor(s) and advisors.
+\end{itemize}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+\mainmatter
+
+\bookmarksetup{startatroot}
+
+\chapter{Introduction}\label{introduction}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: Clearly state the rationale and objectives of the
+research.
+
+\bookmarksetup{startatroot}
+
+\chapter{Literature Review}\label{literature-review}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: The comprehensive review of the literature must
+sufficiently demonstrate the student's knowledge of and expertise in
+their research areas and should be broad enough to apply to each
+research question in the thesis. The review of the literature can
+additionally include various types of content, such as:
+
+\begin{itemize}
+\tightlist
+\item
+  A review providing a reader who is relatively less familiar with the
+  research topic (e.g., an internal/external member of an oral defence
+  committee with adjacent but not direct expertise) an introduction to
+  the general domain.
+\item
+  An explanation of the overall rationale for how and why the subsequent
+  studies were conducted. For example, the literature underlying the
+  research questions must be sufficiently discussed.
+\item
+  A review of fundamental theories underlying the subsequently presented
+  work, or to explain why certain approaches were not taken in the
+  study(ies) presented.
+\end{itemize}
+
+The literature review must be in line with disciplinary expectations.
+The review can be incorporated in the Introduction chapter, addressed in
+a standalone chapter, or distributed across multiple chapters.
+
+\bookmarksetup{startatroot}
+
+\chapter{Discussion}\label{discussion}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: The discussion of findings must be in line with
+disciplinary expectations. A comprehensive discussion is expected to be
+a minimum of 10 pages, double-spaced for doctoral students and a minimum
+of 5 pages, double-spaced for Master's students (including figures,
+images, and tables). It pertains to the entirety of a thesis. The
+discussion of findings should provide a final, overarching summary of
+study themes, limitations, and future directions.
+
+In the case of a manuscript-based thesis, the comprehensive discussion
+should encompass all of the chapters of the thesis and should not be a
+repetition of the individual chapters. This section can be used to
+address issues not sufficiently covered in the preceding chapters or
+papers (e.g., critiques raised by reviewers that could not be
+incorporated into published works, or reintroducing discussion arguments
+removed from published papers upon reviewer request). This section can
+also be used to elaborate on the practical/applied aspects of published
+findings in a manner that is more accessible to less expert readers.
+
+\bookmarksetup{startatroot}
+
+\chapter{Conclusions}\label{conclusions}
+
+\href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}{Official
+McGill Guidelines}: Clearly state how the objectives of the research
+were met and discuss implications of findings.
+
+\bookmarksetup{startatroot}
+
+\chapter*{Publications}\label{publications}
+\addcontentsline{toc}{chapter}{Publications}
+
+\markboth{Publications}{Publications}
+
+This part is optional, but it gives a nice touch to list all the
+publications (official venues down to poster sessions) throughout your
+PhD.
+
+\bookmarksetup{startatroot}
+
+\chapter*{Acronyms}\label{acronyms}
+\addcontentsline{toc}{chapter}{Acronyms}
+
+\markboth{Acronyms}{Acronyms}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{HVR}: Hippocampal-to-Ventricle Ratio
+\item
+  \textbf{QC}: Quality Control
+\item
+  \textbf{CVR}: Cerebrovascular Reactivity
+\item
+  \textbf{LGCM}: Latent Growth Curve Model
+\end{itemize}
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{part}{Appendices}
+\appendix
+
+\chapter{Supplementary Material for Chapter 3}\label{sec-appendix-ch3}
+
+Supplementary tables and figures for the HVR Validation study (Chapter
+3) will be placed here when the chapter is adapted.
+
+\chapter{Supplementary Material for Chapter 4}\label{sec-appendix-ch4}
+
+Supplementary tables and figures for the sex differences study (Chapter
+4) will be placed here when the chapter is adapted.
+
+
+\backmatter
+
+
+\end{document}

@@ -1,0 +1,26 @@
+project:
+  type: default
+  output-dir: _output
+
+format:
+  html:
+    toc: true
+    number-sections: true
+  pdf:
+    documentclass: article
+    keep-tex: true
+
+execute:
+  echo: false
+  warning: false
+  message: false
+  freeze: auto
+
+knitr:
+  opts_chunk:
+    fig.path: "figures_generated/"
+    fig.width: 8
+    fig.height: 6
+    dpi: 300
+
+bibliography: references.bib

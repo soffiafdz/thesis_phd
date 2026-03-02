@@ -1,0 +1,78 @@
+---
+title: "Qrater: A Web-Based Quality Control Platform for Neuroimaging Data"
+author:
+  - name: Sofia Fernandez-Lozano
+    affiliations:
+      - McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University
+format:
+  html:
+    toc: true
+    number-sections: true
+  pdf:
+    documentclass: article
+    keep-tex: true
+execute:
+  echo: false
+  warning: false
+bibliography: references.bib
+---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(here)
+
+# Set paths relative to thesis root
+thesis_root <- here::here()
+paper1_data <- file.path(thesis_root, "source", "paper1", "data")
+paper1_scripts <- file.path(thesis_root, "source", "paper1", "scripts")
+```
+
+## Abstract
+
+<!-- TODO: Add abstract from published paper -->
+
+## Introduction
+
+<!-- TODO: Add introduction content -->
+
+## Methods
+
+### Study Datasets
+
+<!-- TODO: Add methods content -->
+
+### Quality Control Platform
+
+<!-- TODO: Describe Qrater platform -->
+
+### Statistical Analysis
+
+<!-- TODO: Add statistical methods -->
+
+## Results
+
+### Inter-rater Reliability
+
+```{r}
+#| label: fig-interrater
+#| fig-cap: "Inter-rater reliability analysis"
+#| eval: false
+
+# TODO: Source analysis from paper1 scripts
+# source(file.path(paper1_scripts, "analysis_script.R"))
+```
+
+### Intra-rater Reliability
+
+<!-- TODO: Add intra-rater results -->
+
+## Discussion
+
+<!-- TODO: Add discussion content -->
+
+## Conclusions
+
+<!-- TODO: Add conclusions -->
+
+## References
