@@ -1,4 +1,6 @@
-# Discussion
+# Discussion and Conclusion
+
+## Discussion
 
 [Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
 The discussion of findings must be in line with disciplinary expectations.
@@ -18,3 +20,13 @@ works, or reintroducing discussion arguments removed from published papers
 upon reviewer request). This section can also be used to elaborate on the
 practical/applied aspects of published findings in a manner that is more
 accessible to less expert readers.
+
+## Limitations
+
+<!-- TODO: Write limitations section -->
+
+## Conclusion
+
+[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
+Clearly state how the objectives of the research were met and discuss
+implications of findings.

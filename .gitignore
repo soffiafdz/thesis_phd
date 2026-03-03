@@ -3,3 +3,9 @@ _book/
 renv/library/
 renv/staging/
 renv/python/
+
+# Data symlinks (gitignored in source repos too)
+source/paper1/data/derivatives
+source/paper1/plots
+source/paper3/data
+source/paper4/data

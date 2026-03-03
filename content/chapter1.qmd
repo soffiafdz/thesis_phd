@@ -1,0 +1,25 @@
+# Introduction
+
+[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
+Clearly state the rationale and objectives of the research.
+
+## Motivation
+
+<!-- TODO: Write motivation section -->
+
+## Thesis Overview
+
+<!-- TODO: Write thesis overview section -->
+
+## Scientific Contributions
+
+<!-- TODO: Write scientific contributions section -->
+
+## Contribution of Authors {.unnumbered}
+
+[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
+A doctoral thesis must clearly state the elements of the thesis that are
+considered original scholarship and distinct contributions to knowledge.
+
+- Contributions of the student to each chapter must be explicitly stated.
+- Contributions of any co-authors to each chapter must be explicitly stated.

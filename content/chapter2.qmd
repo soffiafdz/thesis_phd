@@ -1,4 +1,4 @@
-# Literature Review
+# Background
 
 [Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
 The comprehensive review of the literature must sufficiently demonstrate the

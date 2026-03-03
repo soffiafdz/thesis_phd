@@ -15,25 +15,16 @@ book:
     - index.qmd
     - content/abstract_en.qmd
     - content/abstract_fr.qmd
-    - content/contributions.qmd
     - content/acknowledgements.qmd
-    - content/introduction.qmd
-    - content/literature.qmd
-    # Paper chapters (to be added when subtrees are ready):
-    # - part: "Paper Chapters"
-    #   chapters:
-    #     - content/chapter2.qmd
-    #     - content/chapter3.qmd
-    #     - content/chapter4.qmd
-    #     - content/chapter5.qmd
-    - content/discussion.qmd
-    - content/conclusions.qmd
+    - content/chapter1.qmd        # Introduction
+    - content/chapter2.qmd        # Background
+    - content/chapter3.qmd        # Paper 1 — Qrater
+    - content/chapter4.qmd        # Paper 2 — HVR Validation
+    - content/chapter5.qmd        # Paper 3 — Sex Differences
+    # - content/chapter6.qmd      # Paper 4 — CVR Mediation (blocked)
+    - content/chapter7.qmd        # Discussion & Conclusion
     - content/publications.qmd
     - content/acronyms.qmd
-  appendices:
-    - content/appendix-chapter3.qmd
-    - content/appendix-chapter4.qmd
-    # Add more as needed per paper chapter
 
 bibliography: references.bib
 
