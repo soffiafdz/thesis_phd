@@ -11,7 +11,7 @@ author:
       - ref: bic
       - ref: psych
       - ref: stopad
-  - name: Louis D. Collins
+  - name: D. Louis Collins
     affiliations:
       - ref: bic
       - ref: ipn
@@ -19,6 +19,7 @@ author:
     email: louis.collins@mcgill.ca
     corresponding: true
   - name: for the Alzheimer's Disease Neuroimaging Initiative
+    affiliations: []
 affiliations:
   - id: bic
     name: McConnell Brain Imaging Centre
@@ -332,24 +333,29 @@ coupling.
 **RESULTS:**
 FRS predicted hippocampal atrophy (a-path significant
 in `r n_of_total.fn(abs_stats$frs_a_sig, 6L)` LGCM
-models); CVR~mimic~ did not. The b-path
-(HVR slope → cognitive slope) was significant for
-Memory and Executive Function regardless of
-predictor, confirming hippocampal-cognitive coupling
-is not an artifact of CVR measurement. FRS indirect
-effects were significant for Memory and Executive
-Function in both sexes; Language and all CVR~mimic~
-indirect effects were non-significant. LME 3-way
-interactions (YRS × CVR × HVR) were significant
-across all domains for FRS but largely null for
-CVR~mimic~.
+models); CVR~mimic~ did not
+(`r n_of_total.fn(abs_stats$cvr_a_sig, 6L)`). The
+b-path (HVR slope → cognitive slope) was significant
+in `r n_of_total.fn(abs_stats$frs_b_sig, 6L)` FRS
+and `r n_of_total.fn(abs_stats$cvr_b_sig, 6L)`
+CVR~mimic~ models, confirming hippocampal-cognitive
+coupling is not an artifact of CVR measurement. FRS
+indirect effects were significant in
+`r n_of_total.fn(abs_stats$frs_ind_sig, 6L)` models;
+CVR~mimic~ indirect effects in
+`r n_of_total.fn(abs_stats$cvr_ind_sig, 6L)`. LME
+3-way interactions (YRS × CVR × HVR) were significant
+in
+`r n_of_total.fn(abs_lme$frs_m_sig + abs_lme$frs_f_sig, 6L)`
+FRS models (all surviving FDR) versus
+`r n_of_total.fn(abs_lme$cvr_m_sig + abs_lme$cvr_f_sig, 6L)`
+for CVR~mimic~.
 
 **DISCUSSION:**
 FRS "effects" on hippocampal-cognitive decline
-primarily reflect age-related variance rather
-than cardiovascular pathophysiology. Age-adjusted
-CVR measures should be preferred in elderly
-cohorts.
+largely reflect age-related variance. Age-adjusted
+CVR measures complement FRS when the goal is to
+isolate cardiovascular effects from aging per se.
 
 **Keywords:** Cardiovascular risk, Framingham Risk
 Score, hippocampus, cognitive decline, Alzheimer's
@@ -377,14 +383,17 @@ mediation and moderation framework.
 **Interpretation:**
 FRS indirect effects on cognitive decline through
 hippocampal atrophy primarily reflect its
-age-weighting. Partialling out age via a MIMIC
-model (CVR~mimic~) nullified the CVR → hippocampal
-atrophy pathway. In contrast, hippocampal-cognitive
-coupling remained significant in most domains,
-indicating it reflects neurodegeneration rather
-than cardiovascular risk. This dissociation suggests
-prior FRS-brain reports may partly capture age
-effects rather than cardiovascular pathophysiology.
+age-weighting — age being itself a legitimate proxy
+for cumulative vascular exposure
+[@villeneuve_impact_2009]. Partialling out age via a
+MIMIC model (CVR~mimic~) nullified the
+CVR → hippocampal atrophy pathway. In contrast,
+hippocampal-cognitive coupling remained significant
+in most domains, indicating it reflects
+neurodegeneration rather than cardiovascular risk.
+Prior FRS-brain reports likely reflect a mixture of
+age-driven and cardiovascular effects that
+age-adjusted measures can help disentangle.
 
 **Future Directions:**
 Replication in independent aging cohorts (e.g.,
@@ -428,18 +437,21 @@ confounding between FRS and any age-related outcome
 [@koller_development_2012;
 @rodondi_framingham_2012].
 
-This age-weighting poses a fundamental
-interpretive challenge. Because age deterministically
-drives FRS through its formula coefficients and
-independently drives neurodegenerative outcomes
-through biological aging, age acts as a common cause
-of both the predictor and the outcome. The apparent
-pathway from FRS through hippocampal atrophy to
-cognitive decline may therefore be spurious.
-Simply controlling for age in regression
-models does not resolve this confound, because age is
-not an external confounder but an internal component
-of the score itself. In elderly cohorts such as ADNI,
+Age is itself a strong proxy for cumulative
+vascular exposure
+[@villeneuve_impact_2009; @dagostino_general_2008],
+and the FRS age-weighting therefore carries
+legitimate clinical information. However, this
+creates an interpretive challenge when FRS is used
+to predict age-related outcomes: because age
+simultaneously drives FRS through its formula
+coefficients and independently drives
+neurodegenerative outcomes through biological aging,
+it acts as a common cause of both the predictor and
+the outcome. Simply controlling for age in
+regression models does not fully resolve this
+confound, because age is not an external confounder
+but an internal component of the score itself. In elderly cohorts such as ADNI,
 this problem is compounded by the fact that the
 ADSP-PHC-derived FRS variable is capped at 30%
 10-year risk
@@ -2293,10 +2305,10 @@ age-weighting. By contrast, the b-path
 `r n_of_total.fn(abs_stats$cvr_b_sig, 6L)`
 CVR~mimic~ models, confirming that hippocampal-
 cognitive coupling persists regardless of predictor.
-The FRS indirect effect (a × b) was significant
-for Memory and Executive Function in both sexes;
-Language indirect effects and all CVR~mimic~
-indirect effects were non-significant.
+The FRS indirect effect (a × b) was significant in
+`r n_of_total.fn(abs_stats$frs_ind_sig, 6L)` models;
+CVR~mimic~ indirect effects in
+`r n_of_total.fn(abs_stats$cvr_ind_sig, 6L)`.
 
 **Males.** FRS predicted hippocampal atrophy across
 `r m_frs_a_nsig` domains (a-path β range
@@ -2399,9 +2411,16 @@ limiting score variance and statistical sensitivity,
 particularly in females. When age is partialled out
 (CVR~mimic~), the indirect pathway
 (CVR → HVR → Cognition) disappears — the a-path is
-null, suggesting FRS "effects" on
-hippocampal-cognitive trajectories are actually age
-effects captured by the age component of FRS.
+null, suggesting the FRS-hippocampal association in
+this sample is primarily carried by the age component
+of FRS rather than by cardiovascular risk factors
+per se. This does not invalidate FRS as a clinical
+tool — age is itself a potent marker of cumulative
+vascular exposure
+[@villeneuve_impact_2009; @dagostino_general_2008] —
+but it does mean that FRS-brain associations in
+elderly cohorts cannot be straightforwardly
+attributed to modifiable cardiovascular factors.
 
 The negative total cholesterol loading (see
 @tbl-mimic-loadings) likely reflects widespread
@@ -2418,8 +2437,9 @@ dissociation could reflect scaling artifacts rather
 than substantive predictor properties. Prior studies
 reporting FRS-brain relationships in elderly samples
 [@zsoldos_association_2020; @seshadri_stroke_2004; @song_associations_2020; @meusel_cardiovascular_2019]
-may be detecting age effects rather than true
-cardiovascular effects.
+may therefore reflect a mixture of age-driven and
+cardiovascular effects that is difficult to
+disentangle without age-adjustment.
 
 ## Dissociating Moderation from Mediation
 
@@ -2498,10 +2518,10 @@ exhibited expected effects across all models
 The HVR slope → Cognitive slope relationship
 (b-path) was consistent regardless of whether FRS or
 CVR~mimic~ was the predictor (@fig-mediation).
-Significant b-path estimates appeared in Memory and
-Executive Function for both predictors
-(`r n_of_total.fn(abs_stats$frs_b_sig, 6L)` each;
-Language non-significant), supporting HVR decline as
+The b-path was significant in
+`r n_of_total.fn(abs_stats$frs_b_sig, 6L)` FRS and
+`r n_of_total.fn(abs_stats$cvr_b_sig, 6L)`
+CVR~mimic~ models, supporting HVR decline as
 a reliable marker of cognitive decline
 [@kramer_longitudinal_2007; @oschwald_brain_2020]
 and extending earlier evidence that HVR captures
@@ -2562,13 +2582,16 @@ were concordant with z-scored analyses.
 ## Clinical Implications
 
 In clinical trials targeting cardiovascular risk
-reduction for dementia prevention, FRS should not be
-used as the sole CVR endpoint in elderly samples due
-to age-confounding
-[@ko_calibration_2020; @marrugat_adaptation_2003].
-Age-adjusted CVR measures should be considered when
-the research question concerns cardiovascular effects
-independent of aging [@zhang_bayesian_2024]. HVR
+reduction for dementia prevention, FRS remains a
+valid summary of overall vascular burden — including
+the age-driven component that itself reflects
+cumulative exposure
+[@villeneuve_impact_2009; @dagostino_general_2008].
+However, when the research question concerns
+cardiovascular effects independent of aging,
+age-adjusted CVR measures such as CVR~mimic~ provide
+a necessary complement
+[@ko_calibration_2020; @zhang_bayesian_2024]. HVR
 provides a more sensitive neuroimaging endpoint than
 hippocampal volume alone, and its consistent
 cognitive coupling supports use as a surrogate
@@ -2611,10 +2634,13 @@ How CVR is measured determines whether it appears
 to influence hippocampal-cognitive trajectories: FRS
 produces significant indirect effects through
 hippocampal decline, but age-adjusted CVR~mimic~
-does not. The most parsimonious explanation is that
-FRS "effects" on hippocampal decline are carried by
-its age component rather than by cardiovascular
-pathophysiology per se. Suggestive single-domain evidence
+does not. Because age is both a legitimate marker of
+cumulative vascular exposure and an independent
+driver of neurodegeneration
+[@villeneuve_impact_2009], the most parsimonious
+explanation is that FRS-hippocampal associations in
+this elderly sample are primarily carried by the age
+component of the score. Suggestive single-domain evidence
 (Female Executive LME 3-way) hints that age-adjusted
 CVR may still modulate the brain-cognition
 relationship through reserve-like mechanisms. The
