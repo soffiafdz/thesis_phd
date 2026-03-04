@@ -6,11 +6,13 @@ execute:
   echo: false
   warning: false
   message: false
+  freeze: auto
 
 book:
-  title: "Title of Your Thesis"
-  author: "Santiago Fernandez"
-  date: today
+  title: "The Hippocampal-to-Ventricle Ratio: Validation, Normative Modeling, and Clinical Application of a Self-Normalizing Biomarker for Brain Aging"
+  output-file: Fernandez2026
+  author: "Sofia Fernandez-Lozano"
+
   chapters:
     - index.qmd
     - content/abstract_en.qmd
@@ -21,12 +23,12 @@ book:
     - content/chapter3.qmd        # Paper 1 — Qrater
     - content/chapter4.qmd        # Paper 2 — HVR Validation
     - content/chapter5.qmd        # Paper 3 — Sex Differences
-    # - content/chapter6.qmd      # Paper 4 — CVR Mediation (blocked)
+    - content/chapter6.qmd        # Paper 4 — CVR Mediation
     - content/chapter7.qmd        # Discussion & Conclusion
-    - content/publications.qmd
     - content/acronyms.qmd
 
 bibliography: references.bib
+reference-section-title: "References"
 
 filters:
   - _filters/thesis.lua
@@ -37,13 +39,13 @@ format:
     classoption: [12pt, oneside]
     include-in-header: _templates/preamble.tex
     include-before-body: _templates/before-body.tex
-    template-partials:
-      - _templates/title.tex
     toc: false
     lof: false
     lot: false
     number-sections: true
     linestretch: 1.5
     colorlinks: false
-    latex-min-runs: 3
-    keep-tex: true
+    pdf-engine: tectonic
+    pdf-engine-opts:
+      - "--keep-intermediates"
+    keep-tex: false

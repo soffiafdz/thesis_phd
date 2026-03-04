@@ -6,6 +6,37 @@
 -- 1. Removes empty chapter headings (from headingless index.qmd)
 -- 2. Injects \frontmatter before the Abstract chapter
 -- 3. Injects TOC/LOF/LOT + \mainmatter before the Introduction
+-- 4. Strips \markright{} commands (headers managed by fancyhdr)
+
+-- Extract short caption from Quarto's FloatRefTarget.
+-- Quarto (v1.4+) converts figures/tables to FloatRefTarget
+-- custom elements BEFORE user Lua filters run, so the
+-- standard Figure() and Table() callbacks never fire.
+-- FloatRefTarget.caption_long is a single Block (Plain),
+-- and the LaTeX renderer reads float.attributes["fig-scap"]
+-- to produce \caption[short]{long}.
+function FloatRefTarget(float)
+  -- Skip if fig-scap already set manually
+  if float.attributes and float.attributes["fig-scap"] then
+    return float
+  end
+  if not float.caption_long then
+    return float
+  end
+  -- caption_long is a single Block (Plain or Para)
+  if float.caption_long.t ~= "Plain" and
+     float.caption_long.t ~= "Para" then
+    return float
+  end
+  local inlines = float.caption_long.content
+  if #inlines > 0 and inlines[1].t == "Strong" then
+    local short_text = pandoc.utils.stringify(
+      inlines[1].content
+    )
+    float.attributes["fig-scap"] = short_text
+  end
+  return float
+end
 
 function Pandoc(doc)
   local dominated_by_format = FORMAT:match("latex") or
@@ -49,6 +80,13 @@ function Pandoc(doc)
     -- (now handled by the filter injection above)
     elseif block.t == "RawBlock" and block.format == "latex" and
            block.text:match("^%s*\\frontmatter%s*$") then
+      goto continue
+
+    -- Strip \markright{...} commands to prevent section-level
+    -- headers from polluting running headers. We use fancyhdr
+    -- with only chapter-level marks (\chaptermark).
+    elseif block.t == "RawBlock" and block.format == "latex" and
+           block.text:match("^%s*\\markright%b{}%s*$") then
       goto continue
 
     else

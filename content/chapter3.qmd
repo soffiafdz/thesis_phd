@@ -1,5 +1,9 @@
 # Qrater: A Collaborative and Centralized Imaging Quality Control Web-Based Application {#sec-qrater}
 
+```{=latex}
+\chaptermark{Qrater: Imaging QC Application}
+```
+
 ```{r}
 #| label: setup
 #| include: false
@@ -25,30 +29,11 @@ knitr::opts_chunk$set(
 )
 
 # Paper-specific gt table styling
+# Font size (9pt) and longtable are set by _common.R
 style_manuscript_table <- function(gt_tbl,
                                    table_type = "main") {
-  if (table_type == "main") {
-    font_size <- "10pt"
-  } else {
-    font_size <- "9pt"
-  }
-  gt_tbl <- gt_tbl |>
-    sub_missing(missing_text = "-") |>
-    tab_options(
-      table.font.size = font_size,
-      column_labels.font.size = font_size,
-      column_labels.font.weight = "bold",
-      latex.use_longtable = TRUE
-    ) |>
-    cols_align(
-      align = "right",
-      columns = everything()
-    )
-  col_names <- gt_tbl[["_boxhead"]]$var[
-    gt_tbl[["_boxhead"]]$type == "default"
-  ]
   gt_tbl |>
-    cols_align(align = "left", columns = col_names[1])
+    sub_missing(missing_text = "-")
 }
 ```
 
@@ -59,22 +44,17 @@ introduces Qrater, a web-based quality control application for
 neuroimaging data. The paper was published in *Frontiers in
 Neuroinformatics* in 2024.
 
-## QRATER: a collaborative and centralized imaging quality control web-based application
+\clearpage
 
-**Authors:** Sofia Fernandez-Lozano, Mahsa Dadar, Cassandra
-Morrison, Ana Manera, Daniel Andrews, Reza Rajabli, Victoria
-Madge, Etienne St-Onge, Neda Shaffie, Alexandra Livadas,
-Vladimir Fonov, D. Louis Collins, and Alzheimer's Disease
-Neuroimaging Initiative (ADNI)
+## QRATER: a collaborative and centralized imaging quality control web-based application {.unnumbered}
 
-**Affiliations:**
+Sofia Fernandez-Lozano, Mahsa Dadar, Cassandra Morrison,
+Ana Manera, Daniel Andrews, Reza Rajabli, Victoria Madge,
+Etienne St-Onge, Neda Shaffie, Alexandra Livadas, Vladimir
+Fonov, D. Louis Collins, and Alzheimer's Disease Neuroimaging
+Initiative (ADNI)
 
-1. Department of Neurology and Neurosurgery, McGill University
-2. McConnell Brain Imaging Centre, Montreal Neurological
-   Institute and Hospital
-3. Douglas Mental Health University Institute
-4. Department of Psychiatry, McGill University
-5. Department of Biomedical Engineering, McGill University
+\vspace{1em}
 
 ## Abstract {.unnumbered}
 
@@ -113,6 +93,8 @@ registration (Fleiss' Kappa = 0.56); the experts' inter-rater
 agreement of the skull segmentation task was excellent (Cohen's
 Kappa = 0.83). These results demonstrate that Qrater is a useful
 asset for QC tasks that rely on manual evaluation of QC images.
+
+\vspace{1em}
 
 ## Introduction
 
@@ -186,7 +168,7 @@ out-performed other IQMs in identifying images deemed "unusable"
 by human raters [@rosen2018quantitative]. Qoala-T is a
 supervised-learning tool that works with Freesurfer's
 segmentation and produces a single measure of scan quality
-ranging from 0 to 100 [@klapwijk2019qoala]. For the QC of
+ranging from 0 to 100 [@klapwijk2019]. For the QC of
 image-to-template registration, DARQ [@fonov2022darq] and
 RegQCNET [@senneville2020regqcnet], two deep learning tools
 trained on expert manual QC, have proved to be effective in the
@@ -252,7 +234,7 @@ project is presented in @fig-flowchart.
 
 ```{r}
 #| label: fig-flowchart
-#| fig-cap: "Flowchart summarizing the QC tasks for raw MRI, linear registration and skull segmentation."
+#| fig-cap: "**QC task flowchart.** Flowchart summarizing the QC tasks for raw MRI, linear registration and skull segmentation."
 #| out-width: "80%"
 
 knitr::include_graphics(
@@ -278,11 +260,11 @@ and Redis backend-server enables simultaneous rating by multiple
 users on datasets of tens of thousands of images without
 bottlenecks or latency issues. A detailed technical report
 describing Qrater's architecture, deployment, and main features
-is included in the supplementary materials (S1).
+is included in the appendices (Technical Report of Qrater).
 
 ```{r}
 #| label: fig-interface
-#| fig-cap: "Overview of the Qrater interface as viewed in the browser. A) Shows a user's rating window for an example linear registration QC task with transverse, sagittal, and coronal perspectives of slices in an MRI volume. Colour-coded ratings from other users are indicated above the image viewer. A magnifying glass function allows users to zoom in on the images. A comment box and predefined ratings facilitate rating and description. B) The datasets are organized in cards indicating the number of rated images. C) Shows the tabular list of images from an open dataset in which column visibility can be toggled. A search field on the top right helps users quickly find specific images. D) Shows key bindings for faster rating. E) Shows sliders to adjust brightness, contrast, and saturation to facilitate visual inspection. Note that these sliders do not alter the image files."
+#| fig-cap: "**Qrater interface overview.** Overview of the Qrater interface as viewed in the browser. A) Shows a user's rating window for an example linear registration QC task with transverse, sagittal, and coronal perspectives of slices in an MRI volume. Colour-coded ratings from other users are indicated above the image viewer. A magnifying glass function allows users to zoom in on the images. A comment box and predefined ratings facilitate rating and description. B) The datasets are organized in cards indicating the number of rated images. C) Shows the tabular list of images from an open dataset in which column visibility can be toggled. A search field on the top right helps users quickly find specific images. D) Shows key bindings for faster rating. E) Shows sliders to adjust brightness, contrast, and saturation to facilitate visual inspection. Note that these sliders do not alter the image files."
 #| out-width: "100%"
 
 knitr::include_graphics(
@@ -403,7 +385,7 @@ is presented in @tbl-params.
 
 ```{r}
 #| label: tbl-params
-#| tbl-cap: "Summary table of the open datasets used for the different QC tasks (Raw MRI, linear registration, and skull segmentation) and their imaging parameters. For the NACC dataset, a single imaging protocol is not available since it is a collection of scans from several AD centers."
+#| tbl-cap: "**QC task datasets and imaging parameters.** Summary table of the open datasets used for the different QC tasks (Raw MRI, linear registration, and skull segmentation) and their imaging parameters. For the NACC dataset, a single imaging protocol is not available since it is a collection of scans from several AD centers."
 
 params <- fread(
   here("source/paper1/data/raw/databases_params.csv")
@@ -438,15 +420,15 @@ stereotaxic template overlaid in red. For the skull segmentation
 task, the skull voxels were labelled in red. Additionally, 2D
 projections of three perspectives of 3D renderings of the
 segmented skull were included alongside the MRI slices. An
-example of the images for each QC task is shown in supplementary
-material S2.
+example of the images for each QC task is shown in
+@fig-qc-images.
 
 ### QC Training
 
 While not specific to Qrater, the team of experts designed a
 protocol and developed training material for the QC of raw MRI
 data, linear registration, and skull segmentation (available in
-the supplementary materials S3-S5). For raw MRI, the QC criteria
+the appendices, QC Protocols). For raw MRI, the QC criteria
 focused on field-of-view, noise, motion, and intensity
 uniformity. For the linear registration, QC criteria was based on
 the one used by Dadar et al. [@dadar2018validation], which
@@ -454,7 +436,7 @@ focused on symmetry, rotation, and scaling. A set of videos was
 created with instructions and examples of what artifacts to look
 for both tasks that the trainees could consult at any time. A set
 of transcripts of the videos extracted with summarize.tech are
-available as supplementary materials S6-8.
+available in the appendices (Training Video Summaries).
 
 All trainees were introduced to Qrater and given time to
 familiarize themselves with the application and the available
@@ -597,7 +579,7 @@ available from ADNI.
 All the linear registrations in this task were done using the
 Revised BestLinReg algorithm from the MRITOTAL technique
 [@dadar2018validation]. As standard space we utilized the
-MNI-ICBM152-2009c template [@fonov2011unbiased].
+MNI-ICBM152-2009c template [@fonov2011].
 
 ##### Balanced Dataset
 
@@ -674,8 +656,8 @@ evaluated using this conventional method in the same amount of
 time that was needed when using Qrater.
 
 The viewer used for these tasks was register
-(https://www.mcgill.ca/bic/software/visualization/register), a
-minc tool that enables the user to scroll through and view the
+(\url{https://www.mcgill.ca/bic/software/visualization/register}),
+a minc tool that enables the user to scroll through and view the
 transverse, sagittal and coronal slices of each 3D image volume.
 
 #### Raw MRI
@@ -743,7 +725,7 @@ scripts required to reproduce all analyses in this paper are also
 uploaded to Github under a GPL-3.0 license
 (https://github.com/soffiafdz/qrater_analysis). The QA/QC
 protocols generated by the experts for the different tasks are
-included as supplementary material.
+included in the appendices.
 
 Given that we did not obtain from the dataset owners explicit
 permission to redistribute the data in any shape or form we
@@ -821,7 +803,7 @@ of inspected images (@tbl-demog-nacc).
 
 ```{r}
 #| label: tbl-demog-nacc
-#| tbl-cap: "Demographic information of the initial 338 images and the selected 99 images from the NACC data that would form the balanced dataset for the raw MRI QC task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported."
+#| tbl-cap: "**NACC raw MRI demographics.** Demographic information of the initial 338 images and the selected 99 images from the NACC data that would form the balanced dataset for the raw MRI QC task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported."
 
 read_rds(
   here("source/paper1/data/derivatives/nacc_demog_gt.rds")
@@ -885,11 +867,11 @@ of "Pass", but only 2 cases with Expert-1's rating of "Fail". At
 least eight of the raters agreed on 67 of the 99 cases. The
 detailed inter-rater agreement of the expert and the trainees as
 a confusion matrix of the percentage of agreement between each
-rater are shown in the supplementary material S9.
+rater are shown in @fig-agreement-raw.
 
 ```{r}
 #| label: fig-raw-agreement
-#| fig-cap: "Inter-rater agreement data from the raw MRI QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
+#| fig-cap: "**Raw MRI inter-rater agreement.** Inter-rater agreement data from the raw MRI QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
 #| fig-width: 10
 #| fig-height: 8
 
@@ -1045,7 +1027,7 @@ time differences between "Pass" and "Fail" images were
 significant when looking at the individual rater levels. The
 measurements of time for all raters for the balanced dataset
 including the number of rests from their task are summarized in
-the supplementary materials (S10).
+@tbl-time-acq99.
 
 While there were only 9 trainees, there was a significant
 correlation between the total time it took the trainees to
@@ -1066,7 +1048,7 @@ of data as "Fail" and between 2% and 7% as "Warning".
 
 ```{r}
 #| label: tbl-demog-adni
-#| tbl-cap: "Demographic information of the 10,196 images from the ADNI data that were QCed in the raw MRI and linear registration tasks. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported. Some of the missing information was due to the subjects that were dropped from ADNI and whose information is no longer maintained in their dataset."
+#| tbl-cap: "**ADNI demographics for raw MRI and linear registration tasks.** Demographic information of the 10,196 images from the ADNI data that were QCed in the raw MRI and linear registration tasks. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported. Some of the missing information was due to the subjects that were dropped from ADNI and whose information is no longer maintained in their dataset."
 
 read_rds(
   here("source/paper1/data/derivatives/adni_demog_gt.rds")
@@ -1090,8 +1072,8 @@ significant differences between "Fail" and "Pass" (Z = 7.219;
 p < 0.001) and "Pass" and "Warning" (Z = -10.598; p < 0.001),
 but not between "Warning" and "Fail" (Z = -1.095; p = 0.137).
 The time data for all raters who performed the QC of ADNI data
-and the post-hoc analysis are presented in the supplementary
-materials (S11 and S12).
+and the post-hoc analysis are presented in
+@tbl-time-acq-adni and @tbl-posthoc-adni.
 
 #### Linear Registration: Balanced Dataset
 
@@ -1101,7 +1083,7 @@ and borderline cases of linear registration is shown on
 
 ```{r}
 #| label: tbl-demog-linreg
-#| tbl-cap: "Demographic information of the selected 99 images that would form the balanced dataset for the linear registration QC task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported."
+#| tbl-cap: "**Linear registration balanced dataset demographics.** Demographic information of the selected 99 images that would form the balanced dataset for the linear registration QC task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported."
 
 read_rds(
   here(
@@ -1124,11 +1106,7 @@ read_rds(
       )
     }
   ) |>
-  style_manuscript_table() |>
-  tab_options(
-    table.font.size = "9pt",
-    column_labels.font.size = "9pt"
-  )
+  style_manuscript_table()
 ```
 
 ```{r}
@@ -1181,12 +1159,12 @@ unanimously marked as "Fail" one of the selected "Pass" cases and
 preselected "Pass" cases, only eight obtained "Pass" with
 complete agreement. The detailed inter-rater agreement in the
 form of the percentage of agreement between Expert-1 and the
-trainees is presented as a confusion matrix in the supplementary
-material S13.
+trainees is presented as a confusion matrix in
+@fig-agreement-reg.
 
 ```{r}
 #| label: fig-linreg-agreement
-#| fig-cap: "Inter-rater agreement data from the linear registration QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
+#| fig-cap: "**Linear registration inter-rater agreement.** Inter-rater agreement data from the linear registration QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
 #| fig-width: 10
 #| fig-height: 8
 
@@ -1328,7 +1306,7 @@ median of 24 s to either pass or fail an image (W = 99,852;
 r = 0.006; p = 0.851). The difference was still absent when
 looking at only the trainees' time data (29 s for both ratings;
 W = 58,110; r = 0.029; p = 0.420). The time measurements for the
-expert and trainees are presented in supplementary material S14.
+expert and trainees are presented in @tbl-time-reg99.
 The relationship between the QC session times of the trainees and
 their inter-rater agreement with the expert's gold standard was
 non-significant (S = 87.018; rho = -0.036; p = 0.933).
@@ -1347,7 +1325,7 @@ The decision criteria was explicitly defined and codified before
 the trainees went back and restarted their QC. Close to a quarter
 of the images that had been inspected before the interruption
 ended with a QC label different to the one previously assigned
-(supplementary material S15). In the end, raters passed 94% of
+(@tbl-prepost). In the end, raters passed 94% of
 the data ("Pass" = 9,635; "Fail" = 561) with pass rates ranging
 from 90% to 98% across the trainees.
 
@@ -1361,7 +1339,7 @@ assigned (i.e., a "Passing" or "Failing" image). Raters took
 significantly longer to fail an image than to pass one (16 s vs.
 8 s; W = 3,434,646, r = 0.119; p < 0.001, p~adj~ < 0.001). The
 table with the time data for the trainees is shown in the
-supplementary material S16.
+@tbl-time-reg-adni.
 
 #### Skull Segmentation
 
@@ -1372,7 +1350,7 @@ Experts is presented in @tbl-demog-skull.
 
 ```{r}
 #| label: tbl-demog-skull
-#| tbl-cap: "Demographic information of the 6,968 images evaluated by Expert-2 and the subset of 1,746 images evaluated by both experts from the ADNI data that were QCed in the skull segmentation task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported. Some of the missing information was due to the subjects that were dropped from ADNI and whose information is no longer maintained in their dataset."
+#| tbl-cap: "**ADNI skull segmentation demographics.** Demographic information of the 6,968 images evaluated by Expert-2 and the subset of 1,746 images evaluated by both experts from the ADNI data that were QCed in the skull segmentation task. For categorical variables, number (n) and percentage of the total are reported. For numerical variables, the mean and standard deviation (SD) are reported. Some of the missing information was due to the subjects that were dropped from ADNI and whose information is no longer maintained in their dataset."
 
 read_rds(
   here("source/paper1/data/derivatives/skull_demog_gt.rds")
@@ -1410,7 +1388,7 @@ r = 0.149; p < 0.001, p~adj~ < 0.001; Expert-2: mean of 2.7 s
 vs. 3.7 s; W = 4,607,049; r = 0.221; p < 0.001,
 p~adj~ < 0.001). Given the low variance in rating times, means
 are reported instead of medians. The timing data of the experts
-is available in the supplementary material S17.
+is available in @tbl-time-seg.
 
 ### QC with a Conventional Image Viewer
 
@@ -1751,13 +1729,13 @@ semi-automatic tools, ease collaboration and training for QC,
 making the task more accessible to beginners and faster for
 experienced raters.
 
-## Supplementary Materials {.unnumbered}
+## Appendices
 
-## S1. Technical report of Qrater {.unnumbered}
+### Technical Report of Qrater
 
 Qrater is a python application designed to facilitate the rating of quality control (QC) images within a web browser. This report describes in detail the technical aspects of Qrater's including its architecture and the technologies used.
 
-### Architecture {.unnumbered}
+#### Architecture
 
 *Core Technologies*
 
@@ -1779,13 +1757,13 @@ Qrater's full deployment, however, relies on the use of other services. These de
 
 To streamline the deployment of these three interconnected services, we utilize Docker Compose. Docker Compose manages the multiple Docker containers needed for Qrater with a single configuration file. This setup allows that the Flask application, the MySQL database, Redis, and the multiple worker instances are correctly configured and can communicate seamlessly with each other.
 
-### Remote Access and Security {.unnumbered}
+#### Remote Access and Security
 
 Once Qrater is running, it is accessible on a specific port of the computer it is running on. With SSH port forwarding, remote access is possible giving the possibility to multiple users to access the application on the host from different locations.
 
 Qrater contains different measures to not compromise data security. To use Qrater, each user has to register within the application with a username and a password. When loading data, it can be marked as private restricting its access only to specific users. The data contained in private datasets including its ratings will be accessible only to those selected by the data owner.
 
-### Frontend Development {.unnumbered}
+#### Frontend Development
 
 The interface of Qrater is built using Bootstrap, a front-end framework that offers pre-designed components and a responsive grid system. This ensures the application is visually consistent and works across different devices, web browsers and screen sizes.
 
@@ -1806,15 +1784,15 @@ QC data can be accessed within the browser in the form of tables, using jQuery's
 - Filtering: The plugin supports filtering options to narrow down data sets based on criteria.
 - Searching: A search box allows users to quickly locate specific records within the data table.
 
-### Conclusion {.unnumbered}
+#### Conclusion
 
 In conclusion, Qrater is a practical and efficient tool designed to simplify the rating of quality control (QC) images through a user-friendly web interface. Its utilization of Flask, Gunicorn, Redis, and Docker Compose ensures robust performance and seamless integration of essential services, making it a reliable solution for managing QC processes and data effectively.
 
-## S2. QC mosaic image examples {.unnumbered}
+### QC Mosaic Image Examples
 
 ```{r}
 #| label: fig-qc-images
-#| fig-cap: "Example images selected for the three QC tasks. A) Mosaic containing 60 slices of raw (native) MRI data of the brain of one subject (20 axial slices, 20 sagittal slices, and 20 coronal slices). B) For the stereotaxic registration task, 60 MR image slices (20 axial slices, 20 sagittal slices, and 20 coronal slices) from the subject's MRI scan, resampled into the standard stereotaxic coordinate system, with the standard template's cortical boundaries overlaid in red. C) For the segmentation task, 60 brain MR image slices from one subject (20 axial slices, 20 sagittal slices, and 20 coronal slices). In the 2D images comprising the mosaic, we highlighted the segmented skull tissue in red. To the right of the mosaic, we show six 2D representations of 3D reconstructions of the subject's skull."
+#| fig-cap: "**Example QC task images.** Example images selected for the three QC tasks. A) Mosaic containing 60 slices of raw (native) MRI data of the brain of one subject (20 axial slices, 20 sagittal slices, and 20 coronal slices). B) For the stereotaxic registration task, 60 MR image slices (20 axial slices, 20 sagittal slices, and 20 coronal slices) from the subject's MRI scan, resampled into the standard stereotaxic coordinate system, with the standard template's cortical boundaries overlaid in red. C) For the segmentation task, 60 brain MR image slices from one subject (20 axial slices, 20 sagittal slices, and 20 coronal slices). In the 2D images comprising the mosaic, we highlighted the segmented skull tissue in red. To the right of the mosaic, we show six 2D representations of 3D reconstructions of the subject's skull."
 #| out-width: "100%"
 
 knitr::include_graphics(
@@ -1824,7 +1802,7 @@ knitr::include_graphics(
   suppressWarnings()
 ```
 
-## S3. QC protocol - raw MRI {.unnumbered}
+### QC Protocol - Raw MRI
 
 The task was designed to assess whether the trainees could accurately QC raw MRI. Once everyone had finished the QC of the selected cases, they would receive the QC labels assigned by the expert. Some brief explanations on the reasoning behind the more challenging cases were also shared. A secondary goal was to assure matching levels of strictness between all raters before moving forward with the QC of large datasets as ADNI and UKBiobank.
 
@@ -1838,7 +1816,7 @@ The overall QC criteria consisted of:
 - Intensity non-uniformity artifacts: Our implementation of N3 or N4 might not be able to deal with severe non-uniformity, therefore, those cases should fail. Trainees should include a "non-uniformity artifact" comment. Problematic cases often have one of two issues: 1) the lowest slices are affected by signal loss (due to the imperfect volume excitation pulse), or 2) there's a very strong AP inhomogeneity due to the nose or forehead being very close to the coil, and thus having a very bright signal.
 - Data should not be failed if the GM/WM contrast is diminished. Nonetheless, the trainee should leave a "low GM/WM contrast" comment.
 
-## S4. QC protocol - linear registration {.unnumbered}
+### QC Protocol - Linear Registration
 
 For the QC of linear registration of MRI to a standard template, the criteria to pass or fail an image was the following:
 
@@ -1869,13 +1847,13 @@ Contour problems to ignore (in most cases), summarized:
 - There is no tentorium contour line in sagittal slices near the midline in the ADNI template contours.
 - Look for the occipital-cerebellar notch in the contour pressing into the anterior tentorium viewed from the sagittal perspective near the midline.
 
-## S5. QC protocol - skull segmentation {.unnumbered}
+### QC Protocol - Skull Segmentation
 
 The main goal of the skull segmentation was to use its output as a feature in longitudinal registration. The QC task was done in order to build a library for the training of an automatic tool. QC labels were limited to "Pass" and "Fail".
 
 A successful segmentation was defined as having at least 95% of the top half of the skull properly segmented. Up to three holes of less than 2 cm2 were allowed for a segmentation to pass QC.
 
-## S6. Technical summary of the training video for raw MRI {.unnumbered}
+### Technical Summary of the Training Video for Raw MRI
 
 In this video, the speaker examines different MRI cases and evaluates their image quality. They observe various artifacts, signal drop-off, and non-uniformities, but overall, most of the cases shown pass the quality control (QC) criteria. The speaker leaves comments for the anomalies observed, suggesting further investigation during the processing QC stage. The speaker then focuses on the eligibility of different data sets for passing MRI acquisition quality control. They highlight various aspects that are commonly considered, including features like high intensity voxels that limit dynamic range, slight ringing artifacts, and the presence of fat in specific anatomical regions. The speaker explains how these factors can influence the quality of the images and whether they would meet the requirements for quality control.
 
@@ -1905,7 +1883,7 @@ In this video, the speaker examines different MRI cases and evaluates their imag
 
 (01:00:00 - 01:05:00). The speaker points out common elements in the reviewed cases such as bright skin markers, intense markers that reduce dynamic range, slight ringing artifacts, and the presence of fat in certain areas of the body. The speaker explains how these factors can affect the overall quality of the images and whether they would pass or fail the quality control. They encourage viewers to reach out with any further questions.
 
-## S7. Technical summary of the training video for linear registration {.unnumbered}
+### Technical Summary of the Training Video for Linear Registration
 
 In the video titled "QC linear stx reg2", the speaker discusses quality control of linear stereotactic registration. They demonstrate the use of the Qrater program to analyze different databases of images and evaluate the quality of stereotactic registration. The speaker examines various data sets, assessing the fit and symmetry of brain contours. They highlight cases where the registration passes or fails, identifying specific errors such as incorrect orientation or scaling. The speaker also discusses issues with z-scaling, rotation, and overall size of the data set. They emphasize the importance of checking scaling, contours, and symmetry to ensure the quality of the MRI scans.
 
@@ -1919,7 +1897,7 @@ In the video titled "QC linear stx reg2", the speaker discusses quality control 
 
 (00:20:00 - 00:25:00). The speaker discusses the issue of rotation in MRI images. They point out that the rotations in the images seem to be okay, with the orientation of the brain looking good. However, there are some concerns about the scaling and rotation, as the tectorium and cerebellum do not fit well in the sagittal images. The speaker also mentions a rotation error related to the orbital frontal contour cutting through the occipital fat. They emphasize the importance of checking the scaling, contours at the top of the brain, base of the cerebellum, and temporal lobes. Additionally, they highlight the need for left-right symmetry in both transverse and coronal images. Overall, these issues should be addressed to ensure the quality of the MRI.
 
-## S8. Technical summary of the training video of the follow-up meeting: linear registration of ADNI data {.unnumbered}
+### Technical Summary of the Training Video of the Follow-Up Meeting: Linear Registration of ADNI Data
 
 In this video, the linear stx QC is examined through various examples of brain images. The reviewer evaluates each case based on scale, intensity, contour fitting, and symmetry. While there is some disagreement among the reviewers regarding the pass or fail status of certain cases, they discuss the limitations of linear registration in handling protrusions or asymmetries in the brain. They emphasize the importance of evaluating the accuracy of linear registration rather than purely relying on the image's appearance. The reviewers also discuss the impact of Z scale on assessing asymmetry, as well as the presence of shear or asymmetry in the Z axis. They analyze different data sets and debate whether certain cases should pass or fail, considering factors such as contour fitting and signal drop-off. The reviewer highlights the need for proper alignment using linear registration and provides detailed analysis and recommendations for improvement based on the intra-rater experiment results. The reviewer also mentions the feedback received from participants regarding the scale and shape of the brain, acknowledging the challenges in accurately judging images with slight deviations from the standard model.
 
@@ -1937,11 +1915,11 @@ In this video, the linear stx QC is examined through various examples of brain i
 
 (00:30:00 - 00:35:00). Finally, the reviewer discusses the feedback received from the participants regarding the set scale of the images. Some participants mentioned that the scale appeared small, while others mentioned that the white matter was big. The reviewer then proceeds to analyze the Y scale contour, pointing out that the occipital pole had a slight extension, but overall, the contour seemed to fit the shape of the brain well. The Y scale in the front, back, and temporal lobe also appeared to be reasonably good. However, it is noted that some people might be offended by the Z scale since the cerebellum was not included within the contour. Additionally, the reviewer acknowledges that the shape of the brain being slightly different from the standard model could make it challenging to judge the images accurately.
 
-## S9. Matrix of detailed inter-rater agreement of the raw MRI QC task {.unnumbered}
+### Matrix of Detailed Inter-Rater Agreement of the Raw MRI QC Task
 
 ```{r}
 #| label: fig-agreement-raw
-#| fig-cap: "Confusion matrix representing the percentage of agreement between the expert's gold standard ratings represented as E01 and the trainees represented as R01 - R09 for the QC labels given in the raw MRI QC task."
+#| fig-cap: "**Raw MRI confusion matrix.** Confusion matrix representing the percentage of agreement between the expert's gold standard ratings represented as E01 and the trainees represented as R01 - R09 for the QC labels given in the raw MRI QC task."
 #| out-width: "80%"
 #| fig-width: 7
 #| fig-height: 6
@@ -1962,11 +1940,11 @@ ggplot(acq_count_plot,
         panel.grid = element_blank())
 ```
 
-## S10. Time measurements of raters for QC of the balanced dataset of raw MRI {.unnumbered}
+### Time Measurements of Raters for QC of the Balanced Dataset of Raw MRI
 
 ```{r}
 #| label: tbl-time-acq99
-#| tbl-cap: "Measurements of the time to complete their raw MRI QC sessions (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the balanced subset of preselected cases for the trainees and for the two sessions performed by the expert (Ses1 & Ses2). Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings. The last row represents the median of the total time, number of rests, and number of \"Pass\" and \"Fail\" images, as well as the median time data by QC label among all raters."
+#| tbl-cap: "**Raw MRI QC timing for balanced subset.** Measurements of the time to complete their raw MRI QC sessions (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the balanced subset of preselected cases for the trainees and for the two sessions performed by the expert (Ses1 & Ses2). Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings. The last row represents the median of the total time, number of rests, and number of \"Pass\" and \"Fail\" images, as well as the median time data by QC label among all raters."
 
 acq_99_time <- read_rds(
   here("source/paper1/data/derivatives/acq_99_time_dt.rds")
@@ -2058,11 +2036,11 @@ acq_99_summ |>
   style_manuscript_table(table_type = "supplementary")
 ```
 
-## S11. Time measurements of raters for raw MRI QC of the ADNI dataset {.unnumbered}
+### Time Measurements of Raters for Raw MRI QC of the ADNI Dataset
 
 ```{r}
 #| label: tbl-time-acq-adni
-#| tbl-cap: "Measurements of the time to complete the raw MRI QC of the ADNI data (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the expert and the trainees. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass, Warning and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number of rests as well as the QC label and time data among all raters."
+#| tbl-cap: "**Raw MRI QC timing for ADNI data.** Measurements of the time to complete the raw MRI QC of the ADNI data (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the expert and the trainees. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass, Warning and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number of rests as well as the QC label and time data among all raters."
 
 acquis_time <- read_rds(
   here("source/paper1/data/derivatives/acquis_time_dt.rds")
@@ -2199,18 +2177,14 @@ acquis_summ[, .(
     columns = c(Fail_N, Fail_Time),
     id = "spanner_fail"
   ) |>
-  style_manuscript_table(table_type = "supplementary") |>
-  tab_options(
-    table.font.size = "8pt",
-    column_labels.font.size = "8pt"
-  )
+  style_manuscript_table(table_type = "supplementary")
 ```
 
-## S12. Post-hoc analysis of time differences by QC label in the ADNI data {.unnumbered}
+### Post-Hoc Analysis of Time Differences by QC Label in the ADNI Data
 
 ```{r}
 #| label: tbl-posthoc-adni
-#| tbl-cap: "Post-hoc analysis of the time differences by QC label of the ADNI data performed by the Dunn's test of multiple comparisons using rank sums using the Holm method for multiple comparisons. P values in bold are statistically significant."
+#| tbl-cap: "**Post-hoc timing analysis by QC label.** Post-hoc analysis of the time differences by QC label of the ADNI data performed by the Dunn's test of multiple comparisons using rank sums using the Holm method for multiple comparisons. P values in bold are statistically significant."
 
 # Per-rater Dunn's test with Kruskal-Wallis chi-squared
 raters_posthoc <- unique(acquis_time$Rater)
@@ -2293,11 +2267,11 @@ posthoc_dt[, .(
   style_manuscript_table(table_type = "supplementary")
 ```
 
-## S13. Matrix of detailed inter-rater agreement of the linear registration QC task {.unnumbered}
+### Matrix of Detailed Inter-Rater Agreement of the Linear Registration QC Task
 
 ```{r}
 #| label: fig-agreement-reg
-#| fig-cap: "Confusion matrix representing the percentage of agreement between the expert's gold standard ratings represented as E01 and the trainees represented as R01 - R09 for the QC labels given in the linear registration QC task."
+#| fig-cap: "**Linear registration confusion matrix.** Confusion matrix representing the percentage of agreement between the expert's gold standard ratings represented as E01 and the trainees represented as R01 - R09 for the QC labels given in the linear registration QC task."
 #| out-width: "80%"
 #| fig-width: 7
 #| fig-height: 6
@@ -2318,11 +2292,11 @@ ggplot(reg_count_plot,
         panel.grid = element_blank())
 ```
 
-## S14. Time measurements of raters for QC of the balanced dataset of linear registration {.unnumbered}
+### Time Measurements of Raters for QC of the Balanced Dataset of Linear Registration
 
 ```{r}
 #| label: tbl-time-reg99
-#| tbl-cap: "Measurements of the time to complete the linear registration QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the balanced subset of preselected cases for the trainees and for the two sessions performed by the expert (Ses1 & Ses2). Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number of rests as well as the QC label and time data among all raters."
+#| tbl-cap: "**Linear registration QC timing for balanced subset.** Measurements of the time to complete the linear registration QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the balanced subset of preselected cases for the trainees and for the two sessions performed by the expert (Ses1 & Ses2). Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number of rests as well as the QC label and time data among all raters."
 
 reg_99_time <- read_rds(
   here("source/paper1/data/derivatives/reg_99_time_dt.rds")
@@ -2412,11 +2386,11 @@ reg_99_summ |>
   style_manuscript_table(table_type = "supplementary")
 ```
 
-## S15. Change before and after protocol refinement of linear registration {.unnumbered}
+### Change Before and After Protocol Refinement of Linear Registration
 
 ```{r}
 #| label: tbl-prepost
-#| tbl-cap: "Change in QC before and after the interruption of the linear registration QC of the ADNI data. QC labels of the images already evaluated before the task interruption and after the protocol refinement (n and percentage of the total). The images flagged as \"Warning\" were not considered when calculating the number of images changed."
+#| tbl-cap: "**QC changes after protocol refinement.** Change in QC before and after the interruption of the linear registration QC of the ADNI data. QC labels of the images already evaluated before the task interruption and after the protocol refinement (n and percentage of the total). The images flagged as \"Warning\" were not considered when calculating the number of images changed."
 
 # Compare pre-meeting and final ratings
 reg_pre_final <- reg_pre[
@@ -2546,11 +2520,11 @@ rbindlist(list(
   style_manuscript_table(table_type = "supplementary")
 ```
 
-## S16. Time measurements for the linear registration QC of the ADNI data {.unnumbered}
+### Time Measurements for the Linear Registration QC of the ADNI Data
 
 ```{r}
 #| label: tbl-time-reg-adni
-#| tbl-cap: "Measurements of the time to complete the linear registration QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the ADNI data. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number rests as well as the QC label and time data among all raters."
+#| tbl-cap: "**Linear registration QC timing for ADNI data.** Measurements of the time to complete the linear registration QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the ADNI data. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant. The last row represents the median total time and number rests as well as the QC label and time data among all raters."
 
 regis_time <- read_rds(
   here("source/paper1/data/derivatives/regis_time_dt.rds")
@@ -2660,11 +2634,11 @@ regis_summ |>
   style_manuscript_table(table_type = "supplementary")
 ```
 
-## S17. Time measurements of experts for the skull segmentation QC of the ADNI data {.unnumbered}
+### Time Measurements of Experts for the Skull Segmentation QC of the ADNI Data
 
 ```{r}
 #| label: tbl-time-seg
-#| tbl-cap: "Measurements of the time to complete the skull segmentation QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the ADNI data. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant."
+#| tbl-cap: "**Skull segmentation QC timing.** Measurements of the time to complete the skull segmentation QC (HH:MM:SS), number of rests, number of images assigned as \"Pass\" or \"Fail\", and the time spent per image divided by their assigned QC label (median and standard deviation; MM:SS) for the ADNI data. Rests were defined as any time higher than 900 s (15 min) assumed to be time spent away from the computer and thus discarded for the timing analyses. Adjusted p-values show the significance of the different in timing between Pass and Fail ratings; values in bold are statistically significant."
 
 rskull_time <- copy(rskull)
 rskull_time[

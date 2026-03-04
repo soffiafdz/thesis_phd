@@ -2,22 +2,67 @@
 % Adapted from the McGill thesis LaTeX template
 % https://github.com/juliengs/mcgill-thesis-template
 
-% Big gray chapter numbers
+% Margins (McGill requires ≥1in; default book class is wider)
+\usepackage[margin=1in]{geometry}
+
+% Allow URLs to break at any character (prevents margin overflow)
+\usepackage{xurl}
+
+% Gray chapter numbers
 \usepackage{fix-cm}
 \usepackage{xcolor}
+\usepackage{setspace}
 \usepackage[bf,rm,medium,compact]{titlesec}
 \definecolor{gray75}{gray}{0.75}
 \newcommand{\hsp}{\hspace{20pt}}
 \titleformat{\chapter}[display]
-  {\filleft\Huge\bfseries}
-  {\fontsize{100}{100}\selectfont\textcolor{gray75}\thechapter}
+  {\filleft\huge\bfseries\setstretch{1.0}}
+  {\fontsize{76}{80}\selectfont\textcolor{gray75}\thechapter}
   {1ex}{}[]
+\titlespacing*{\chapter}{0pt}{20pt}{30pt}
 
 % Format for unnumbered chapters (frontmatter, backmatter)
 \titleformat{name=\chapter,numberless}
-  {\Huge\bfseries}
+  {\huge\bfseries\setstretch{1.0}}
   {}
   {0pt}{}
+\titlespacing*{name=\chapter,numberless}{0pt}{20pt}{30pt}
+
+% Single-spacing for section/subsection headings
+% (prevents 1.5 linestretch from bloating multi-line titles)
+\titleformat{\section}
+  {\normalfont\Large\bfseries\setstretch{1.0}}
+  {\thesection}{1em}{}
+\titleformat{name=\section,numberless}
+  {\normalfont\Large\bfseries\setstretch{1.0}}
+  {}{0pt}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\setstretch{1.0}}
+  {\thesubsection}{1em}{}
+\titleformat{name=\subsection,numberless}
+  {\normalfont\large\bfseries\setstretch{1.0}}
+  {}{0pt}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\setstretch{1.0}}
+  {\thesubsubsection}{1em}{}
+\titleformat{name=\subsubsection,numberless}
+  {\normalfont\normalsize\bfseries\setstretch{1.0}}
+  {}{0pt}{}
+
+% titlesec compact option omits \paragraph/\subparagraph formats
+\titleformat{\paragraph}[runin]
+  {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}
+\titleformat{\subparagraph}[runin]
+  {\normalfont\normalsize\itshape}{\thesubparagraph}{1em}{}
+\titlespacing*{\subparagraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}
+
+% Paragraph indentation
+\setlength{\parindent}{1.5em}
+
+% Smaller captions for figures and tables (10pt)
+\usepackage{caption}
+\captionsetup{font=small}
 
 % Suppress default title page (we use _templates/before-body.tex)
 \renewcommand{\maketitle}{}
@@ -26,3 +71,80 @@
 \newcommand{\mcgillguidelines}{%
   \href{https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation}%
   {Official McGill Guidelines}: }
+
+% ----- Running headers with fancyhdr -----
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Plain page style (chapter opening pages)
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
+
+% Only chapter-level info appears in running headers.
+% Sections do NOT update the header (prevents "Abstract",
+% "Preface", "Research in Context" from polluting headers).
+\renewcommand{\chaptermark}[1]{%
+  \markboth{\chaptername\ \thechapter.\ #1}{}%
+}
+\renewcommand{\sectionmark}[1]{}
+
+% ----- Packages required by paper chapters -----
+
+% Tables
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{adjustbox}
+
+% Floats
+\usepackage{float}
+\floatplacement{table}{H}
+\floatplacement{figure}{H}
+\usepackage{placeins}
+
+% TikZ (Paper 4 CONSORT diagram, Paper 3 PRISMA diagram)
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+\usepackage{etoolbox}
+\AtBeginEnvironment{tikzpicture}{\setstretch{1.0}}
+
+% Unicode characters used in inline R output
+\usepackage{textcomp}
+\usepackage{newunicodechar}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{×}{\ensuremath{\times}}
+\newunicodechar{β}{\ensuremath{\beta}}
+\newunicodechar{η}{\ensuremath{\eta}}
+\newunicodechar{χ}{\ensuremath{\chi}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{τ}{\ensuremath{\tau}}
+\newunicodechar{γ}{\ensuremath{\gamma}}
+\newunicodechar{ζ}{\ensuremath{\zeta}}
+\newunicodechar{φ}{\ensuremath{\varphi}}
+\newunicodechar{μ}{\ensuremath{\mu}}
+\newunicodechar{ν}{\ensuremath{\nu}}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{Δ}{\ensuremath{\Delta}}
+\newunicodechar{ε}{\ensuremath{\varepsilon}}
+\newunicodechar{ρ}{\ensuremath{\rho}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{↔}{\ensuremath{\leftrightarrow}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{²}{\textsuperscript{2}}
+\newunicodechar{ₛ}{\textsubscript{s}}
+
+% Limit section numbering to 3 levels (e.g. 5.3.6, not 5.3.6.1)
+\setcounter{secnumdepth}{2}
+
+% Table spacing
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{\fill}

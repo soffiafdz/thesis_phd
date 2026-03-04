@@ -8,4 +8,7 @@ renv/python/
 source/paper1/data/derivatives
 source/paper1/plots
 source/paper3/data
+source/paper2/data/rds/adnimerge_baseline.rds
+source/paper2/tables
 source/paper4/data
+source/paper4/outputs
