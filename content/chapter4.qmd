@@ -46,10 +46,24 @@ style_manuscript_table <- function(gt_tbl,
 
 ## Preface {.unnumbered}
 
-This chapter presents the second paper of this thesis, which
-introduces and validates the hippocampal-to-ventricle ratio (HVR)
-as a biomarker for medial temporal atrophy in Alzheimer's disease.
-The paper was published in 2025.
+With the quality-controlled ADNI dataset established in
+Chapter 3, this chapter turns to the central biomarker of
+the thesis: the hippocampal-to-ventricle ratio (HVR). While
+early work demonstrated the HVR's promise using manual
+segmentation in small clinical samples, broader adoption
+required automated computation tools and systematic
+validation against conventional hippocampal volumetry. This
+chapter introduces a convolutional neural network-based
+segmentation pipeline for automated HVR computation,
+validates it against manual labels, and benchmarks the HVR
+against hippocampal volume alone for Alzheimer's disease
+group discrimination and age associations. The automated
+segmentation tool developed here is subsequently used in
+the population-level analyses of Chapter 5 and the clinical
+analyses of Chapter 6.
+
+The following manuscript was published in *Human Brain
+Mapping* in 2025.
 
 \clearpage
 
@@ -88,7 +102,7 @@ Learning Test (RAVLT) and the Alzheimer's Disease Assessment
 Scale 13 (ADAS13) scores. Cross validation demonstrated that the
 CNN method yielded more accurate HC and CSF segmentations when
 compared to MALF and NLPB, demonstrating higher volumetric
-overlap (Dice Kappa = 0.94) and correlation ($\rho$ = 0.99)
+overlap (Dice Kappa $= 0.94$) and correlation ($\rho = 0.99$)
 with the manual labels. It was also the most reliable method in
 clinical data application, showing minimal failures. Our
 comparisons yielded high correlations between FreeSurfer, CNN
@@ -404,7 +418,7 @@ ADNI-2, and ADNI-GO cohorts.
 
 Training of the segmentation algorithms was done using manual HC
 labels and the surrounding temporal horns of the lateral
-ventricles (N=80). This data and the manual segmentation
+ventricles ($N = 80$). This data and the manual segmentation
 protocol are identical to those described in Schoemaker et al.
 [@schoemaker2019; @collins2010]. The labels were segmented by
 trained neuroanatomical experts and are considered the ground
@@ -486,10 +500,10 @@ network for 200 epochs for each cross-validation split.
 We compared the output of our trained segmentations with those
 obtained from FreeSurfer
 (<https://surfer.nmr.mgh.harvard.edu>). First, we used the
-values of HCvol from UCSF from either version 4.3 (N=545) or
-version 5.1 (N=701) of the cross-sectional FreeSurfer pipeline
-reported by ADNI on the files UCSFFSX_11_02_15.csv and
-UCSFFSX41_11_08_19.csv respectively, and our own results using
+values of HCvol from UCSF from either version 4.3 ($N = 545$) or
+version 5.1 ($N = 701$) of the cross-sectional FreeSurfer pipeline
+reported by ADNI on the files `UCSFFSX_11_02_15.csv` and
+`UCSFFSX41_11_08_19.csv` respectively, and our own results using
 cross-sectional FreeSurfer pipeline version 6.0 with default
 parameters. Since ADNI does not report inferior lateral
 ventricle volumes for the earlier FreeSurfer results, we
@@ -639,17 +653,18 @@ and ADNI 2: 501 CH participants, 819 individuals with MCI, and
 321 patients with clinically probable AD. All demographic and
 clinical measures were significantly different among the three
 groups (@tbl-demographics-ch4). The Chi-squared test showed
-significant differences of sex for the CH (p=0.002) and MCI
-(p=0.004) groups, but not for AD (p=1). The post hoc analysis
-using Dunn's test showed that participants in the MCI group were
-significantly younger than those of the CH group (Z=2.6,
-p=0.014) and the AD group (Z=4.03, p<0.001). However, the age
-difference between the CH and AD groups was non-significant
-(Z=1.65, p=0.15). The CH group also appeared to be on average
-slightly more educated compared to both the MCI group (Z=2.64,
-p=0.012) and the AD group (Z=-5.59, p<0.001). The difference
-between the MCI and AD groups was also significant (Z=-3.8,
-p<0.001).
+significant differences of sex for the CH ($p = 0.002$) and MCI
+($p = 0.004$) groups, but not for AD ($p = 1$). The post hoc
+analysis using Dunn's test showed that participants in the MCI
+group were significantly younger than those of the CH group
+($Z = 2.6$, $p = 0.014$) and the AD group ($Z = 4.03$,
+$p < 0.001$). However, the age difference between the CH and AD
+groups was non-significant ($Z = 1.65$, $p = 0.15$). The CH
+group also appeared to be on average slightly more educated
+compared to both the MCI group ($Z = 2.64$, $p = 0.012$) and
+the AD group ($Z = -5.59$, $p < 0.001$). The difference between
+the MCI and AD groups was also significant ($Z = -3.8$,
+$p < 0.001$).
 
 ```{r}
 #| label: tbl-demographics-ch4
@@ -791,12 +806,12 @@ The robust repeated-measures two-way ANOVA revealed significant
 differences between the segmentation methods across all five
 performance metrics (@tbl-s2-ch4). Pairwise comparisons showed
 laterality effects in HC segmentation only for MALF (kappa and
-sensitivity, both FDR-adjusted p=0.009). In contrast, significant
-side differences were observed on all three methods for
-ventricular segmentation: Dice coefficient differences were
+sensitivity, both FDR-adjusted $p = 0.009$). In contrast,
+significant side differences were observed on all three methods
+for ventricular segmentation: Dice coefficient differences were
 significant on all methods (FDR-adjusted $p \leq 0.001$); kappa
 and sensitivity differences were also significant for NLPB and
-CNN (FDR-adjusted p<0.05). Robust effect-sizes ($\psi$), 95%
+CNN (FDR-adjusted $p < 0.05$). Robust effect-sizes ($\psi$), 95%
 confidence intervals and FDR-adjusted p-values are reported in
 @tbl-s3-ch4 of the Supporting Information.
 
@@ -805,7 +820,7 @@ MALF and NLPB across all five segmentation performance metrics
 for both HC and CSF. Differences were especially pronounced for
 Dice coefficient, Cohen's kappa, and sensitivity with robust
 effect sizes ($\psi$) consistently exceeding 0.04 for the HC and
-0.15 for CSF (all, FDR-adjusted p<0.001). While MALF
+0.15 for CSF (all, FDR-adjusted $p < 0.001$). While MALF
 outperformed NLPB in some of the HC metrics (kappa and
 sensitivity, $\psi \approx 0.01$, FDR-adjusted $p \leq 0.001$),
 the differences were inconsistent for CSF (Tables S4 and S5).
@@ -1032,7 +1047,7 @@ if (exists("mosaic_grob")) {
 @fig-correlation shows correlations between volumes obtained
 from the original manual labels and those from computed
 segmentations. All associations were significant (FDR-adjusted
-p<0.001). The Spearman's rho values for the CNN method were
+$p < 0.001$). The Spearman's rho values for the CNN method were
 almost 1 ($\rho \approx 0.98$) for both HCvol and CSFvol on
 both left and right sides. While the correlations were lower for
 NLPB, they still showed strong associations with the manual
@@ -1320,8 +1335,9 @@ Visual inspection of the violin plots (@fig-s1-ch4) shows
 consistency among the clinical groups and suggests a laterality
 effect on the segmentation particularly for the MCI and AD
 groups. This side difference resulted significant in the robust
-two-way mixed ANOVA for kappa, F (1, 25.03)=8.48, and
-sensitivity, F (1, 25.12)=8.47; both FDR-adjusted p=0.37.
+two-way mixed ANOVA for kappa, $F(1, 25.03) = 8.48$, and
+sensitivity, $F(1, 25.12) = 8.47$; both FDR-adjusted
+$p = 0.37$.
 Neither clinical group nor the interaction between group and
 clinical label were significant (@tbl-s7-ch4).
 
@@ -1339,8 +1355,8 @@ $\rho = 0.96$), but not in the healthy cohort
 
 Bland--Altman plots for HCvol segmented on the three cohorts of
 the ADNI out-of-sample dataset are presented in @fig-s3-ch4. Mean
-differences were close to zero in all groups (CH: 0.04,
-MCI: --0.04, AD: -0.02), with relatively narrow limits of
+differences were close to zero in all groups (CH: $0.04$,
+MCI: $-0.04$, AD: $-0.02$), with relatively narrow limits of
 agreement.
 
 
@@ -1360,7 +1376,11 @@ mean HCvol and HVR for each of the clinical groups.
 #|   HCvol and calculated HVR, along with the number of
 #|   segmentation failures for each automatic segmentation
 #|   method. Values are Mean (SD). Failures: N of failed
-#|   segmentations. Missing: N of unreported cases from ADNI."
+#|   segmentations. Missing: N of unreported cases from ADNI.
+#|   For FreeSurfer versions 4.3 and 5.1, missing data from
+#|   ADNI are reported instead of explicit algorithm failures.
+#|   Due to the lack of ventricular volume data, HVR was not
+#|   calculated for these versions of FreeSurfer."
 
 # Prepare volume data for Table 2
 vol_data <- adnimerge[, .(PTID, DX)] |>
@@ -1517,10 +1537,11 @@ The comparisons between segmentation methods in terms of
 volumetric correlation and effect size between CH individuals and
 patients with AD are presented in @fig-similarity-hc. HC volumes
 obtained from the FreeSurfer, CNN and NLPB segmentations were
-all highly correlated with each other ($\rho > 0.9$, p<0.001),
-with the FreeSurfer versions being the most similar between each
-other ($\rho = 0.99$). The correlations coefficients for MALF,
-the least similar method, ranged between 0.67--0.78. Even after
+all highly correlated with each other ($\rho > 0.9$,
+$p < 0.001$), with the FreeSurfer versions being the most
+similar between each other ($\rho = 0.99$). The correlations
+coefficients for MALF, the least similar method, ranged between
+$0.67$--$0.78$. Even after
 stratifying the comparisons by clinical groups, we still found
 high similarity between FreeSurfer versions and CNN
 ($\rho > 0.97$, between FreeSurfer versions; $\rho > 0.91$,
@@ -1534,7 +1555,7 @@ coefficients were found on the AD group
 #|   sizes of HCvol.** The lower triangle of the matrix plot
 #|   shows scatter plots of the HCvol values across the
 #|   different automatic segmentation methods stratified by the
-#|   clinical group (CH: Orange, MCI: Blue, and AD: Green). The
+#|   clinical group (CH: Orange, MCI: Blue, and AD: Pink). The
 #|   upper triangle of the matrix plots lists the correlation
 #|   coefficients between the automatic segmentation methods
 #|   using Spearman's rank correlation. The correlation
@@ -1597,13 +1618,13 @@ diag_fun <- function(data, mapping, labels.dt, ...) {
       data = labels.dt[
         labels.dt$METHOD == as_label(mapping$x),
       ],
-      size = 2,
+      size = 1.7,
       colour = "Black",
       fill = "White",
       alpha = 1,
       x = -Inf,
       y = y_limits[2] + y_limits[2] * 0.17,
-      hjust = -0.25
+      hjust = 0
     ) +
     scale_y_continuous(
       limits = c(y_limits[1], y_limits[2] * 1.3)
@@ -1634,9 +1655,9 @@ print(p_hc)
 ```
 
 Effect sizes calculated using Glass' delta follow the
-conventional interpretation of Cohen's d small, medium, and
-large effect sizes defined as d<0.5, 0.5<d<0.8, and d>0.8,
-respectively. We found large effect sizes on the HCvol
+conventional interpretation of Cohen's $d$ small, medium, and
+large effect sizes defined as $d < 0.5$, $0.5 < d < 0.8$, and
+$d > 0.8$, respectively. We found large effect sizes on the HCvol
 difference between CH and AD groups for all segmentation methods
 except MALF. The methods, from worst to best, were MALF
 ($\Delta = -0.78$), NLPB ($\Delta = -1.54$), FreeSurfer
@@ -1675,7 +1696,7 @@ significant.
 #|   clinical effect sizes.** The lower triangle of the matrix
 #|   plot shows scatter plots of the HVR values across the
 #|   different automatic segmentation methods stratified by the
-#|   clinical group (CH: Orange, MCI: Blue, and AD: Green). The
+#|   clinical group (CH: Orange, MCI: Blue, and AD: Pink). The
 #|   upper triangle of the matrix plot lists the correlation
 #|   coefficients ($\\rho$) between the automatic segmentation
 #|   methods using Spearman's rank correlation. The correlation
@@ -1745,28 +1766,30 @@ all four segmentation methods are presented in @fig-associations.
 The correlation coefficients for HVR are presented as well. All
 correlations and comparisons were corrected for multiple
 comparisons. We found a significant positive association
-(p<0.001) between HCvol and Age across all clinical groups for
-FreeSurfer (N=1589), CNN (1612), and NLPB (N=1600); for MALF
-(1590), the correlation was significant only on the CH (p=0.002)
-and MCI groups (p<0.001). The association between HVR and age
-was significant for all groups and methods (p<0.001). The
+($p < 0.001$) between HCvol and Age across all clinical groups
+for FreeSurfer ($N = 1589$), CNN ($N = 1612$), and NLPB
+($N = 1600$); for MALF ($N = 1590$), the correlation was
+significant only on the CH ($p = 0.002$) and MCI groups
+($p < 0.001$). The association between HVR and age was
+significant for all groups and methods ($p < 0.001$). The
 correlations of age with HVR were higher compared to
 correlations with HCvol. This difference was significant on the
-CH and MCI cohorts for the CNN (CH, $\rho$: -0.4 vs. -0.53,
-p=0.012; MCI, $\rho$: -0.46 vs. -0.57, p=0.01;
-@fig-associations and @fig-s4-ch4) and NLPB (CH, $\rho$: -0.34
-vs. -0.49, p=0.006; MCI, $\rho$: -0.39 vs. -0.54, p=0.001;
-@fig-associations and @fig-s5-ch4), and all clinical groups of
-MALF (CH, $\rho$: -0.19 vs. -0.5; MCI, $\rho$: -0.2 vs.
--0.52; AD, $\rho$: -0.03 vs. -0.38; all p<0.001;
-@fig-associations and @fig-s6-ch4). The HCvol and HVR performance
-difference was not found on FreeSurfer (@fig-associations and
-@fig-s7-ch4).
+CH and MCI cohorts for the CNN (CH, $\rho$: $-0.4$ vs. $-0.53$,
+$p = 0.012$; MCI, $\rho$: $-0.46$ vs. $-0.57$, $p = 0.01$;
+@fig-associations and @fig-s4-ch4) and NLPB (CH, $\rho$: $-0.34$
+vs. $-0.49$, $p = 0.006$; MCI, $\rho$: $-0.39$ vs. $-0.54$,
+$p = 0.001$; @fig-associations and @fig-s5-ch4), and all
+clinical groups of MALF (CH, $\rho$: $-0.19$ vs. $-0.5$; MCI,
+$\rho$: $-0.2$ vs. $-0.52$; AD, $\rho$: $-0.03$ vs. $-0.38$;
+all $p < 0.001$; @fig-associations and @fig-s6-ch4). The HCvol
+and HVR performance difference was not found on FreeSurfer
+(@fig-associations and @fig-s7-ch4).
 
 There was a positive association with the RAVLT learning
 subscore on both HCvol and HVR with all four methods, but this
 association was significant only for the MCI cohort (HCvol:
-0.24--0.37; HVR: 0.25--0.31; p<0.001; @fig-associations). The
+$0.24$--$0.37$; HVR: $0.25$--$0.31$; $p < 0.001$;
+@fig-associations). The
 association between HVR and memory was significantly stronger
 than the one with HCvol only for the MALF segmentation and the
 AD group (@fig-associations and @fig-s4-ch4).
@@ -1775,22 +1798,22 @@ We noted a negative association between both HCvol and HVR with
 the ADAS13 scores across groups (@fig-associations). The
 correlations of HCvol with cognitive decline were significant in
 the CH group segmented with FreeSurfer ($\rho = -0.22$,
-p<0.001), CNN ($\rho = -0.22$, p<0.001) and NLPB
-($\rho = -0.2$, p<0.001), but not MALF ($\rho = -0.1$, p=1);
-and the MCI group on all four methods (FreeSurfer:
+$p < 0.001$), CNN ($\rho = -0.22$, $p < 0.001$) and NLPB
+($\rho = -0.2$, $p < 0.001$), but not MALF ($\rho = -0.1$,
+$p = 1$); and the MCI group on all four methods (FreeSurfer:
 $\rho = -0.48$; CNN: $\rho = -0.46$; NLPB: $\rho = -0.43$;
-and MALF: $\rho = -0.25$; p<0.001). For the AD group, the only
-significant correlations between HCvol and ADAS13 were found on
-the FreeSurfer ($\rho = -0.22$, p=0.01) and CNN methods
-($\rho = -0.22$, p=0.01). The association between HVR and
-ADAS13 was significant in all three groups of the four
-segmentation methods ($\rho = -0.21$ -- $-0.44$, p<0.001). The
-magnitude of these associations was comparable to those of HCvol
-on all segmentation methods except for MALF. The correlation
-between ADAS13 and the HVR obtained from the MALF was stronger
-on all groups (CH, $\rho$: -0.1 vs. -0.21, p=0.048; MCI,
-$\rho$: -0.25 vs. -0.37, p=0.009; AD, $\rho$: 0.04 vs. -0.3,
-p<0.001; @fig-s4-ch4).
+and MALF: $\rho = -0.25$; $p < 0.001$). For the AD group, the
+only significant correlations between HCvol and ADAS13 were
+found on the FreeSurfer ($\rho = -0.22$, $p = 0.01$) and CNN
+methods ($\rho = -0.22$, $p = 0.01$). The association between
+HVR and ADAS13 was significant in all three groups of the four
+segmentation methods ($\rho = -0.21$ -- $-0.44$, $p < 0.001$).
+The magnitude of these associations was comparable to those of
+HCvol on all segmentation methods except for MALF. The
+correlation between ADAS13 and the HVR obtained from the MALF
+was stronger on all groups (CH, $\rho$: $-0.1$ vs. $-0.21$,
+$p = 0.048$; MCI, $\rho$: $-0.25$ vs. $-0.37$, $p = 0.009$;
+AD, $\rho$: $0.04$ vs. $-0.3$, $p < 0.001$; @fig-s4-ch4).
 
 ```{r}
 #| label: fig-associations
@@ -2393,7 +2416,7 @@ proposed CNN method.
 ## Conclusions {#sec-conclusions}
 
 In conclusion, after evaluating various automatic segmentation
-methods, with Dice Kappas of 0.96 and rho values of 0.99
+methods, with Dice Kappas of $0.96$ and $\rho$ values of $0.99$
 against high-quality manually segmented labels, the CNN method
 yields the best HC segmentations among the three methods, with
 results that are comparable to the best in the literature. The
@@ -2412,19 +2435,9 @@ integrity, specifically for neurodegenerative disease research
 and the study of age-related cognitive decline.
 
 
-## Author Contributions {.unnumbered}
-
-**Sofia Fernandez-Lozano:** conceptualization, methodology,
-software, investigation, writing -- original draft,
-visualization. **Vladimir Fonov:** software, data curation.
-**Dorothee Schoemaker:** resources, writing -- review and
-editing. **Jens Pruessner:** resources, writing -- review and
-editing. **Olivier Potvin:** resources, writing -- review and
-editing. **Simon Duchesne:** resources, writing -- review and
-editing. **D. Louis Collins:** conceptualization, writing --
-review and editing, supervision.
-
 ## Appendices
+
+The following appendices provide detailed segmentation performance metrics, statistical comparisons, and validation results supporting the analyses presented in this chapter.
 
 ```{r}
 #| label: setup-supplementary-ch4
@@ -2891,7 +2904,9 @@ supp_posthoc_segm <- copy(
   setcolorder(c(1:3, 5, 7, 9))
 ```
 
-### Cross-validation segmentation performance
+### Appendix A: Cross-Validation Results {.unnumbered}
+
+#### Cross-validation segmentation performance
 
 ```{r}
 #| label: tbl-s1-ch4
@@ -2964,7 +2979,7 @@ attr(tbl_s1, "scale_to_fit") <- TRUE
 tbl_s1
 ```
 
-### Cross-validation ANOVA results
+#### Cross-validation ANOVA results
 
 ```{r}
 #| label: tbl-s2-ch4
@@ -3018,7 +3033,7 @@ attr(tbl_s2, "scale_to_fit") <- TRUE
 tbl_s2
 ```
 
-### Post-hoc comparisons (Side differences)
+#### Post-hoc comparisons (Side differences)
 
 ```{r}
 #| label: tbl-s3-ch4
@@ -3147,7 +3162,7 @@ attr(tbl_s3, "scale_to_fit") <- TRUE
 tbl_s3
 ```
 
-### Post-hoc comparisons (Accuracy, Dice, Kappa)
+#### Post-hoc comparisons (Accuracy, Dice, Kappa)
 
 ```{r}
 #| label: tbl-s4-ch4
@@ -3229,7 +3244,7 @@ attr(tbl_s4, "scale_to_fit") <- TRUE
 tbl_s4
 ```
 
-### Post-hoc comparisons (Sensitivity, Specificity)
+#### Post-hoc comparisons (Sensitivity, Specificity)
 
 ```{r}
 #| label: tbl-s5-ch4
@@ -3311,7 +3326,9 @@ attr(tbl_s5, "scale_to_fit") <- TRUE
 tbl_s5
 ```
 
-### Out-of-sample validation performance
+### Appendix B: Out-of-Sample Validation {.unnumbered}
+
+#### Out-of-sample validation performance
 
 ```{r}
 #| label: tbl-s6-ch4
@@ -3370,7 +3387,7 @@ attr(tbl_s6, "scale_to_fit") <- TRUE
 tbl_s6
 ```
 
-### Out-of-sample validation ANOVA
+#### Out-of-sample validation ANOVA
 
 ```{r}
 #| label: tbl-s7-ch4
@@ -3431,7 +3448,7 @@ tbl_s7
 ```
 
 
-### Out-of-sample validation segmentation performance
+#### Out-of-sample validation segmentation performance
 
 ```{r}
 #| label: fig-s1-ch4
@@ -3519,7 +3536,7 @@ if (!is.null(supp_validation_data)) {
 }
 ```
 
-### Out-of-sample validation volume correlations
+#### Out-of-sample validation volume correlations
 
 ```{r}
 #| label: fig-s2-ch4
@@ -3590,7 +3607,7 @@ if (!is.null(val_vols)) {
 }
 ```
 
-### Out-of-sample validation Bland-Altman plots
+#### Out-of-sample validation Bland-Altman plots
 
 ```{r}
 #| label: fig-s3-ch4
@@ -3689,7 +3706,9 @@ if (!is.null(val_vols)) {
 }
 ```
 
-### Permutation tests - MALF
+### Appendix C: Clinical Application {.unnumbered}
+
+#### Permutation tests - MALF
 
 ```{r}
 #| label: fig-s4-ch4
@@ -3839,7 +3858,7 @@ if (file.exists(perms_rds)) {
 }
 ```
 
-### Permutation tests - NLPB
+#### Permutation tests - NLPB
 
 ```{r}
 #| label: fig-s5-ch4
@@ -3984,7 +4003,7 @@ if (file.exists(perms_rds)) {
 }
 ```
 
-### Permutation tests - CNN
+#### Permutation tests - CNN
 
 ```{r}
 #| label: fig-s6-ch4
@@ -4129,7 +4148,7 @@ if (file.exists(perms_rds)) {
 }
 ```
 
-### Permutation tests - FreeSurfer
+#### Permutation tests - FreeSurfer
 
 ```{r}
 #| label: fig-s7-ch4
@@ -4274,7 +4293,7 @@ if (file.exists(perms_rds)) {
 }
 ```
 
-### Permutation tests - CNN vs FreeSurfer HVR
+#### Permutation tests - CNN vs FreeSurfer HVR
 
 ```{r}
 #| label: fig-s8-ch4
