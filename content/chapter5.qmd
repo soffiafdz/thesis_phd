@@ -65,14 +65,14 @@ subsequently transferred to the ADNI clinical cohort in
 Chapter 6, enabling individualized z-scoring of hippocampal
 structure in a disease-enriched population.
 
-The following manuscript is in preparation for
-submission to *Human Brain Mapping*.
+The following manuscript has been submitted to
+*Human Brain Mapping* (Manuscript ID: XXXX).
 
 \clearpage
 
 ## Hippocampal-to-Ventricle Ratio as a Head-Size-Independent Biomarker: Sex Differences and Cognitive Associations in 27,680 UK Biobank Participants {.unnumbered}
 
-Sofia Fernandez-Lozano, D. Louis Collins
+Sofía Fernández-Lozano, D. Louis Collins
 
 \vspace{1em}
 

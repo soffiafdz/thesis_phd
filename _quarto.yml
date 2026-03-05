@@ -11,7 +11,7 @@ execute:
 book:
   title: "The Hippocampal-to-Ventricle Ratio: Validation, Normative Modeling, and Clinical Application of a Self-Normalizing Biomarker for Brain Aging"
   output-file: Fernandez2026
-  author: "Sofia Fernandez-Lozano"
+  author: "Sofía Fernández-Lozano"
 
   chapters:
     - index.qmd

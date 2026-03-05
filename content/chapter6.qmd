@@ -96,14 +96,14 @@ Framingham Risk Score from genuine cerebrovascular
 effects, addressing a source of bias that affects any
 longitudinal study using this composite risk measure.
 
-The following manuscript is in preparation for
-submission to *Alzheimer's & Dementia*.
+The following manuscript has been submitted to
+*Alzheimer's & Dementia* (Manuscript ID: XXXX).
 
 \clearpage
 
 ## Age-Adjusted Cardiovascular Risk and Hippocampal-Cognitive Coupling Along the Alzheimer's Disease Continuum {.unnumbered}
 
-Sofia Fernandez-Lozano, Sylvia Villeneuve,
+Sofía Fernández-Lozano, Sylvia Villeneuve,
 D. Louis Collins, for the Alzheimer's Disease
 Neuroimaging Initiative
 

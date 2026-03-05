@@ -1,25 +1,277 @@
 # Introduction
 
-[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
-Clearly state the rationale and objectives of the research.
-
 ## Motivation
 
-<!-- TODO: Write motivation section -->
+Hippocampal volume is the most widely used structural MRI
+biomarker for neurodegeneration in Alzheimer's disease.
+Its measurement from T1-weighted MRI has become central to
+clinical trials, observational studies, and the diagnostic
+frameworks that rely on structural markers to stage disease
+progression. However, interpreting hippocampal volumetry is complicated
+by substantial inter-individual variability. Baseline
+hippocampal volume varies dramatically even among
+cognitively healthy individuals, with up to a quarter of
+young adults naturally possessing volumes comparable to
+those observed in older populations. This inherent
+diversity makes it difficult to distinguish pathological
+atrophy from normal anatomical variation in cross-sectional
+assessments. Compounding this ambiguity, hippocampal volume
+is strongly influenced by overall head size, and reported
+sex differences in hippocampal structure vary considerably
+depending on how---or whether---head size is accounted for.
+
+A core methodological challenge underlying these
+inconsistencies is the absence of a consensus approach for
+head-size correction. Several competing methods
+exist---including proportional adjustment, covariate
+residualization, and stereotaxic normalization---each
+resting on different statistical assumptions about the
+relationship between brain structure size and intracranial
+volume. When applied to the same dataset, these methods can
+produce contradictory results, including reversals in the
+direction of observed sex differences. This methodological heterogeneity has generated decades of
+conflicting findings on whether the hippocampus is larger
+or smaller in one sex relative to the other, obscuring
+biological signals beneath analytical artifacts. What is
+needed is not incremental refinements to existing
+correction approaches, but a different measurement strategy
+that is inherently robust to head-size confounding.
+
+The hippocampal-to-ventricle ratio (HVR) offers such a
+strategy. The HVR leverages the well-established
+phenomenon of ex-vacuo dilation, whereby hippocampal tissue
+loss is accompanied by compensatory expansion of the
+adjacent lateral ventricle temporal horn. By expressing
+hippocampal volume as a ratio to ventricular volume, the
+HVR captures this reciprocal anatomical relationship in a
+single composite metric that is naturally self-normalizing
+with respect to head size. Early work on the HVR
+demonstrated its promise using manually segmented data in
+small clinical samples, but broader adoption has been
+limited by the absence of automated computation tools,
+large-scale population validation, characterization of
+sex-specific normative patterns, and application in
+clinical research contexts.
+
+Before any automated volumetric analysis can be deployed at
+population scale, the quality of the underlying imaging
+data must be assured. Quality control of structural MRI
+includes both assessment of raw image quality and
+verification of downstream processing steps such as
+stereotaxic registration, tissue classification, and
+subcortical segmentation. At the scale
+of modern biobank studies involving tens of thousands of
+brain scans, manual inspection of every image at every
+processing stage is infeasible with conventional tools.
+Existing quality control software addresses specific niches
+but lacks the generality, scalability, and collaborative
+infrastructure required for systematic multi-step quality
+control across large, multi-site datasets. Addressing this
+bottleneck is a prerequisite for the reliable large-scale
+analyses that motivate this thesis.
 
 ## Thesis Overview
 
-<!-- TODO: Write thesis overview section -->
+This thesis presents four studies that develop, validate,
+and apply the hippocampal-to-ventricle ratio as a
+structural brain aging biomarker. The work follows a
+progression from tool development through measurement
+validation, population-level characterization, and clinical
+application.
+
+**Chapter 3** addresses the quality control bottleneck that
+precedes any large-scale neuroimaging analysis. It presents
+Qrater, an open-source, web-based platform designed for
+collaborative and centralized visual quality control of
+neuroimaging data. Qrater provides a generalized framework
+for multi-rater assessment across arbitrary preprocessing
+steps, supporting real-time collaboration and centralized
+data management. The platform was deployed for quality
+control of the Alzheimer's Disease Neuroimaging Initiative
+(ADNI) dataset, producing the curated imaging data that
+serves as the foundation for the clinical analyses in
+subsequent chapters.
+
+**Chapter 4** establishes the automated computation and
+validation of the HVR. Using convolutional neural network
+segmentation of the hippocampus and lateral ventricles, the
+study introduces a fully automated pipeline for HVR
+computation and packages it as a publicly available Docker
+tool. The automated HVR is validated against manual
+segmentation labels and benchmarked against conventional
+hippocampal volumetry. The results demonstrate that the HVR provides superior
+discrimination between Alzheimer's disease diagnostic
+groups and stronger associations with age compared to
+hippocampal volume alone. The automated segmentation tool developed in this
+chapter is subsequently used in the analyses of Chapters 5
+and 6.
+
+**Chapter 5** takes the validated HVR to the UK Biobank, a
+population-level dataset of 27,680 participants, to
+characterize sex differences in hippocampal structure and
+aging. The study shows that apparent sex differences in
+hippocampal volume reverse direction depending on the
+head-size correction method applied, with effect sizes
+swinging by approximately 1.5 standard deviations across
+methods. The HVR is shown to be inherently
+self-normalizing, resolving these contradictions. Matching on intracranial volume reveals that residual HVR
+sex differences persist beyond head-size effects, reflecting
+genuine biological variation. The chapter further establishes sex-specific
+normative aging curves using generalized additive models
+for location, scale, and shape (GAMLSS), which are
+subsequently transferred to the clinical dataset in
+Chapter 6.
+
+**Chapter 6** applies the HVR normative framework
+developed in Chapter 5 to investigate the relationship
+between cardiovascular risk, hippocampal structure, and
+cognitive decline along the Alzheimer's disease continuum
+in ADNI. Using latent growth curve models, the study tests
+whether the Framingham Risk Score (FRS)---a widely used
+composite cardiovascular risk measure---exerts effects on
+hippocampal-cognitive trajectories through genuine
+cerebrovascular pathophysiology or merely through the
+confounding influence of age-weighting in the score's
+calculation. A multiple-indicators, multiple-causes (MIMIC) model is
+introduced to construct an age-adjusted FRS, revealing that
+the apparent effects of cardiovascular risk on
+brain-cognitive decline are largely driven by age-weighting
+artifacts rather than cerebrovascular mechanisms. The
+chapter demonstrates moderation without mediation:
+hippocampal-cognitive coupling persists regardless of
+cardiovascular risk measurement, while the FRS fails to
+mediate the relationship between vascular burden and
+hippocampal decline.
+
+Together, these four studies trace a complete
+methodological arc---from quality control infrastructure,
+through biomarker development and population
+characterization, to clinical hypothesis testing---
+establishing the HVR as a reliable and scalable tool for
+structural brain aging research.
 
 ## Scientific Contributions
 
-<!-- TODO: Write scientific contributions section -->
+### Methodological Contributions
+
+The following methodological contributions to original
+knowledge are presented in this thesis:
+
+1. Development of Qrater, an open-source, web-based
+   collaborative platform for centralized visual quality
+   control of neuroimaging data, supporting multi-rater
+   assessment across arbitrary preprocessing steps
+   (Chapter 3).
+
+2. Design and validation of a standardized quality control
+   training protocol with documented procedures for
+   consistent multi-rater evaluation of brain imaging data
+   (Chapter 3).
+
+3. Development of a convolutional neural network-based
+   automated segmentation pipeline for hippocampal and
+   lateral ventricle extraction, packaged as a publicly
+   available Docker tool for HVR computation (Chapter 4).
+
+4. Construction of sex-specific normative centile tables
+   for hippocampal volume, HVR, and lateral ventricle
+   volume using GAMLSS, enabling transferable
+   population-to-clinical z-score computation (Chapter 5).
+
+5. Introduction of a MIMIC-based age-adjustment framework
+   for deconfounding composite clinical risk scores in
+   longitudinal structural-cognitive analyses (Chapter 6).
+
+### Scientific Contributions
+
+The following scientific contributions to original
+knowledge are presented in this thesis:
+
+1. Demonstration that Qrater accelerates quality control
+   throughput by 2- to 30-fold compared to conventional
+   workflows, establishing feasibility for biobank-scale
+   visual inspection (Chapter 3).
+
+2. Validation of the HVR as a robust aging-sensitive
+   biomarker that provides larger effect sizes for
+   Alzheimer's disease group discrimination and stronger
+   associations with age than hippocampal volume alone
+   (Chapter 4).
+
+3. Systematic demonstration that apparent hippocampal sex
+   differences reverse direction across head-size
+   correction methods, with effect sizes shifting by
+   approximately 1.5 standard deviations---revealing these
+   differences as methodological artifacts rather than
+   biological findings (Chapter 5).
+
+4. Evidence that HVR sex differences persist after
+   intracranial volume matching, indicating residual
+   biological effects beyond head-size confounding
+   (Chapter 5).
+
+5. Characterization of sex-specific HVR aging trajectories
+   showing that males exhibit approximately 1.7-fold
+   steeper HVR decline than females, while HVR maintains
+   cognitive validity in both sexes (Chapter 5).
+
+6. Transfer of normative aging curves from the UK Biobank
+   population cohort to the ADNI clinical cohort, testing
+   cross-dataset applicability of GAMLSS-derived centile
+   models (Chapters 5 and 6).
+
+7. Discovery that FRS effects on hippocampal-cognitive
+   decline are driven by age-weighting within the score
+   rather than cerebrovascular pathophysiology, as
+   demonstrated by MIMIC-based age adjustment (Chapter 6).
+
+8. Demonstration that hippocampal-cognitive coupling
+   persists regardless of how cardiovascular risk is
+   measured, establishing moderation without mediation in
+   the vascular-neurodegeneration pathway (Chapter 6).
 
 ## Contribution of Authors {.unnumbered}
 
-[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
-A doctoral thesis must clearly state the elements of the thesis that are
-considered original scholarship and distinct contributions to knowledge.
+### Chapter 3 {.unnumbered}
 
-- Contributions of the student to each chapter must be explicitly stated.
-- Contributions of any co-authors to each chapter must be explicitly stated.
+**Sofía Fernández-Lozano:** conceptualization, methodology,
+software, investigation, writing -- original draft,
+visualization. **Mahsa Dadar:** conceptualization,
+methodology, investigation, writing -- review and editing,
+project administration. **Cassandra Morrison:** methodology,
+investigation, writing -- review and editing, project
+administration. **Vladimir Fonov:** resources,
+investigation, writing -- review and editing. **Ana Manera,
+Daniel Andrews, Reza Rajabli, Victoria Madge, Etienne
+St-Onge, Neda Shaffie, Alexandra Livadas:** investigation,
+writing -- review and editing. **D. Louis Collins:**
+conceptualization, methodology, validation, resources,
+writing -- review and editing, supervision, project
+administration, funding acquisition.
+
+### Chapter 4 {.unnumbered}
+
+**Sofía Fernández-Lozano:** conceptualization, methodology,
+software, investigation, writing -- original draft,
+visualization. **Vladimir Fonov:** software, data curation.
+**Dorothee Schoemaker:** resources, writing -- review and
+editing. **Jens Pruessner:** resources, writing -- review and
+editing. **Olivier Potvin:** resources, writing -- review and
+editing. **Simon Duchesne:** resources, writing -- review and
+editing. **D. Louis Collins:** conceptualization, writing --
+review and editing, supervision.
+
+### Chapter 5 {.unnumbered}
+
+**Sofía Fernández-Lozano:** conceptualization, methodology,
+software, formal analysis, writing -- original draft,
+visualization. **D. Louis Collins:** supervision, writing --
+review and editing.
+
+### Chapter 6 {.unnumbered}
+
+**Sofía Fernández-Lozano:** conceptualization, methodology,
+software, formal analysis, writing -- original draft,
+visualization. **Sylvia Villeneuve:** writing -- review and
+editing. **D. Louis Collins:** supervision, writing -- review
+and editing.

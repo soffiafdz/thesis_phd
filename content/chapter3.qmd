@@ -61,7 +61,7 @@ in 2024.
 
 ## QRATER: a collaborative and centralized imaging quality control web-based application {.unnumbered}
 
-Sofia Fernandez-Lozano, Mahsa Dadar, Cassandra Morrison,
+Sofía Fernández-Lozano, Mahsa Dadar, Cassandra Morrison,
 Ana Manera, Daniel Andrews, Reza Rajabli, Victoria Madge,
 Etienne St-Onge, Neda Shaffie, Alexandra Livadas, Vladimir
 Fonov, D. Louis Collins, and Alzheimer's Disease Neuroimaging

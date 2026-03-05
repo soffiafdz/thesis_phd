@@ -69,7 +69,7 @@ Mapping* in 2025.
 
 ## Enhanced Detection of Age-Related and Cognitive Declines Using Automated Hippocampal-To-Ventricle Ratio in Alzheimer's Patients {.unnumbered}
 
-Sofia Fernandez-Lozano, Vladimir Fonov, Dorothee Schoemaker,
+Sofía Fernández-Lozano, Vladimir Fonov, Dorothee Schoemaker,
 Jens Pruessner, Olivier Potvin, Simon Duchesne, D. Louis Collins
 
 \vspace{1em}
