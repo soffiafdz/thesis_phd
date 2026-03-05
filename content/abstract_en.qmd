@@ -1,12 +1,13 @@
 # Abstract {.unnumbered}
 
-[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
-If the language of the thesis is neither English nor French (only allowed
-for specific language Units) then a third abstract in the language of the
-thesis is required.
+This thesis develops, validates, and applies the hippocampal-to-ventricle ratio (HVR) as a self-normalizing structural brain aging biomarker. The HVR captures the reciprocal relationship between hippocampal atrophy and compensatory ventricular expansion, providing a metric that is inherently robust to head-size confounding---a persistent source of inconsistency in conventional hippocampal volumetry.
 
-Abstracts in English and French are mandatory and must be text only, i.e.
-no images, special characters (apart from the West European character set
-excluding the "OE" and "oe"), chemical or mathematical formulae, or special
-formatting (e.g. lists, tables). Abstracts have a maximum limit of 4,000
-characters.
+The first study presents Qrater, an open-source, web-based platform for collaborative visual quality control of neuroimaging data. Qrater provides a generalized framework for multi-rater assessment across arbitrary preprocessing steps and accelerates quality control throughput by 2- to 30-fold compared to conventional workflows. The platform was deployed to curate imaging data from the Alzheimer's Disease Neuroimaging Initiative (ADNI), producing the quality-controlled dataset used in subsequent analyses.
+
+The second study introduces an automated pipeline for HVR computation based on convolutional neural network segmentation of the hippocampus and lateral ventricles, achieving a Dice coefficient of 0.96 against manual labels. The pipeline is packaged as a publicly available Docker tool. Benchmarking against conventional hippocampal volumetry demonstrated that the HVR provides superior effect sizes for Alzheimer's disease group discrimination and stronger associations with age.
+
+The third study applies the automated HVR to 27,680 UK Biobank participants to characterize sex differences in hippocampal structure. The analysis reveals that apparent sex differences in hippocampal volume reverse direction depending on the head-size correction method, with effect sizes swinging by approximately 1.5 standard deviations across methods. The HVR is shown to be inherently self-normalizing, resolving these contradictions. Sex-specific normative aging curves are established using generalized additive models for location, scale, and shape (GAMLSS), revealing that males exhibit approximately 1.7-fold steeper HVR decline than females.
+
+The fourth study applies the normative framework to the ADNI clinical cohort to investigate relationships between cardiovascular risk, hippocampal structure, and cognitive decline along the Alzheimer's disease continuum. Using latent growth curve models with a multiple-indicators, multiple-causes (MIMIC) framework, the study reveals that the apparent effects of the Framingham Risk Score on brain-cognitive decline are largely driven by age-weighting artifacts within the score rather than cerebrovascular pathophysiology. Hippocampal-cognitive coupling persists regardless of how cardiovascular risk is measured, establishing a pattern of moderation without mediation.
+
+Together, these four studies contribute an open-source pipeline spanning quality control, automated segmentation, normative modeling, and clinical application, transforming a raw MRI scan into an individualized, age- and sex-referenced brain aging metric.
