@@ -248,7 +248,7 @@ project is presented in @fig-flowchart.
 ```{r}
 #| label: fig-flowchart
 #| fig-cap: "**QC task flowchart.** Flowchart summarizing the QC tasks for raw MRI, linear registration and skull segmentation."
-#| out-width: "80%"
+#| out-width: "60%"
 
 knitr::include_graphics(
   here("source/paper1/plots/qrater_diagram.png"),

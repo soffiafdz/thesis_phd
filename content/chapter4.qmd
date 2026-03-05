@@ -1065,8 +1065,8 @@ $\rho = 0.86$; CSFvol, $\rho = 0.57$).
 #|   NLPB (pink), and CNN (orange). The Spearman's rank
 #|   correlation coefficients ($\\rho$) and their significance
 #|   are added for each automatic method."
-#| fig-width: 6.5
-#| fig-height: 6.5
+#| fig-width: 5
+#| fig-height: 5
 
 # Process volume data for correlation plots
 vols_long <- vols_manual |>
@@ -1566,8 +1566,8 @@ coefficients were found on the AD group
 #|   cohort. Inside each density plot, the inlaid box shows
 #|   calculated effect sizes between the CH and AD groups using
 #|   Glass' Delta and their robust 95% confidence intervals."
-#| fig-width: 6.5
-#| fig-height: 4.9
+#| fig-width: 5.5
+#| fig-height: 4.2
 
 # Load pre-computed effect sizes (Glass' delta with CI)
 hc_effect_file <- here(
@@ -1707,8 +1707,8 @@ significant.
 #|   each density plot, the inlaid box shows calculated effect
 #|   sizes between the CH and AD groups using Glass' Delta and
 #|   their robust 95% confidence intervals."
-#| fig-width: 6.5
-#| fig-height: 4.6
+#| fig-width: 5.5
+#| fig-height: 3.9
 
 # Load pre-computed effect sizes for HVR
 hvr_effect_file <- here(
@@ -1828,8 +1828,8 @@ AD, $\rho$: $0.04$ vs. $-0.3$, $p < 0.001$; @fig-s4-ch4).
 #|   0.001). Gray asterisks mark the significance comparing
 #|   HCvol and HVR. All p-values are corrected for multiple
 #|   comparisons."
-#| fig-width: 6.5
-#| fig-height: 5.7
+#| fig-width: 5.5
+#| fig-height: 4.8
 
 # Use pre-computed correlation data if available
 if (!is.null(corr_data)) {
@@ -3194,7 +3194,9 @@ tbl_s4 <- load_or_generate(
       locations = cells_stub()
     ) |>
     tab_style(
-      style = cell_text(weight = "bold"),
+      style = cell_text(
+        weight = "bold", size = "x-small"
+      ),
       locations = cells_body(
         columns = c(
           "PSI_HC", "CI_HC", "Pval_HC"
@@ -3203,7 +3205,9 @@ tbl_s4 <- load_or_generate(
       )
     ) |>
     tab_style(
-      style = cell_text(weight = "bold"),
+      style = cell_text(
+        weight = "bold", size = "x-small"
+      ),
       locations = cells_body(
         columns = c(
           "PSI_VC", "CI_VC", "Pval_VC"
@@ -3276,7 +3280,9 @@ tbl_s5 <- load_or_generate(
       locations = cells_stub()
     ) |>
     tab_style(
-      style = cell_text(weight = "bold"),
+      style = cell_text(
+        weight = "bold", size = "x-small"
+      ),
       locations = cells_body(
         columns = c(
           "PSI_HC", "CI_HC", "Pval_HC"
@@ -3285,7 +3291,9 @@ tbl_s5 <- load_or_generate(
       )
     ) |>
     tab_style(
-      style = cell_text(weight = "bold"),
+      style = cell_text(
+        weight = "bold", size = "x-small"
+      ),
       locations = cells_body(
         columns = c(
           "PSI_VC", "CI_VC", "Pval_VC"
@@ -3453,8 +3461,8 @@ tbl_s7
 ```{r}
 #| label: fig-s1-ch4
 #| fig-cap: "**Out-of-sample validation segmentation performance.** Violin plots of the distributions of the overlap and accuracy metrics (Dice, Kappa, and Sensitivity) between manual and computed segmentations of the hippocampus from the left (red) and right (blue) hemispheres on an out-of-sample subset of ADNI data using CNN for each of the clinical groups (CH, MCI, and AD). The median and standard deviation are represented inside the violin plots."
-#| fig-width: 6.5
-#| fig-height: 3.25
+#| fig-width: 5.5
+#| fig-height: 2.75
 
 if (!is.null(supp_validation_data)) {
   supp_validation_data[
@@ -3541,8 +3549,8 @@ if (!is.null(supp_validation_data)) {
 ```{r}
 #| label: fig-s2-ch4
 #| fig-cap: "**Out-of-sample validation: Relationship between manual and computed hippocampal volumes.** Scatter plots of the volumes (measured in cc) of the left and right hippocampus from the manual segmentations against those obtained from CNN on the out-of-sample subset of ADNI data for each of the clinical groups (CH, MCI, AD). The Spearman's rank correlation coefficients ($\\rho$) and their significance are added for each hemisphere."
-#| fig-width: 6.5
-#| fig-height: 6.5
+#| fig-width: 5
+#| fig-height: 5
 
 if (!is.null(val_vols)) {
   val_vols |>
@@ -3612,8 +3620,8 @@ if (!is.null(val_vols)) {
 ```{r}
 #| label: fig-s3-ch4
 #| fig-cap: "**Out-of-sample validation Bland-Altman plots.** Bland-Altman plots for the volumetric comparison between mean HCvol (in cc) resulting from the automatic segmentation of the out-of-sample subset of ADNI data for each of the clinical groups (CH, MCI, AD). The dashed lines represent the mean difference (orange) and the upper and lower limits of agreement (blue)."
-#| fig-width: 6.5
-#| fig-height: 3.25
+#| fig-width: 5.5
+#| fig-height: 2.75
 
 if (!is.null(val_vols)) {
   ba_dt <- val_vols[
@@ -3713,8 +3721,8 @@ if (!is.null(val_vols)) {
 ```{r}
 #| label: fig-s4-ch4
 #| fig-cap: "**Permutation tests for differences in correlation strength between HCvol and HVR using MALF segmentations.** Distributions of the differences in Spearman's rank correlation coefficients ($\\Delta\\rho$ = $\\rho$(HCvol) - $\\rho$(HVR)) with respect to age, memory, and global cognition. The hypothesis tested is that the MALF-based HVR measure yields stronger correlations in magnitude than the MALF-based HCvol measure. Each distribution was obtained via 10,000 one-tailed permutation tests; shaded orange area represents the region of rejection of the null hypothesis ($\\alpha$ < 0.05). Vertical lines mark the observed $\\Delta\\rho$; solid and red when significant, black and dashed when not. FDR-corrected p-values are provided as labels."
-#| fig-width: 6.5
-#| fig-height: 5.7
+#| fig-width: 5.5
+#| fig-height: 4.8
 
 # Check for pre-computed permutation results
 perms_rds <- here(
@@ -3863,8 +3871,8 @@ if (file.exists(perms_rds)) {
 ```{r}
 #| label: fig-s5-ch4
 #| fig-cap: "**Permutation tests for differences in correlation strength between HCvol and HVR using NLPB segmentations.** Distributions of the differences in Spearman's rank correlation coefficients ($\\Delta\\rho$ = $\\rho$(HCvol) - $\\rho$(HVR)) with respect to age, memory, and global cognition. The hypothesis tested is that the NLPB-based HVR measure yields stronger correlations in magnitude than the NLPB-based HCvol measure. Each distribution was obtained via 10,000 one-tailed permutation tests; shaded orange area represents the region of rejection of the null hypothesis ($\\alpha$ < 0.05). Vertical lines mark the observed $\\Delta\\rho$; solid and red when significant, black and dashed when not. FDR-corrected p-values are provided as labels."
-#| fig-width: 6.5
-#| fig-height: 5.7
+#| fig-width: 5.5
+#| fig-height: 4.8
 
 perms_rds <- here(
   "source/paper2/data/rds",
@@ -4008,8 +4016,8 @@ if (file.exists(perms_rds)) {
 ```{r}
 #| label: fig-s6-ch4
 #| fig-cap: "**Permutation tests for differences in correlation strength between HCvol and HVR using CNN segmentations.** Distributions of the differences in Spearman's rank correlation coefficients ($\\Delta\\rho$ = $\\rho$(HCvol) - $\\rho$(HVR)) with respect to age, memory, and global cognition. The hypothesis tested is that the CNN-based HVR measure yields stronger correlations in magnitude than the CNN-based HCvol measure. Each distribution was obtained via 10,000 one-tailed permutation tests; shaded orange area represents the region of rejection of the null hypothesis ($\\alpha$ < 0.05). Vertical lines mark the observed $\\Delta\\rho$; solid and red when significant, black and dashed when not. FDR-corrected p-values are provided as labels."
-#| fig-width: 6.5
-#| fig-height: 5.7
+#| fig-width: 5.5
+#| fig-height: 4.8
 
 perms_rds <- here(
   "source/paper2/data/rds",
@@ -4153,8 +4161,8 @@ if (file.exists(perms_rds)) {
 ```{r}
 #| label: fig-s7-ch4
 #| fig-cap: "**Permutation tests for differences in correlation strength between HCvol and HVR using FreeSurfer segmentations.** Distributions of the differences in Spearman's rank correlation coefficients ($\\Delta\\rho$ = $\\rho$(HCvol) - $\\rho$(HVR)) with respect to age, memory, and global cognition. The hypothesis tested is that the FreeSurfer-based HVR measure yields stronger correlations in magnitude than the FreeSurfer-based HCvol measure. Each distribution was obtained via 10,000 one-tailed permutation tests; shaded orange area represents the region of rejection of the null hypothesis ($\\alpha$ < 0.05). Vertical lines mark the observed $\\Delta\\rho$; solid and red when significant, black and dashed when not. FDR-corrected p-values are provided as labels."
-#| fig-width: 6.5
-#| fig-height: 5.7
+#| fig-width: 5.5
+#| fig-height: 4.8
 
 perms_rds <- here(
   "source/paper2/data/rds",
@@ -4298,8 +4306,8 @@ if (file.exists(perms_rds)) {
 ```{r}
 #| label: fig-s8-ch4
 #| fig-cap: "**Permutation tests for differences in correlation strength of HVR between CNN and FreeSurfer segmentations.** Distributions of the differences in Spearman's rank correlation coefficients ($\\Delta\\rho$ = $\\rho$(CNN) - $\\rho$(FS)) with respect to age, memory, and global cognition. The hypothesis tested is that the CNN-based HVR measure yields stronger correlations in magnitude than the FreeSurfer-based HVR measure. Each distribution was obtained via 10,000 one-tailed permutation tests; shaded orange area represents the region of rejection of the null hypothesis ($\\alpha$ < 0.05). Vertical lines mark the observed $\\Delta\\rho$; solid and red when significant, black and dashed when not. FDR-corrected p-values are provided as labels."
-#| fig-width: 6.5
-#| fig-height: 5.7
+#| fig-width: 5.5
+#| fig-height: 4.8
 
 perms_rds <- here(
   "source/paper2/data/rds",

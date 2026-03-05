@@ -211,7 +211,7 @@ registerS3method(
       # 7. Add consistent row spacing
       latex_code <- gsub(
         "(\\\\begin\\{tabular\\})",
-        "\\\\renewcommand{\\\\arraystretch}{1.15}\\1",
+        "\\\\renewcommand{\\\\arraystretch}{1.05}\\1",
         latex_code
       )
 
@@ -248,7 +248,7 @@ registerS3method(
       #    - \begingroup/\endgroup contains font changes
       #    - Reduced \tabcolsep prevents wide-table overflow
       #    - scale_to_fit uses 2pt colsep for tighter fit
-      colsep <- if (scale_to_fit) "2pt" else "4pt"
+      colsep <- if (scale_to_fit) "2pt" else "3pt"
       latex_code <- paste0(
         "\\begingroup",
         "\\setlength{\\tabcolsep}{", colsep, "}\n",

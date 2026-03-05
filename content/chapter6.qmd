@@ -361,6 +361,18 @@ tikz_code <- generate_consort_tikz(
   ukb_age_range = cc$ukb_age_range
 )
 
+# Downsize fonts to match 10pt paper in 12pt thesis
+tikz_code <- gsub(
+  "font=\\\\scriptsize",
+  "font=\\\\tiny",
+  tikz_code
+)
+tikz_code <- gsub(
+  "font=\\\\footnotesize",
+  "font=\\\\scriptsize",
+  tikz_code
+)
+
 # Fix T-junction: replace -| shorthand with a single
 # horizontal bar + two vertical arrows (clean rendering)
 tikz_code <- sub(
