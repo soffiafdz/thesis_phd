@@ -76,6 +76,14 @@ function Pandoc(doc)
         table.insert(new_blocks, block)
       end
 
+      -- For unnumbered chapters, manually set the running
+      -- header (LaTeX's \chapter* does not call \chaptermark)
+      if text ~= "" and block.classes and
+         block.classes:includes("unnumbered") then
+        table.insert(new_blocks, pandoc.RawBlock("latex",
+          "\\markboth{" .. text .. "}{}"))
+      end
+
     -- Remove the \frontmatter RawBlock from index.qmd
     -- (now handled by the filter injection above)
     elseif block.t == "RawBlock" and block.format == "latex" and
