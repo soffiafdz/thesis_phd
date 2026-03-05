@@ -2,31 +2,574 @@
 
 ## Discussion
 
-[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
-The discussion of findings must be in line with disciplinary expectations.
-A comprehensive discussion is expected to be a minimum of 10 pages,
-double-spaced for doctoral students and a minimum of 5 pages, double-spaced
-for Master's students (including figures, images, and tables). It pertains
-to the entirety of a thesis. The discussion of findings should provide a
-final, overarching summary of study themes, limitations, and future
+This thesis developed, validated, and applied the
+hippocampal-to-ventricle ratio as a structural brain aging
+biomarker. Across four studies, the work followed a
+progression from quality control infrastructure, through
+automated biomarker computation and population-level
+characterization, to clinical hypothesis testing, producing
+a pipeline that transforms a raw MRI scan into an
+individualized, age- and sex-referenced brain aging metric.
+
+### From quality control to clinical inference: a cohesive pipeline
+
+Reliable neuroimaging inference requires a complete
+methodological chain, starting well before any biomarker is
+computed. Qrater (Chapter 3) was developed to address a
+practical bottleneck: biobank-scale datasets generate tens
+of thousands of images requiring quality assessment at
+multiple processing stages, yet existing tools were too
+narrowly specialized, lacked collaborative features, or
+could not scale to multi-step, multi-rater workflows.
+Qrater addressed this gap with a web-based
+platform for centralized visual quality control that
+accelerated inspection throughput by 2- to 30-fold compared
+to conventional methods. Qrater was not an isolated
+software contribution but the entry point for the empirical
+work that followed: the curated ADNI imaging data produced
+through Qrater's deployment served as the foundation for
+the HVR validation in Chapter 4 and the clinical analyses
+in Chapter 6.
+
+The importance of this foundation is clear when considering
+what happens without it. Motion artifacts, registration
+failures, and segmentation errors introduce systematic bias
+into volumetric measurements, and these biases
+disproportionately affect clinical populations, the groups
+where accurate measurement matters most
+[@reuter_head_2015; @alexander2016subtle]. Chapter 3 showed
+that even experts with decades of experience are
+inconsistent in quality judgments, not only for borderline
+cases but even for images previously deemed obvious
+failures, highlighting the need for structured training
+protocols and collaborative verification rather than
+reliance on individual assessors. This is consistent with
+the broader QC literature showing that automated tools,
+while useful for triage, cannot replace visual inspection
+for subcortical segmentation failures that correlate with
+clinical status
+[@monereo2021quality; @raamana2023visualqc].
+
+Chapter 4 then established the automated computation that
+made population-scale analysis feasible. The convolutional
+neural network segmentation achieved a Dice coefficient of
+0.94 for hippocampal delineation and maintained high
+performance across diagnostic groups, including the
+ventricular compartment where traditional atlas-based
+methods showed sharp performance drops. The pipeline was
+packaged as a publicly available Docker tool, so that any
+research group can compute the HVR from a T1-weighted scan
+with a single command, using the same segmentation
+algorithm employed throughout this thesis. The continuity
+from quality-controlled input data (Chapter 3) through
+validated automated segmentation (Chapter 4) to normative
+referencing (Chapters 5 and 6) means that each link in the
+chain has been independently evaluated, an increasingly
+important requirement for clinical translation
+[@bethlehem_brain_2022; @ge_normative_2024].
+
+### The HVR as a self-normalizing biomarker
+
+The HVR rests on a simple idea: because both hippocampal
+volume and adjacent ventricular volume scale with
+intracranial volume, their ratio cancels the shared
+head-size variance, producing a measure of medial temporal
+lobe integrity that is largely independent of the head-size
+confound that has long complicated hippocampal volumetry
+[@schoemaker2019; @obrien_statistical_2011]. This thesis
+provides the first large-scale empirical confirmation of
+this self-normalizing property and extends it in two
 directions.
 
-In the case of a manuscript-based thesis, the comprehensive discussion
-should encompass all of the chapters of the thesis and should not be a
-repetition of the individual chapters. This section can be used to address
-issues not sufficiently covered in the preceding chapters or papers (e.g.,
-critiques raised by reviewers that could not be incorporated into published
-works, or reintroducing discussion arguments removed from published papers
-upon reviewer request). This section can also be used to elaborate on the
-practical/applied aspects of published findings in a manner that is more
-accessible to less expert readers.
+First, the UK Biobank analyses in Chapter 5 showed that
+the HVR has a much weaker correlation with intracranial
+volume than unadjusted hippocampal volume, confirming that
+the ratio largely removes the head-size dependence that
+drives methodological artifacts in conventional volumetry.
+This matters because it directly resolves the
+contradictions that have characterized the sex-differences
+literature, where the same hippocampal data yield opposite
+conclusions depending on the correction method applied
+[@pintzka_marked_2015; @sanchis-segura_effects_2020;
+@wang_comparison_2024]. The HVR produces directionally
+consistent sex-difference estimates regardless of whether
+additional intracranial volume adjustments are applied,
+providing the stability that a clinically useful biomarker
+requires.
+
+Second, the clinical validation in Chapters 4 and 6
+showed that the HVR outperforms hippocampal volume alone.
+In Chapter 4, the HVR yielded larger effect sizes for
+distinguishing cognitively healthy individuals from those
+with Alzheimer's disease across all segmentation methods,
+and stronger associations with age across most methods.
+The improvement was most pronounced for lower-quality
+segmentation approaches, suggesting that the ratio partly
+compensates for measurement noise because errors in
+adjacent tissue and fluid compartments are correlated. In
+Chapter 6, sex-specific normative curves derived from the
+UK Biobank were applied to the ADNI clinical cohort for
+individualized z-scoring along the Alzheimer's disease
+continuum. The transfer revealed a systematic negative
+z-score offset in ADNI relative to the UK Biobank
+reference, reflecting age-distribution and population-health
+differences between the two cohorts. Absolute z-scores
+therefore require cautious interpretation across datasets,
+but within-cohort relative comparisons remained valid. This
+cross-dataset transfer represents a step toward the
+normative referencing framework envisioned by the brain
+charting movement
+[@bethlehem_brain_2022; @ge_normative_2024].
+
+The residual negative correlation between the HVR and
+intracranial volume, while small, deserves comment. Under
+strict isometric scaling, the ratio would be entirely
+ICV-independent. The remaining dependence likely reflects
+the hyperallometric scaling of the lateral
+ventricles (ventricles expand disproportionately in larger
+brains), which introduces a mild downward bias in the HVR
+for individuals with larger heads
+[@de_jong_allometric_2017; @williams_neuroanatomical_2021].
+This departure from perfect cancellation is modest compared
+to the biases of standard correction methods, but it means
+that the HVR is substantially rather than perfectly
+self-normalizing. Residualization of the HVR on intracranial
+volume remains an option for applications demanding complete
+ICV independence, though the incremental gain is small.
+
+### Methodological artifacts masquerading as biology
+
+A recurrent theme across this thesis is that analytical
+choices can manufacture apparent biological effects or
+obscure genuine ones. Two findings illustrate this clearly.
+
+In Chapter 5, applying different head-size correction
+methods to the same UK Biobank dataset produced hippocampal
+sex differences that reversed direction, with effect sizes
+shifting by approximately 1.5 standard deviations from a
+large male advantage (unadjusted volumes) to a moderate
+female advantage (proportional correction). The reversal is
+explained by the hypoallometric scaling of the hippocampus
+relative to intracranial volume: proportional division
+over-corrects smaller brains and under-corrects larger ones,
+creating a spurious female advantage
+[@pintzka_marked_2015; @sanchis-segura_effects_2020]. When
+intracranial volume is properly controlled through
+residualization or matching, hippocampal volume differences
+between the sexes collapse to near-zero
+[@nordenskjold_intracranial_2015; @voevodskaya_effects_2014;
+@wang_comparison_2024].
+
+In Chapter 6, an analogous artifact appeared in the
+cardiovascular risk domain. The Framingham Risk Score
+predicted hippocampal decline in all six parallel-process
+latent growth curve models. But when the age component
+embedded in the score was removed through MIMIC-based
+adjustment, the apparent cardiovascular effect on
+hippocampal atrophy vanished: the age-adjusted
+cardiovascular risk factor predicted hippocampal decline in
+none of the six models. This dissociation shows that the
+widely reported link between the Framingham Risk Score and
+brain atrophy in elderly cohorts reflects, at least in
+large part, the confound of age-weighting within the score
+rather than cerebrovascular pathophysiology
+[@koller_development_2012; @pencina_quantifying_2019].
+
+The common lesson is that composite metrics embedding
+demographic confounds, whether head size in a proportional
+correction or age in a risk score, can generate
+associations that appear biologically meaningful but are
+artifacts of the metric's construction. This thesis
+contributes both the diagnosis of these artifacts and
+solutions: the HVR as an alternative to externally
+corrected hippocampal volumes, and the MIMIC framework for
+deconfounding composite clinical scores. Both build the
+adjustment into the measurement itself rather than applying
+it post hoc.
+
+### Sex differences: what remains after deconfounding
+
+Once head-size artifacts are removed, genuine sex
+differences in hippocampal structure and aging remain, with
+implications for clinical practice.
+
+The matched-pair analysis in Chapter 5 demonstrated that
+when males and females are strictly matched on age and
+intracranial volume, hippocampal volume differences
+collapse to effectively zero, but a small but consistent
+female HVR advantage persists. This persistent advantage
+is driven primarily by males retaining significantly
+larger ventricles even after head-size matching, a pattern
+consistent with the well-documented earlier onset and
+faster progression of ventricular enlargement in males
+[@curra_ventricular_2019; @voevodskaya_effects_2014]. The
+HVR captures this ventricular signal because it integrates
+both tissue and fluid compartments into a single metric,
+detecting a sex difference in brain aging that would be
+missed by hippocampal volume alone.
+
+The cross-sectional age-stratified analyses further revealed
+that males exhibit approximately 1.7-fold steeper
+HVR decline with age compared to females, driven
+predominantly by the greater rate of male ventricular
+expansion rather than differential hippocampal atrophy per
+se. This steeper male trajectory widens the female HVR
+advantage at older ages, a finding that has direct
+implications for age-specific normative thresholds. The
+sex-stratified GAMLSS centile curves established in Chapter
+5 formalize this requirement: an HVR value at the 50th
+percentile for a male of a given age falls well below the
+50th percentile for a female of the same age, meaning that
+sex-pooled norms would systematically misclassify healthy
+males as abnormal and pathological females as normal.
+
+The brain-cognition models in Chapter 5 revealed further
+sex-specificity. Residualized hippocampal volume predicted
+general cognition in females but not in males, consistent
+with evidence that hippocampal structure predicts
+associative memory in women but not men
+[@zheng_sex_2017; @jockwitz_differential_2024]. The HVR
+showed the opposite pattern: significant associations with
+cognition in both sexes but stronger coupling in
+males, suggesting that the combined tissue-fluid metric
+captures aspects of structural integrity relevant to male
+cognitive processing that hippocampal volume alone misses.
+In the clinical domain, the parallel-process models in
+Chapter 6 showed sex-asymmetric hippocampal-cognitive
+coupling along the Alzheimer's disease continuum, though
+this asymmetry may partly reflect power differences between
+the male and female subsamples rather than a purely
+biological divergence. Nonetheless, the overall pattern
+supports sex-stratified modeling in neuroimaging research
+[@ferretti_sex_2018; @ritchie_sex_2018].
+
+The biological mechanisms behind these sex differences are
+likely multifactorial. Cumulative estrogen exposure has
+neuroprotective effects on the hippocampus, promoting
+neurogenesis, preserving synaptic plasticity, and reducing
+neuroinflammation [@jett_endogenous_2022; @bettio2017].
+Women with longer reproductive spans show younger brain ages
+and better preserved hippocampal structure
+[@de_lange_womens_2020; @luders_case_2025]. The menopausal
+transition, with its rapid drop in estrogen, may accelerate
+structural brain aging and contribute to the higher lifetime
+prevalence of Alzheimer's disease in women
+[@jett_endogenous_2022; @ferretti_sex_2018]. Conversely,
+the earlier and faster ventricular expansion in males may
+reflect sex differences in cerebrovascular aging, white
+matter integrity, or CSF dynamics that are not yet fully
+characterized [@curra_ventricular_2019; @peterson_sex_2024; @lohner_relation_2022; @burmistrov_sex_2024].
+
+### Brain-cognition coupling across the aging continuum
+
+Chapters 5 and 6 together show that the HVR captures
+hippocampal-cognitive coupling across both healthy aging and
+the Alzheimer's disease continuum, extending its validity
+beyond the small, cross-sectional samples in which it was
+originally evaluated [@schoemaker2019].
+
+In healthy aging (Chapter 5), the HVR predicted general
+cognitive performance comparably to residualized hippocampal
+volume despite requiring no external head-size
+adjustment, a practical advantage because intracranial
+volume estimation itself introduces error
+[@obrien_statistical_2011; @sanfilipo_correction_2004]. The
+effect sizes were small, as is typical in large, cognitively
+healthy samples [@ritchie_sex_2018], but statistically
+robust and consistent across both sexes.
+
+In the clinical context (Chapter 6), the parallel-process
+latent growth curve models showed that longitudinal HVR
+decline reliably predicts concurrent cognitive decline
+across the Alzheimer's disease spectrum. This coupling was
+significant regardless of how cardiovascular risk was
+measured, whether using the original Framingham Risk Score
+or the age-adjusted latent cardiovascular risk
+factor, indicating that hippocampal-cognitive coupling is
+not driven by shared age or vascular influences but reflects
+a genuine neurodegenerative pathway. This is consistent with
+the broader literature showing that longitudinal hippocampal
+decline is among the strongest structural predictors of
+cognitive deterioration
+[@oschwald_brain_2020; @kramer_longitudinal_2007].
+
+The "moderation without mediation" finding in Chapter 6
+adds nuance. Age-adjusted cardiovascular risk did not
+mediate the pathway from vascular burden to hippocampal
+decline (the indirect pathway was null), yet it moderated
+the hippocampal-cognitive relationship in select domains.
+This pattern is consistent with the cognitive reserve
+framework [@stern_cognitive_2012]: cardiovascular burden may
+reduce the brain's capacity to maintain cognitive
+performance at a given level of structural integrity,
+without directly accelerating the structural atrophy itself.
+Rather than a simple chain (vascular damage causes atrophy
+causes cognitive decline), vascular and neurodegenerative
+processes may operate through partly independent pathways
+that converge on cognitive outcomes
+[@gorelick_vascular_2011; @iadecola_neurovascular_2019].
+
+### Practical and clinical implications
+
+Together, this thesis produced a complete, open-source
+pipeline from raw MRI acquisition to individualized brain
+aging assessment, with each component publicly available
+and independently validated.
+
+Qrater provides a quality control platform that
+is not specific to hippocampal analysis or to any particular
+neuroimaging pipeline; it can be configured for visual
+inspection of any imaging modality or processing step,
+as demonstrated for structural MRI and extensible to other
+modalities including PET and CT (Chapter 3). The
+Docker-packaged HVR computation tool enables
+single-command, fully automated extraction of hippocampal
+and ventricular volumes from T1-weighted scans, removing the
+need for site-specific segmentation software installation
+or manual intervention (Chapter 4). The sex-stratified
+GAMLSS normative curves translate raw volumes into
+age-referenced z-scores, enabling clinicians and researchers
+to quantify individual deviation from healthy aging
+expectations (Chapters 5 and 6). Finally, the MIMIC age-adjustment framework provides an
+approach for deconfounding composite clinical scores whose
+constituent components independently predict the outcome
+of interest, extending beyond the Framingham Risk Score to
+other instruments where age or similar confounds dominate
+the score variance (Chapter 6).
+
+These tools address a gap in the brain charting literature:
+while large-scale normative references are increasingly
+available [@bethlehem_brain_2022; @ge_normative_2024], the
+practical infrastructure for computing the underlying
+metrics, assuring their quality, and referencing them
+against population norms has lagged behind. The pipeline
+developed here, from quality-controlled segmentation to
+normative z-scoring, shows how such end-to-end workflows
+can be built and validated for specific structural
+biomarkers.
 
 ## Limitations
 
-<!-- TODO: Write limitations section -->
+Each chapter discusses study-specific limitations. The
+following addresses cross-cutting limitations that span
+multiple chapters.
+
+### Cross-sectional designs
+
+The HVR validation (Chapter 4) and the UK Biobank
+sex-differences study (Chapter 5) are cross-sectional:
+age-related patterns are inferred from between-person
+comparisons rather than within-person trajectories.
+Cross-sectional age effects may conflate genuine aging
+with cohort effects (differences between birth decades
+reflecting historical variation in nutrition, education, or
+medical care). The longitudinal analyses in Chapter 6
+partially address this by modeling within-person change, but
+are restricted to the ADNI clinical population. The UK
+Biobank repeat imaging subsample (~10,000 participants with
+two or more sessions) will eventually allow within-person
+validation of the cross-sectional HVR aging patterns from
+Chapter 5.
+
+### Cohort representativeness
+
+Both the UK Biobank and ADNI have well-documented selection
+biases. The UK Biobank draws from a volunteer cohort that is
+healthier, more educated, and less ethnically diverse than
+the general UK population, so the normative curves from
+Chapter 5 may not represent the full spectrum of healthy
+brain aging [@ritchie_sex_2018]. ADNI enrolls a
+predominantly white, highly educated sample enriched for
+Alzheimer's disease pathology, and participants who remain
+in follow-up are those healthy enough to continue attending
+visits, introducing attrition bias that may cause the
+Chapter 6 models to underestimate true rates of decline.
+Together, these selection effects mean the thesis lacks
+validation in community-based, ethnically diverse, or
+socioeconomically representative populations.
+
+### The HVR as a composite measure
+
+The HVR conflates hippocampal and ventricular contributions
+into a single metric. A declining HVR could reflect
+hippocampal shrinkage, ventricular expansion, or both.
+In cross-sectional analyses, these cannot be separated.
+Chapter 5 examined hippocampal volume, ventricular volume,
+and the HVR separately to characterize each component, but
+the HVR itself remains an aggregate index. Longitudinal
+decomposition, tracking individual rates of hippocampal
+atrophy and ventricular expansion within the same
+individuals over time, would be needed to determine which
+component drives HVR change at different disease stages.
+
+### Normative model transfer
+
+Transferring the UK Biobank-derived GAMLSS normative curves
+to the ADNI cohort in Chapter 6 revealed a systematic
+negative z-score offset in the ADNI reference group,
+reflecting the mismatch between a population-based sample
+(ages 45--82) and a clinical cohort with a different age
+range and health profile. Within-cohort relative comparisons
+remain valid, but absolute z-scores are not directly
+interchangeable across datasets without recalibration.
+This limitation is inherent to all normative referencing
+approaches and highlights the need for multi-cohort norm
+construction or site-specific recalibration before
+individual-level clinical decisions can be supported
+[@ge_normative_2024].
+
+### Cognitive measurement
+
+The cognitive assessments differ between the two datasets.
+The UK Biobank battery (Chapter 5) is brief and
+population-optimized, lacking a reliable episodic memory
+measure, a notable gap given the hippocampus's central role
+in memory. The bifactor model's memory-specific factor
+failed to achieve stable estimation, limiting evaluation of
+hippocampal-memory associations in the healthy aging sample.
+ADNI (Chapter 6) provides richer neuropsychological
+assessment but uses cohort-specific composite scores not
+directly comparable to the UK Biobank measures. No unified
+cognitive framework spans both datasets, preventing direct
+comparison of brain-cognition coupling across the healthy
+and clinical populations examined here.
+
+## Future Directions
+
+### Longitudinal HVR validation
+
+The UK Biobank repeat imaging subsample (~10,000
+participants with two or more MRI sessions) provides an
+opportunity to validate the cross-sectional HVR aging
+patterns from Chapter 5 using within-person longitudinal
+data. Individual HVR trajectories can test whether the
+sex-differential aging rates observed cross-sectionally
+replicate in longitudinal change, and whether baseline HVR
+or its rate of decline predicts incident cognitive
+impairment or dementia. Longitudinal decomposition of the
+HVR into hippocampal and ventricular components would
+clarify which compartment drives HVR change at different
+life stages and in response to different risk factors.
+
+### Clinical translation and diagnostic thresholds
+
+The GAMLSS normative curves and Docker computation tool
+developed in this thesis together enable individual-level
+HVR z-scoring from a single T1-weighted scan. However,
+the clinical utility of this capability depends on
+establishing actionable thresholds. Future work should
+determine which HVR z-score cutoffs optimally identify
+individuals with accelerated brain aging, predict conversion
+from mild cognitive impairment to Alzheimer's dementia, or
+stratify participants for clinical trial enrollment. Such
+thresholds would require validation against longitudinal
+cognitive outcomes and, ideally, against biomarker-confirmed
+Alzheimer's disease pathology (amyloid and tau PET) to
+establish the HVR's place within the AT(N) diagnostic
+framework [@jack2018].
+
+### Gene-sex interactions
+
+APOE genotype was unavailable in the UK Biobank analyses
+(Chapter 5). Given the known interaction between APOE-e4
+carrier status and sex in Alzheimer's disease risk (female
+APOE-e4 carriers show faster hippocampal atrophy and
+greater tau deposition than male carriers
+[@park_sex-specific_2025; @buckley_sex_2019;
+@ferretti_sex_2018]), testing whether APOE modifies HVR sex
+differences and aging trajectories is a priority. The ADNI
+cohort provides APOE genotyping for all participants, and
+extending the latent growth curve models from Chapter 6 with
+APOE-by-sex interaction terms would directly address this
+question.
+
+### Extension beyond the hippocampus
+
+The ratiometric and MIMIC frameworks developed in this
+thesis are not specific to the hippocampus. The
+self-normalizing ratio approach could in principle be
+applied to other structure-CSF pairs where tissue loss is
+accompanied by adjacent fluid expansion (for example,
+caudate-to-frontal-horn ratios or cortical
+thickness-to-sulcal width indices). Such extensions would
+test whether the advantages of ratiometric measurement
+generalize beyond the medial temporal lobe. Similarly, the MIMIC age-adjustment framework is
+applicable to other composite clinical scores whose
+constituent components independently predict the outcome,
+including other cardiovascular risk calculators, frailty
+indices, or comorbidity scores commonly used in aging
+research.
+
+### Inclusive and diverse validation
+
+The normative curves in this thesis are derived from
+predominantly white, educated, volunteer samples.
+Replication in non-WEIRD (Western, Educated,
+Industrialized, Rich, and Democratic) populations and
+community-based cohorts is essential for clinical
+generalizability. Extending the HVR normative framework to
+ethnically diverse and socioeconomically representative
+populations would determine whether the aging trajectories
+and sex differences observed here generalize beyond the
+cohorts studied.
 
 ## Conclusion
 
-[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
-Clearly state how the objectives of the research were met and discuss
-implications of findings.
+This thesis developed, validated, and applied the
+hippocampal-to-ventricle ratio as a self-normalizing
+structural brain aging biomarker, spanning the full
+pipeline from data quality assurance to clinical hypothesis
+testing. Each study built upon the preceding work. Quality
+control infrastructure was established through Qrater, an
+open-source platform that enabled multi-rater curation of
+the neuroimaging data underlying all subsequent analyses
+(Chapter 3). Automated HVR computation was developed and
+validated against manual segmentation, showing superior
+effect sizes for Alzheimer's disease group discrimination
+and stronger associations with age compared to conventional
+hippocampal volumetry (Chapter 4). The HVR's
+self-normalizing properties were confirmed in 27,680 UK
+Biobank participants, resolving contradictory findings on
+hippocampal sex differences by showing that these
+discrepancies are methodological artifacts of head-size
+correction, and sex-specific normative aging curves were
+established for individual-level referencing (Chapter 5).
+Finally, the normative framework was transferred to a
+clinical Alzheimer's disease cohort, revealing that the
+widely reported association between cardiovascular risk and
+brain atrophy is largely driven by age-confounding within
+the Framingham Risk Score, while hippocampal-cognitive
+coupling persists regardless of how cardiovascular risk is
+measured (Chapter 6).
+
+The scientific contribution of this work is twofold. First,
+the HVR succeeds as a self-normalizing biomarker not because
+ratios are generically superior (Chapter 5 shows that the
+proportions method, itself a ratio-based correction,
+produces biologically implausible results when brain
+structures scale non-isometrically with head size) but
+because the HVR captures a specific anatomical
+relationship: the ex-vacuo dilation that accompanies hippocampal
+atrophy: as the hippocampus shrinks, the adjacent ventricle
+expands to fill the vacated space, so the ratio captures
+both changes. It is this anatomical relationship, not
+the arithmetic of division, that makes the HVR resistant
+to head-size confounding where
+other correction strategies fail. Second, methodological
+vigilance in quality control, head-size adjustment, and
+risk score construction is not peripheral to scientific
+discovery but is itself how artifacts are distinguished from
+biology. The reversal of hippocampal sex differences across
+correction methods and the disappearance of cardiovascular
+risk effects upon age adjustment are not secondary findings;
+they show that the field's prior conclusions on these topics
+were, in part, products of analytical tools rather than of
+the underlying neurobiology.
+
+The HVR pipeline developed here, from quality-controlled
+segmentation to sex-stratified normative z-scoring, is
+publicly available, fully automated, and validated across
+two major neuroimaging cohorts. It provides a reproducible framework for structural brain aging research,
+and a foundation for future longitudinal validation,
+clinical threshold development, and extension to diverse
+populations.

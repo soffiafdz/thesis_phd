@@ -1,6 +1,58 @@
 # Acronyms {.unnumbered}
 
+- **AD**: Alzheimer's Disease
+- **ADAS-13**: Alzheimer's Disease Assessment Scale -- 13 Item
+- **ADNI**: Alzheimer's Disease Neuroimaging Initiative
+- **ANIMAL**: Automatic Nonlinear Image Matching and
+  Anatomical Labeling
+- **APOE**: Apolipoprotein E
+- **BCCG**: Box-Cox Cole and Green (distribution)
+- **CFA**: Confirmatory Factor Analysis
+- **CFI**: Comparative Fit Index
+- **CNN**: Convolutional Neural Network
+- **CSF**: Cerebrospinal Fluid
+- **CVD**: Cardiovascular Disease
+- **CVR**: Cardiovascular Risk
+- **DARQ**: Deep Automated Registration QC
+- **DBM**: Deformation-Based Morphometry
+- **DG**: Dentate Gyrus
+- **DSC**: Dice Similarity Coefficient
+- **FIML**: Full Information Maximum Likelihood
+- **FLAIR**: Fluid-Attenuated Inversion Recovery
+- **FRS**: Framingham Risk Score
+- **GAMLSS**: Generalized Additive Models for Location,
+  Scale, and Shape
+- **HC**: Hippocampus
+- **HCvol**: Hippocampal Volume
+- **HDL**: High-Density Lipoprotein
+- **HOC**: Hippocampal Occupancy Score
+- **HPA**: Hypothalamic-Pituitary-Adrenal (axis)
 - **HVR**: Hippocampal-to-Ventricle Ratio
-- **QC**: Quality Control
-- **CVR**: Cerebrovascular Reactivity
+- **ICV**: Intracranial Volume
+- **IQMs**: Image Quality Metrics
 - **LGCM**: Latent Growth Curve Model
+- **LME**: Linear Mixed-Effects (model)
+- **MALF**: Multi-Atlas Label Fusion
+- **MCI**: Mild Cognitive Impairment
+- **MIMIC**: Multiple Indicators Multiple Causes (model)
+- **MMSE**: Mini-Mental State Examination
+- **MRI**: Magnetic Resonance Imaging
+- **MRIQC**: MR Image Quality Classifier
+- **NFTs**: Neurofibrillary Tangles
+- **NIA-AA**: National Institute on Aging and Alzheimer's
+  Association
+- **NLPB**: Non-Local Patch-Based (segmentation)
+- **NPH**: Normal Pressure Hydrocephalus
+- **PET**: Positron Emission Tomography
+- **QC**: Quality Control
+- **RAVLT**: Rey Auditory Verbal Learning Test
+- **RMSEA**: Root Mean Square Error of Approximation
+- **SEM**: Structural Equation Modeling
+- **SRMR**: Standardized Root Mean Square Residual
+- **STAPLE**: Simultaneous Truth and Performance Level
+  Estimation
+- **TLI**: Tucker-Lewis Index
+- **UKB**: UK Biobank
+- **WMH**: White Matter Hyperintensities
+- **WLSMV**: Weighted Least Squares Mean and Variance
+  Adjusted
