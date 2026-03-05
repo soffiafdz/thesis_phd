@@ -171,15 +171,13 @@ presented in this thesis:
    with age than hippocampal volume alone across most
    segmentation methods (Chapter 4).
 
-4. Demonstration that apparent hippocampal sex differences
-   reverse direction across head-size correction methods,
-   with effect sizes shifting by approximately 1.5
-   standard deviations, revealing these differences as
-   methodological artifacts rather than biological
-   findings. The HVR resolves these contradictions while
-   revealing residual sex differences that persist after
-   intracranial volume matching, indicating biological
-   effects beyond head-size confounding (Chapter 5).
+4. Demonstration that the HVR is inherently
+   self-normalizing with respect to head size, resolving
+   the well-known contradictions in hippocampal sex
+   differences across correction methods. After
+   intracranial volume matching, residual HVR sex
+   differences persist, indicating biological effects
+   beyond head-size confounding (Chapter 5).
 
 5. Characterization of sex-specific HVR aging trajectories
    showing that males exhibit approximately 1.7-fold
