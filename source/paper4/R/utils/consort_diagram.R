@@ -137,6 +137,23 @@ generate_consort_tikz <- function(
       "rounded corners=2pt,"
     ),
     "    fill=black!5},",
+    "  smallfinal/.style={",
+    paste0(
+      "    rectangle, draw=black!70, ",
+      "very thick,"
+    ),
+    paste0(
+      "    text width=2.4cm, inner sep=3pt,"
+    ),
+    paste0(
+      "    minimum height=0.8cm, ",
+      nohyph, ","
+    ),
+    paste0(
+      "    align=center, ",
+      "rounded corners=2pt,"
+    ),
+    "    fill=black!5},",
     "  excluded/.style={",
     "    rectangle, draw=black!50, thick,",
     paste0(
@@ -312,48 +329,56 @@ generate_consort_tikz <- function(
     ))
   }
 
-  # Right track: if sensitivity present, CU splits
-  # to both A-/CU sensitivity and age-comparable
-  # side by side at row 5
+  # Right track endpoints
   if (has_right && has_sens) {
     exc_cvr <- n_aneg_cu_mri - n_aneg_sensitivity
-    rx_left <- rx - 1.3
-    rx_right <- rx + 2.0
+    rx_left <- rx - 1.5
+    rx_right <- rx + 1.5
+    y_exc_bot <- y_lgcm - 1.8
 
+    # A-/CU (left of pair)
     tikz <- paste0(tikz, node.fn(
-      "final", "aneg_sens", rx_left, y_lgcm,
+      "smallfinal", "aneg_sens",
+      rx_left, y_lgcm,
       paste0(
-        "\\textbf{A\\textsuperscript{--}/CU",
-        " Control}\\\\[2pt]",
+        "\\textbf{A\\textsuperscript{--}",
+        "/CU Subsample}\\\\[2pt]",
         "\\textbf{N\\,=\\,",
         fmt(n_aneg_sensitivity), "}"
       )
     ))
+
+    # UKB (right of pair)
     tikz <- paste0(tikz, node.fn(
-      "final", "age_comp", rx_right, y_lgcm,
+      "smallfinal", "age_comp",
+      rx_right, y_lgcm,
       paste0(
-        "\\textbf{", age_lbl,
+        "\\textbf{UKB",
         " Subsample}\\\\[2pt]",
         "\\textbf{N\\,=\\,",
         fmt(n_age_comparable), "}"
       )
     ))
+
+    # Exclusions below, offset outward
     if (exc_cvr > 0) {
       tikz <- paste0(tikz, node.fn(
         "excluded", "exc_cvr",
-        rx_left, y_lgcm - 1.5,
+        rx_left - 0.3, y_exc_bot,
         paste0(
-          "Excluded: Missing CVR\\\\",
+          "Excluded:\\\\",
+          "Missing CVR\\\\",
           "n\\,=\\,", fmt(exc_cvr)
         )
       ))
     }
     tikz <- paste0(tikz, node.fn(
       "excluded", "exc_age",
-      rx_right + exr, y_lgcm,
+      rx_right + 0.3, y_exc_bot,
       paste0(
         "Excluded:\\\\",
-        "Outside UKB age range\\\\",
+        "Outside UKB\\\\",
+        "age range\\\\",
         "n\\,=\\,", fmt(exc_age)
       )
     ))
@@ -444,8 +469,8 @@ generate_consort_tikz <- function(
     )
 
     if (has_sens) {
-      # T-junction from CU to both endpoints
-      cu_mid_y <- (y_lme + y_lgcm) / 2
+      # T-junction from CU to both subsample boxes
+      cu_mid_y <- y_lme + (y_lgcm - y_lme) * 0.3
       arrows.v <- c(
         arrows.v,
         "  % T-junction: CU splits to both",
@@ -486,20 +511,34 @@ generate_consort_tikz <- function(
       paste0(
         "  \\draw[dasharrow]",
         " (cu.east) -- (exc_dx.west);"
-      ),
-      paste0(
-        "  \\draw[dasharrow]",
-        " (age_comp.east) -- (exc_age.west);"
       )
     )
-    if (has_sens &&
-        n_aneg_cu_mri - n_aneg_sensitivity > 0) {
+    # Exclusions below subsample boxes
+    if (has_sens) {
+      if (n_aneg_cu_mri - n_aneg_sensitivity > 0) {
+        arrows.v <- c(
+          arrows.v,
+          paste0(
+            "  \\draw[dasharrow]",
+            " (aneg_sens.south)",
+            " -- (exc_cvr.north);"
+          )
+        )
+      }
       arrows.v <- c(
         arrows.v,
         paste0(
           "  \\draw[dasharrow]",
-          " (aneg_sens.south)",
-          " -- (exc_cvr.north);"
+          " (age_comp.south)",
+          " -- (exc_age.north);"
+        )
+      )
+    } else {
+      arrows.v <- c(
+        arrows.v,
+        paste0(
+          "  \\draw[dasharrow]",
+          " (age_comp.east) -- (exc_age.west);"
         )
       )
     }
