@@ -9,6 +9,7 @@ models/results/
 models/diagnostics/
 !models/lavaan/
 outputs/*
+outputs/figures/*
 !outputs/**/
 !outputs/**/.gitkeep
 logs/*
@@ -87,3 +88,4 @@ Thumbs.db
 *.otter.*
 .envrc
 .lintr
+*.bib
