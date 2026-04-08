@@ -112,11 +112,23 @@
 \usepackage{multirow}
 \usepackage{adjustbox}
 
-% Floats
+% Floats — allow LaTeX to reflow text around figures/tables
+% [htbp] = here, top, bottom, page (reduces whitespace gaps)
 \usepackage{float}
-\floatplacement{table}{H}
-\floatplacement{figure}{H}
+\floatplacement{table}{htbp}
+\floatplacement{figure}{htbp}
 \usepackage{placeins}
+
+% Reduce float-related whitespace
+\setlength{\textfloatsep}{10pt plus 2pt minus 4pt}
+\setlength{\floatsep}{8pt plus 2pt minus 4pt}
+\setlength{\intextsep}{10pt plus 2pt minus 4pt}
+
+% Allow more floats per page and less empty space on float pages
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.7}
 
 % TikZ (Paper 4 CONSORT diagram, Paper 3 PRISMA diagram)
 \usepackage{tikz}
