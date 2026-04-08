@@ -1822,7 +1822,7 @@ if (!is.null(sens_dt) && nrow(sens_dt) > 0)
 #| label: fig-distributions
 #| fig-cap: "**Distribution overlap by sex.** Across adjustment methods. Left column: full sample. Right column: head-size matched sample (age $\\pm 1$ year, intracranial volume $\\pm 25$ cc)."
 #| fig-width: 6.5
-#| fig-height: 9
+#| fig-height: 7.5
 fig_distribution_overlap(
   brain_data, matched_brain_data, show_matched = TRUE
 )

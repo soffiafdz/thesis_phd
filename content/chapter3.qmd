@@ -891,8 +891,8 @@ rater are shown in @fig-agreement-raw.
 ```{r}
 #| label: fig-raw-agreement
 #| fig-cap: "**Raw MRI inter-rater agreement.** Inter-rater agreement data from the raw MRI QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
-#| fig-width: 10
-#| fig-height: 8
+#| fig-width: 6.5
+#| fig-height: 5.5
 
 # Prepare data for plotting
 acq_agree <- acq_99[
@@ -1185,8 +1185,8 @@ trainees is presented as a confusion matrix in
 ```{r}
 #| label: fig-linreg-agreement
 #| fig-cap: "**Linear registration inter-rater agreement.** Inter-rater agreement data from the linear registration QC task. Bar charts represent the number of Pass (green) and Fail (red) ratings given by the trainees for the selected Pass, Borderline and Fail cases. The plots are separated according to the expert's gold standard ratings after their two sessions."
-#| fig-width: 10
-#| fig-height: 8
+#| fig-width: 6.5
+#| fig-height: 5.5
 
 # Prepare data for plotting
 reg_agree <- reg_99[

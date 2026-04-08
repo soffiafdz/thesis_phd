@@ -1937,7 +1937,7 @@ process model confirm this pattern (see
 #| label: fig-coupling-ch6
 #| fig-cap: "**HVR--cognitive latent slope coupling.** Females in red, Males in blue throughout. A. Individual trajectories (random 20% subsample) with population mean curves (bold; including fixed quadratic curvature where selected by LRT). 2x2 facets: HVR, Memory, Language, Executive. B. Latent slope coupling: latent cognitive decline rate (x) vs latent HVR decline rate (y) from factor scores (positive = faster decline); dashed lines show linear trends per sex; grey line shows 1:1 reference. Correlation estimates from the SEM (* p < .05, ** p < .01, *** p < .001)."
 #| fig-width: 6.5
-#| fig-height: 7.5
+#| fig-height: 6.5
 
 lgcm_m_input <- read_rds_safe(here(
   "source/paper4/data/derivatives/lgcm/lgcm_input_male.rds"
@@ -1986,7 +1986,7 @@ estimates and bootstrap CIs appear in
 #| dev: png
 #| fig-cap: "**LGCM mediation path diagrams.** Rows: Memory, Language, Executive Function. Columns: FRS, CVR$_{\\text{mimic}}$. Each panel shows Male (blue) and Female (red) path estimates. Bold = significant (bootstrap 95% CI excludes zero); faded = non-significant. Star (\\*) and bold indicate CI excludes zero. 95% bootstrap CIs shown for all paths."
 #| fig-width: 6.5
-#| fig-height: 8.0
+#| fig-height: 7.0
 #| fig-dpi: 300
 
 panels <- build_combined_med_panels(
@@ -2882,9 +2882,10 @@ if (n_sig == 0) {
 
 ```{r}
 #| label: fig-edt-comparison-ch6
+
 #| fig-cap: "**Cognitive trajectories under calendar time versus estimated disease time.** Composite scores (Memory, Language, Executive Function) plotted against years from baseline (A) and estimated disease time (B). Under calendar time, the population-average trajectory appears flat because participants at different disease stages are pooled at each follow-up; under EDT, disease-stage alignment reveals the expected monotonic cognitive decline. Lines show loess smooths with 95% CI bands; individual trajectories in light gray. Y-axes are shared across panels for direct comparison; x-axes differ because the two metrics have different natural scales."
-#| fig-width: 7
-#| fig-height: 5.5
+#| fig-width: 6.5
+#| fig-height: 5
 
 # Reshape to long format for faceting
 cog_long.dt <- melt(
