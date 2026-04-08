@@ -47,10 +47,22 @@ function Pandoc(doc)
 
   local blocks = doc.blocks
   local new_blocks = {}
+  local in_appendix = false
 
   for i, block in ipairs(blocks) do
     if block.t == "Header" and block.level == 1 then
       local text = pandoc.utils.stringify(block.content)
+
+      -- New chapter resets appendix state
+      if in_appendix then
+        table.insert(new_blocks, pandoc.RawBlock("latex",
+          "% Restore standard float numbering\n" ..
+          "\\renewcommand{\\thefigure}" ..
+            "{\\thechapter.\\arabic{figure}}\n" ..
+          "\\renewcommand{\\thetable}" ..
+            "{\\thechapter.\\arabic{table}}"))
+        in_appendix = false
+      end
 
       -- Remove empty chapter headings (from index.qmd)
       if text == "" then
@@ -83,6 +95,32 @@ function Pandoc(doc)
         table.insert(new_blocks, pandoc.RawBlock("latex",
           "\\markboth{" .. text .. "}{}"))
       end
+
+    -- Detect "Appendix" headings at level 2 or 3:
+    -- switch float numbering to S-prefix
+    elseif block.t == "Header" and
+           (block.level == 2 or block.level == 3) then
+      local text = pandoc.utils.stringify(block.content)
+      if not in_appendix and
+         text:match("^Appendix") then
+        in_appendix = true
+        table.insert(new_blocks, pandoc.RawBlock("latex",
+          "% Appendix: prefix float numbers with S\n" ..
+          "\\renewcommand{\\thefigure}" ..
+            "{S\\thechapter.\\arabic{figure}}\n" ..
+          "\\renewcommand{\\thetable}" ..
+            "{S\\thechapter.\\arabic{table}}"))
+      end
+      table.insert(new_blocks, block)
+
+    -- Bibliography Div(s): set running header to References
+    -- section-bibliographies filter creates refs-* divs
+    elseif block.t == "Div" and
+           (block.identifier == "refs" or
+            block.identifier:match("^refs%-")) then
+      table.insert(new_blocks, pandoc.RawBlock("latex",
+        "\\markboth{References}{}"))
+      table.insert(new_blocks, block)
 
     -- Remove the \frontmatter RawBlock from index.qmd
     -- (now handled by the filter injection above)

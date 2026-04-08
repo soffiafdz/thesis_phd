@@ -76,7 +76,8 @@ and apply the hippocampal-to-ventricle ratio as a
 structural brain aging biomarker. The work follows a
 progression from tool development through measurement
 validation, population-level characterization, and clinical
-application.
+application. Chapter 2 summarizes the background material
+needed to understand this thesis.
 
 **Chapter 3** addresses the quality control bottleneck that
 precedes any large-scale neuroimaging analysis. It presents
@@ -87,7 +88,15 @@ different processing stages, with ratings stored in a
 shared database. The platform was deployed to curate
 the Alzheimer's Disease Neuroimaging Initiative (ADNI)
 dataset, producing the quality-controlled imaging data
-used in Chapters 4 and 6.
+used in Chapters 4 and 6. Chapter 3 was published as:
+Fernández-Lozano, S., Dadar, M., Morrison, C.,
+Manera, A., Andrews, D., Rajabli, R., Madge, V.,
+St-Onge, E., Shaffie, N., Livadas, A., Fonov, V.,
+Collins, D. L., & Alzheimer's Disease Neuroimaging
+Initiative (2024). QRATER: a collaborative and centralized
+imaging quality control web-based application.
+*Aperture Neuro*, 4.
+doi:[10.52294/001c.118616](https://doi.org/10.52294/001c.118616)
 
 **Chapter 4** establishes the automated computation and
 validation of the HVR. Using convolutional neural network
@@ -101,7 +110,14 @@ discrimination between Alzheimer's disease diagnostic
 groups and stronger associations with age compared to
 hippocampal volume alone. The automated segmentation tool developed in this
 chapter is subsequently used in the analyses of Chapters 5
-and 6.
+and 6. Chapter 4 was published as:
+Fernández-Lozano, S., Fonov, V., Schoemaker, D.,
+Pruessner, J., Potvin, O., Duchesne, S., Collins, D. L.,
+& Alzheimer's Disease Neuroimaging Initiative (2025).
+Enhanced detection of age-related and cognitive declines
+using automated hippocampal-to-ventricle ratio in
+Alzheimer's patients. *Human Brain Mapping*, 46(11), e70265.
+doi:[10.1002/hbm.70265](https://doi.org/10.1002/hbm.70265)
 
 **Chapter 5** takes the validated HVR to the UK Biobank, a
 population-level dataset of 27,680 participants, to
@@ -117,7 +133,8 @@ genuine biological variation. The chapter further establishes sex-specific
 normative aging curves using generalized additive models
 for location, scale, and shape (GAMLSS), which are
 subsequently transferred to the clinical dataset in
-Chapter 6.
+Chapter 6. Chapter 5 has been submitted to
+*Human Brain Mapping*.
 
 **Chapter 6** applies the HVR normative framework
 developed in Chapter 5 to investigate the relationship
@@ -138,7 +155,8 @@ chapter demonstrates moderation without mediation:
 hippocampal-cognitive coupling persists regardless of
 cardiovascular risk measurement, while the FRS fails to
 mediate the relationship between vascular burden and
-hippocampal decline.
+hippocampal decline. Chapter 6 has been submitted to
+*Alzheimer's & Dementia*.
 
 Together, these four studies progress from quality
 control infrastructure, through biomarker development

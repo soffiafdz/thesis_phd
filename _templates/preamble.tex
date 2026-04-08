@@ -36,18 +36,26 @@
 \titleformat{name=\section,numberless}
   {\normalfont\Large\bfseries\setstretch{1.0}}
   {}{0pt}{}
+\titlespacing*{\section}
+  {0pt}{3ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
 \titleformat{\subsection}
   {\normalfont\large\bfseries\setstretch{1.0}}
   {\thesubsection}{1em}{}
 \titleformat{name=\subsection,numberless}
   {\normalfont\large\bfseries\setstretch{1.0}}
   {}{0pt}{}
+\titlespacing*{\subsection}
+  {0pt}{2.5ex plus .75ex minus .2ex}{1ex plus .2ex}
+
 \titleformat{\subsubsection}
   {\normalfont\normalsize\bfseries\setstretch{1.0}}
   {\thesubsubsection}{1em}{}
 \titleformat{name=\subsubsection,numberless}
   {\normalfont\normalsize\bfseries\setstretch{1.0}}
   {}{0pt}{}
+\titlespacing*{\subsubsection}
+  {0pt}{2ex plus .5ex minus .2ex}{0.5ex plus .2ex}
 
 % titlesec compact option omits \paragraph/\subparagraph formats
 \titleformat{\paragraph}[runin]
@@ -148,3 +156,4 @@
 % Table spacing
 \setlength{\LTleft}{0pt}
 \setlength{\LTright}{\fill}
+

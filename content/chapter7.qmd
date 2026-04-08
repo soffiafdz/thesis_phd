@@ -168,11 +168,18 @@ embedded in the score was removed through MIMIC-based
 adjustment, the apparent cardiovascular effect on
 hippocampal atrophy vanished: the age-adjusted
 cardiovascular risk factor predicted hippocampal decline in
-none of the six models. This dissociation shows that the
-widely reported link between the Framingham Risk Score and
-brain atrophy in elderly cohorts reflects, at least in
-large part, the confound of age-weighting within the score
-rather than cerebrovascular pathophysiology
+none of the six models. A complementary analysis in
+amyloid-negative, cognitively unimpaired participants
+reinforced this conclusion: the pattern reversed, with
+age-adjusted cardiovascular risk reaching significance while
+the Framingham Risk Score did not, consistent with the
+age component of the score co-varying with amyloid
+pathology rather than capturing cardiovascular effects per
+se. This dissociation shows that the widely reported link
+between the Framingham Risk Score and brain atrophy in
+elderly cohorts reflects, at least in large part, the
+confound of age-weighting within the score rather than
+cerebrovascular pathophysiology
 [@koller_development_2012; @pencina_quantifying_2019].
 
 The common lesson is that composite metrics embedding
@@ -297,7 +304,13 @@ The "moderation without mediation" finding in Chapter 6
 adds nuance. Age-adjusted cardiovascular risk did not
 mediate the pathway from vascular burden to hippocampal
 decline (the indirect pathway was null), yet it moderated
-the hippocampal-cognitive relationship in select domains.
+the hippocampal-cognitive relationship. Converging evidence
+from the amyloid-negative control analysis strengthened this
+interpretation: when amyloid pathology was absent,
+age-adjusted cardiovascular risk reached significance while
+the Framingham Risk Score did not, consistent with a
+cardiovascular reserve effect that is masked by
+amyloid-driven hippocampal decline in the primary sample.
 This pattern is consistent with the cognitive reserve
 framework [@stern_cognitive_2012]: cardiovascular burden may
 reduce the brain's capacity to maintain cognitive
@@ -538,7 +551,9 @@ Finally, the normative framework was transferred to a
 clinical Alzheimer's disease cohort, revealing that the
 widely reported association between cardiovascular risk and
 brain atrophy is largely driven by age-confounding within
-the Framingham Risk Score, while hippocampal-cognitive
+the Framingham Risk Score --- a conclusion reinforced by a
+complementary analysis in amyloid-negative participants
+showing the reversed pattern --- while hippocampal-cognitive
 coupling persists regardless of how cardiovascular risk is
 measured (Chapter 6).
 
@@ -561,10 +576,12 @@ risk score construction is not peripheral to scientific
 discovery but is itself how artifacts are distinguished from
 biology. The reversal of hippocampal sex differences across
 correction methods and the disappearance of cardiovascular
-risk effects upon age adjustment are not secondary findings;
-they show that the field's prior conclusions on these topics
-were, in part, products of analytical tools rather than of
-the underlying neurobiology.
+risk effects upon age adjustment --- confirmed by the
+complementary reversal in amyloid-negative participants ---
+are not secondary findings; they show that the field's prior
+conclusions on these topics were, in part, products of
+analytical tools rather than of the underlying
+neurobiology.
 
 The HVR pipeline developed here, from quality-controlled
 segmentation to sex-stratified normative z-scoring, is

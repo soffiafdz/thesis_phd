@@ -8,6 +8,10 @@ execute:
   message: false
   freeze: auto
 
+knitr:
+  opts_chunk:
+    dev: "cairo_pdf"
+
 book:
   title: "The Hippocampal-to-Ventricle Ratio: Validation, Normative Modeling, and Clinical Application of a Self-Normalizing Biomarker for Brain Aging"
   output-file: Fernandez2026
@@ -18,6 +22,7 @@ book:
     - content/abstract_en.qmd
     - content/abstract_fr.qmd
     - content/acknowledgements.qmd
+    - content/acronyms.qmd
     - content/chapter1.qmd        # Introduction
     - content/chapter2.qmd        # Background
     - content/chapter3.qmd        # Paper 1 — Qrater
@@ -25,13 +30,15 @@ book:
     - content/chapter5.qmd        # Paper 3 — Sex Differences
     - content/chapter6.qmd        # Paper 4 — CVR Mediation
     - content/chapter7.qmd        # Discussion & Conclusion
-    - content/acronyms.qmd
+    - content/references.qmd       # Complete bibliography
 
 bibliography: references.bib
+citeproc: false
 reference-section-title: "References"
 
 filters:
   - _filters/thesis.lua
+  - _filters/chapter-bib.lua
 
 format:
   pdf:

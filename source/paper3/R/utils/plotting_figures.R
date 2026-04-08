@@ -377,7 +377,7 @@ fig_normative_centiles_panel <- function(norm_tables) {
   # ROI definitions: key, y-label
   roi_defs <- list(
     list(roi = "HVR", adj = "NON", ylab = "HVR"),
-    list(roi = "HC",  adj = "NON", ylab = "Hippocampal Volume (mm\u00B3)"),
+    list(roi = "HC",  adj = "NON", ylab = "Hippocampal Volume (cc)"),
     list(roi = "LV",  adj = "NON", ylab = "Lateral Ventricle Volume (cc)")
   )
 
@@ -448,16 +448,21 @@ fig_normative_centiles_panel <- function(norm_tables) {
   }
 
   # Build all 9 panels (3 ROIs x 3 columns)
+  # Share y-axis limits across the 3 columns per ROI
   panels <- list()
   for (i in seq_along(roi_defs)) {
     def <- roi_defs[[i]]
     long <- prep_data(def)
     if (is.null(long)) next
     is_bottom <- (i == length(roi_defs))
+    y_lims <- range(long$Value, na.rm = TRUE)
     panels <- c(panels, list(
-      panel_single(long, "Female", def$ylab, show_y = TRUE, show_x = is_bottom),
-      panel_both(long, def$ylab, show_x = is_bottom),
-      panel_single(long, "Male", def$ylab, show_y = FALSE, show_x = is_bottom)
+      panel_single(long, "Female", def$ylab, show_y = TRUE, show_x = is_bottom) +
+        coord_cartesian(ylim = y_lims),
+      panel_both(long, def$ylab, show_x = is_bottom) +
+        coord_cartesian(ylim = y_lims),
+      panel_single(long, "Male", def$ylab, show_y = FALSE, show_x = is_bottom) +
+        coord_cartesian(ylim = y_lims)
     ))
   }
 
@@ -1104,7 +1109,7 @@ fig_hc_centiles_sexcomp <- function(norm_tables) {
     ) +
     labs(
       x = "Age (years)",
-      y = "Hippocampal Volume (mm³)",
+      y = "Hippocampal Volume (cc)",
       linetype = "Centile"
     ) +
     theme_publication(base_size = 11) +

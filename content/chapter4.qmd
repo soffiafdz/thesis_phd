@@ -63,7 +63,7 @@ the population-level analyses of Chapter 5 and the clinical
 analyses of Chapter 6.
 
 The following manuscript was published in *Human Brain
-Mapping* in 2025.
+Mapping* in 2025 [@fernandez-lozano_enhanced_2025].
 
 \clearpage
 
@@ -519,7 +519,6 @@ was calculated using HCvol and CSFvol:
 $$
 \text{HVR} = \frac{\text{HCvol}}{\text{HCvol} + \text{CSFvol}}
 $$ {#eq-hvr}
-
 When calculating HVR using the FreeSurfer volumes, CSFvol was
 defined as the volume of the inferior lateral ventricle. For
 both HCvol and HVR, we use the means of both sides in all our
@@ -603,7 +602,6 @@ standard deviation:
 $$
 \Delta = \frac{M_{AD} - M_{CN}}{\sigma_{CN}}
 $$ {#eq-glass}
-
 The CIs were calculated using the
 bias-corrected-and-accelerated bootstrap method [@efron1987]
 with the default setting of 2000 resamples.
@@ -3550,7 +3548,7 @@ if (!is.null(supp_validation_data)) {
 #| label: fig-s2-ch4
 #| fig-cap: "**Out-of-sample validation: Relationship between manual and computed hippocampal volumes.** Scatter plots of the volumes (measured in cc) of the left and right hippocampus from the manual segmentations against those obtained from CNN on the out-of-sample subset of ADNI data for each of the clinical groups (CH, MCI, AD). The Spearman's rank correlation coefficients ($\\rho$) and their significance are added for each hemisphere."
 #| fig-width: 5
-#| fig-height: 5
+#| fig-height: 2.75
 
 if (!is.null(val_vols)) {
   val_vols |>
