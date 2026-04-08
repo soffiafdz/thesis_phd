@@ -33,12 +33,10 @@ book:
     - content/references.qmd       # Complete bibliography
 
 bibliography: references.bib
-citeproc: false
 reference-section-title: "References"
 
 filters:
   - _filters/thesis.lua
-  - _filters/chapter-bib.lua
 
 format:
   pdf:
