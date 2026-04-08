@@ -117,7 +117,18 @@
 \usepackage{float}
 \floatplacement{table}{htbp}
 \floatplacement{figure}{htbp}
-\usepackage{placeins}
+% placeins: auto-insert \FloatBarrier at \section boundaries
+\usepackage[section]{placeins}
+
+% Extend float barriers to \subsection and \subsubsection
+\makeatletter
+\AtBeginDocument{%
+  \expandafter\def\expandafter\subsection\expandafter{%
+    \expandafter\FloatBarrier\subsection}%
+  \expandafter\def\expandafter\subsubsection\expandafter{%
+    \expandafter\FloatBarrier\subsubsection}%
+}
+\makeatother
 
 % Reduce float-related whitespace
 \setlength{\textfloatsep}{10pt plus 2pt minus 4pt}

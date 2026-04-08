@@ -1,9 +1,9 @@
 # QC Training Video Transcripts
 
-AI-generated summaries of the QC training videos used in the Qrater study
+Summaries of the QC training videos used in the Qrater study
 (Chapter 3). The original training videos cannot be shared due to privacy
 considerations for the trainees and the clinical data shown. These transcripts
-were generated using [summarize.tech](https://www.summarize.tech).
+were produced using [summarize.tech](https://www.summarize.tech).
 
 ## Technical Summary of the Training Video for Raw MRI
 

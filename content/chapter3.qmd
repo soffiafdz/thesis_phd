@@ -1887,14 +1887,15 @@ A successful segmentation was defined as having at least 95% of the top half of 
 
 #### Training Video Summaries
 
-The training videos used in this study cannot be shared publicly due to
-privacy considerations for the trainees and the clinical data shown in
-the recordings. AI-generated transcripts of the three training videos
-(Raw MRI QC, Linear Registration QC, and a follow-up session on Linear
+The training videos used in this study cannot be shared
+publicly due to privacy considerations for the trainees
+and the clinical data shown in the recordings. Transcripts
+of the three training videos (Raw MRI QC, Linear
+Registration QC, and a follow-up session on Linear
 Registration of ADNI data) were produced using
-[summarize.tech](https://www.summarize.tech) and are available in the
-thesis repository at
-[github.com/soffiafdz/qrater\_analysis/blob/main/supplementary/training\_video\_transcripts.md](https://github.com/soffiafdz/qrater_analysis/blob/main/supplementary/training_video_transcripts.md).
+[summarize.tech](https://www.summarize.tech) and are
+available in the study's code
+repository.^[<https://github.com/soffiafdz/qrater_analysis/blob/main/supplementary/training_video_transcripts.md>]
 
 ### Appendix C: Statistical Results {.unnumbered}
 
