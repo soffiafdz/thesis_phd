@@ -233,7 +233,7 @@ University, Montreal, Quebec, Canada}
 \affil[3]{Department of Biomedical Engineering, McGill
 University, Montreal, Quebec, Canada}
 
-\date{2026-03-31}
+\date{2026-04-13}
 
 \begin{document}
 \maketitle
@@ -490,7 +490,13 @@ of ``A'' (highest quality grade) {[}Coupé et al., 2020{]}, (2)
 statistical outlier detection excluding participants with age- and
 head-size-adjusted volumes exceeding \(\pm 3\) SD from the sample mean,
 and (3) visual inspection of flagged cases by trained raters for evident
-segmentation failures, motion artifacts, or anatomical anomalies.
+segmentation failures, motion artifacts, or anatomical anomalies. This
+multi-stage pipeline is intentionally conservative: in a large
+population-based study where statistical power is not a limiting factor,
+prioritizing data quality over sample retention reduces the risk of
+segmentation errors biasing volumetric estimates, particularly for small
+structures like the hippocampus and temporal horn ventricles where even
+minor segmentation failures can produce large relative errors.
 
 For participants with multiple imaging sessions, QC filtering was
 applied first, then one session per participant was selected for
@@ -551,7 +557,6 @@ volumes {[}Sanchis-Segura et al., 2020; Sanfilipo et al., 2004{]}:
 \end{enumerate}
 
 \begin{equation}\phantomsection\label{eq-stx}{V_{\text{STX}} = V \times |J|}\end{equation}
-
 where \(J\) is the Jacobian determinant of the nonlinear transformation.
 
 \begin{enumerate}
@@ -574,7 +579,6 @@ replicable sex differences compared to proportional methods.
 The hippocampal-to-ventricle ratio (HVR) was computed as:
 
 \begin{equation}\phantomsection\label{eq-hvr}{\text{HVR} = \frac{\text{HC}_{\text{total}}}{\text{HC}_{\text{total}} + \text{LV}_{\text{total}}}}\end{equation}
-
 where \(\text{HC}_{\text{total}}\) and \(\text{LV}_{\text{total}}\)
 denote bilateral sums (left + right) of hippocampal and lateral
 ventricular temporal horn volumes, respectively. HVR is bounded between
@@ -589,43 +593,12 @@ structures, no further head-size adjustment was applied.
 Cognitive data were collected at the imaging visit using the UK Biobank
 touchscreen-based cognitive battery {[}Sudlow et al., 2015{]},
 comprising 12 indicators spanning memory, processing speed, executive
-function, and reasoning domains (Table S1):
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  \textbf{Pair matching -- average time} (mean response time;
-  inverse-coded)
-\item
-  \textbf{Pair matching -- average errors} (mean incorrect responses;
-  inverse-coded)
-\item
-  \textbf{Numeric memory} (maximum digits recalled)
-\item
-  \textbf{Prospective memory} (recall timing: 0 = incorrect, 1 = second
-  attempt, 2 = first attempt)
-\item
-  \textbf{Fluid intelligence} (total score)
-\item
-  \textbf{Matrix pattern recognition} (puzzles solved)
-\item
-  \textbf{Trail making -- numeric} (completion time; inverse-coded)
-\item
-  \textbf{Trail making -- alphanumeric} (completion time; inverse-coded)
-\item
-  \textbf{Tower rearranging} (correct puzzles)
-\item
-  \textbf{Reaction time} (mean time to identify matches; inverse-coded)
-\item
-  \textbf{Symbol digit substitution -- correct} (correct responses)
-\item
-  \textbf{Symbol digit substitution -- attempts} (total attempts)
-\end{enumerate}
-
-Missing cognitive data were handled using full information maximum
-likelihood (FIML) estimation, which uses all available data under a
-missing-at-random assumption.
+function, and reasoning domains (Table S1). Timed measures (reaction
+time, trail making, pair matching response time) were inverse-coded so
+that higher scores consistently indicate better performance across all
+indicators. Missing cognitive data were handled using full information
+maximum likelihood (FIML) estimation, which uses all available data
+under a missing-at-random assumption.
 
 \subsubsection{Factor Structure: Bifactor
 CFA}\label{factor-structure-bifactor-cfa}
@@ -692,7 +665,6 @@ Linear regression models tested whether cross-sectional age-related
 patterns differed by sex:
 
 \begin{equation}\phantomsection\label{eq-age-sex}{Y_i = \beta_0 + \beta_{\text{Age}} \cdot \text{Age}_i + \beta_{\text{Sex}} \cdot \text{Sex}_i + \beta_{\text{Age} \times \text{Sex}} \cdot \text{Age}_i \times \text{Sex}_i + \varepsilon_i}\end{equation}
-
 where \(Y\) is the brain measure, Sex is coded as a binary indicator
 (Female = reference), and
 \(\varepsilon_i \sim \mathcal{N}(0, \sigma^2)\). A significant
@@ -715,14 +687,15 @@ summary statistics for sex-differential aging rates.
 
 Sex-specific normative centile curves were estimated using Generalized
 Additive Models for Location, Scale, and Shape (GAMLSS) {[}Bethlehem et
-al., 2022; Rigby and Stasinopoulos, 2005{]}. For HC and LV (unadjusted):
+al., 2022; Rigby and Stasinopoulos, 2005{]} on the N = 27,434
+participants from the primary sample with complete education and site
+data. For HC and LV (unadjusted):
 
 \begin{equation}\phantomsection\label{eq-gamlss-hc}{\mu = f_\mu(\text{Age}) + \beta_{\text{ICV}} \cdot \text{ICV} + \beta_{\text{Edu}} \cdot \text{Education} + u_{\text{site}}}\end{equation}
 
 For HVR (self-normalizing, no ICV term needed):
 
 \begin{equation}\phantomsection\label{eq-gamlss-hvr}{\mu = f_\mu(\text{Age}) + \beta_{\text{Edu}} \cdot \text{Education} + u_{\text{site}}}\end{equation}
-
 where \(f_\mu(\cdot)\) denotes a cubic spline smooth for the location
 parameter and \(u_{\text{site}}\) denotes random intercepts for scanner
 site. The scale parameter was also modeled as a function of age,
@@ -736,7 +709,8 @@ Centile curves (5th, 10th, 25th, 50th, 75th, 90th, 95th) were generated
 for ages 45--82 by sex.
 
 Data were split into 80\% training and 20\% test sets, stratified by sex
-and 5-year age bins. Distribution families were selected on training
+and 5-year age bins, to evaluate model fit on independent data and guard
+against overfitting. Distribution families were selected on training
 data and evaluated on the held-out test set by comparing observed
 vs.~expected proportions across centiles. Final models were then fit on
 the complete cross-sectional sample using the selected distribution
@@ -870,7 +844,6 @@ mixed-effects models with a fixed effect for sex and a random intercept
 for scanner site:
 
 \begin{equation}\phantomsection\label{eq-site-adj}{Y_i = \beta_0 + \beta_{\text{Sex}} \cdot \text{Sex}_i + u_{\text{site}(i)} + \varepsilon_i}\end{equation}
-
 where \(u_{\text{site}} \sim \mathcal{N}(0, \sigma^2_{\text{site}})\)
 and \(\varepsilon_i \sim \mathcal{N}(0, \sigma^2_{\text{residual}})\).
 Cohen's d was approximated as
@@ -1187,9 +1160,13 @@ volume models include intracranial volume as a covariate.}
 
 \end{figure}%
 
-Calibration plots (Figure S2) demonstrate that normative models
-accurately capture the distribution of observed values, with observed
-proportions closely tracking expected proportions across centiles.
+Calibration plots (Figure S2) assess whether the normative models are
+well-specified: for each nominal centile (e.g., the 10th percentile
+curve), the plot shows what proportion of observations actually fall
+below that curve. A well-calibrated model produces points along the
+diagonal (observed proportion = expected proportion). Our models closely
+track the diagonal across all centiles, indicating that the fitted
+distributions accurately capture the true variability in the data.
 
 \paragraph{Temporal Stability (Longitudinal
 Validation)}\label{temporal-stability-longitudinal-validation}
@@ -1329,17 +1306,16 @@ Table S16.
 As described in Methods, quadratic age terms were included in HVR and
 HC\textsubscript{RES} models but not in the HC model due to
 multicollinearity; fit indices for the HC model (Table S14) therefore
-reflect this linear-age specification. Both brain measures and cognitive
-factors showed significant negative quadratic age effects (all p
-\textless{} .001; Table S16), indicating steeper cross-sectional
-differences at older ages. For brain measures, HVR showed \(\beta\) =
--0.134 and HC\textsubscript{RES} showed \(\beta\) = -0.075. For
-cognitive factors, \emph{g} showed \(\beta\) = -0.078 in the HVR model
-and \(\beta\) = -0.081 in the HC\textsubscript{RES} model, while
-Speed\textsubscript{s} showed \(\beta\) = -0.046 and \(\beta\) = -0.046
-respectively. The stronger quadratic effect for HVR compared to
-HC\textsubscript{RES} suggests that HVR captures both hippocampal
-atrophy and ventricular expansion, both of which accelerate with age.
+reflect a linear-age specification. All quadratic age effects were
+significantly negative (all p \textless{} .001; Table S16), indicating
+that cross-sectional differences between older and younger participants
+were disproportionately larger at older ages. HVR showed a stronger
+quadratic effect (\(\beta\) = -0.134) than HC\textsubscript{RES}
+(\(\beta\) = -0.075), consistent with HVR capturing both hippocampal and
+ventricular age-related changes, both of which accelerate at older ages.
+Cognitive factors showed comparable quadratic effects across models
+(\emph{g}: \(\beta\) \(\approx\) -0.078; Speed\textsubscript{s}:
+\(\beta\) \(\approx\) -0.046).
 
 \subsection{Sensitivity Analyses}\label{sensitivity-analyses-1}
 
@@ -1381,7 +1357,7 @@ self-normalizing measure that bypasses conventional head-size
 correction. HVR showed weak correlation with ICV, substantially reducing
 head-size dependence compared to unadjusted HC. Hippocampal sex
 differences ranged from d = -0.89 (males larger) to d = 0.58 (females
-larger) depending solely on the adjustment method, whereas HVR
+larger) depending solely on the adjustment method and age, whereas HVR
 consistently showed a female advantage replicated in the ICV-matched
 subsample. Males showed steeper age-related HVR differences (1.66×
 female slope), with the female advantage widening at older ages (d =
@@ -1473,10 +1449,15 @@ captures both processes, and steeper male ventricular expansion
 amplifies hippocampal differences. Males also show earlier ventricular
 abnormality signatures, with ventricular enlargement accelerating in the
 seventies {[}Currà et al., 2019{]}, consistent with the steeper male HVR
-differences observed here. However, Brzezinski-Rittner et al. {[}2025{]}
-found that hippocampal age × sex interactions disappeared in a
-TIV-matched subsample, suggesting that some sex-differential aging
-trajectories may be byproducts of initial brain size differences.
+differences observed here. While the cross-sectional design precludes
+identifying a specific onset age, our age-stratified effect sizes show
+the male-female HVR divergence is already present in the youngest bin
+(ages 45--55, d = 0.23) and widens monotonically with age (d = 0.66 at
+ages 75+), suggesting the divergence begins before midlife. However,
+Brzezinski-Rittner et al. {[}2025{]} found that hippocampal age × sex
+interactions disappeared in a TIV-matched subsample, suggesting that
+some sex-differential aging trajectories may be byproducts of initial
+brain size differences.
 
 The prognostic relevance of age-pattern differences is supported by
 evidence that steeper hippocampal volume loss predicts dementia
@@ -1512,6 +1493,13 @@ greater heterogeneity in aging-related patterns. Well-calibrated centile
 estimates (Figure S2) have demonstrated clinical utility in detecting
 case-control differences and predicting diagnostic transition from MCI
 to Alzheimer's disease {[}Bethlehem et al., 2022; Dima et al., 2022{]}.
+HVR showed slightly lower test-retest reliability (ICC \textgreater{}
+0.93; Table S3) than HC or LV alone over a mean 2.7-year follow-up.
+Because this interval spans real aging-related change, the lower ICC may
+partly reflect HVR's sensitivity to concurrent hippocampal atrophy and
+ventricular expansion rather than measurement noise alone --- a
+hypothesis that dedicated longitudinal studies with shorter retest
+intervals could directly test.
 
 \subsection{Brain-Cognition
 Associations}\label{brain-cognition-associations-2}
