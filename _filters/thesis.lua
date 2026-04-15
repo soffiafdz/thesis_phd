@@ -30,9 +30,12 @@ function FloatRefTarget(float)
   end
   local inlines = float.caption_long.content
   if #inlines > 0 and inlines[1].t == "Strong" then
-    local short_text = pandoc.utils.stringify(
-      inlines[1].content
+    local short_doc = pandoc.Pandoc(
+      {pandoc.Plain(inlines[1].content)}
     )
+    local short_text = pandoc.write(short_doc, "latex")
+    -- Strip trailing newline from pandoc.write output
+    short_text = short_text:gsub("%s+$", "")
     float.attributes["fig-scap"] = short_text
   end
   return float

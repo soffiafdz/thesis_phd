@@ -1,5 +1,3 @@
 ---
 nocite: "@*"
 ---
-
-# Bibliography {.unnumbered}

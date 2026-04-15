@@ -66,8 +66,9 @@ subsequently used to analyze the ADNI clinical cohort in
 Chapter 6, enabling individualized z-scoring of hippocampal
 structure in a disease-enriched population.
 
-The following manuscript has been submitted to
-*Human Brain Mapping* (Manuscript ID: XXXX).
+The following manuscript has been uploaded as a
+preprint on bioRxiv and will be submitted to
+*Human Brain Mapping*.
 
 \clearpage
 
@@ -225,14 +226,14 @@ $\geq$ 0.02. The **ICV-matched subsample**
 (N = `r format(n_matched_pairs * 2, big.mark=",")`) comprised
 female--male pairs matched on age ($\pm 1$ year) and ICV
 ($\pm 25$ cc) drawn from the primary sample, and was used to
-isolate sex effects from head-size confounding (see Sex
-Differences Across Adjustment Methods). The
+isolate sex effects from head-size confounding (see
+@sec-sex-diff-methods). The
 **longitudinal subsample** (N = 2,935) comprised participants from
 the primary sample who also had a follow-up imaging session
 (ses-3), with a mean intersession interval of 2.7 years
 (SD = 1.1; range: 1.5--5.0). This subsample was used as a
 sensitivity check for normative model calibration (see
-Age-Related Patterns and Normative Modeling).
+@sec-age-patterns-methods).
 
 #### Exclusion Criteria
 
@@ -490,7 +491,7 @@ standard errors (MLR) in lavaan [@rosseel_lavaan_2012].
 
 ### Statistical Analyses
 
-#### Sex Differences Across Adjustment Methods
+#### Sex Differences Across Adjustment Methods {#sec-sex-diff-methods}
 
 ##### HVR Self-Normalizing Properties
 
@@ -524,7 +525,7 @@ ICV, they cannot be attributed solely to head-size confounding,
 and if HVR shows similar effects in full and matched samples, this
 indicates HVR is independent of head size.
 
-#### Age-Related Patterns and Normative Modeling
+#### Age-Related Patterns and Normative Modeling {#sec-age-patterns-methods}
 
 ##### Age x Sex Interactions
 
@@ -563,7 +564,11 @@ For HVR (self-normalizing, no ICV term needed):
 $$\mu = f_\mu(\text{Age}) + \beta_{\text{Edu}} \cdot \text{Education} + u_{\text{site}}$$ {#eq-gamlss-hvr}
 where $f_\mu(\cdot)$ denotes a cubic spline smooth for the
 location parameter and $u_{\text{site}}$ denotes random intercepts
-for scanner site. The scale parameter was also modeled as a
+for scanner site. Although site ICCs were low (< 0.05; see
+Sensitivity Analyses), site random intercepts were retained in the
+normative models because centile estimation targets individual-level
+classification, where even small systematic shifts can affect
+percentile assignment. The scale parameter was also modeled as a
 function of age, $\sigma = f_\sigma(\text{Age})$, allowing
 variance to change across the age range. Model families (Gaussian
 and Box-Cox Cole and Green; BCCG) were compared using AIC, with
@@ -740,18 +745,11 @@ of the other.
 
 ##### Inclusion of psychiatric diagnoses
 
-The primary analysis excluded participants with ICD-10 diagnoses
-in the F (mental and behavioral disorders), G (neurological), or
-Q0 (congenital brain malformations) categories. To assess
-robustness, sex difference analyses were repeated in an expanded
-sensitivity sample that included participants with F-code
-diagnoses (F00-F99) while still excluding G and Q0 codes. The
-difference in Cohen's d between primary and sensitivity samples
-($\Delta d$ = $d_{\text{primary}}$ - $d_{\text{sensitivity}}$)
-quantified the impact of psychiatric exclusion criteria. Small
-differences indicate that findings generalize to a less
-restrictively selected sample and are not driven by exclusion of
-psychiatric comorbidity.
+To assess robustness, sex difference analyses were repeated in an
+expanded sensitivity sample that retained participants with F-code
+diagnoses (F00-F99; N = 30,032) while still excluding G and Q0
+codes. The impact of psychiatric exclusion was quantified as
+$\Delta d$ = $d_{\text{primary}}$ - $d_{\text{sensitivity}}$.
 
 ## Results
 
@@ -1008,8 +1006,7 @@ normative models for individual-level assessment.
 ##### Clinical Normative Centile Tables
 
 Sex-specific normative centile tables for HVR, hippocampal volume,
-and lateral ventricular volume are provided in Supporting
-Information
+and lateral ventricular volume are provided in Appendix B
 (@tbl-hvr-centiles-female--@tbl-lv-centiles-male)
 to enable clinical interpretation of individual measurements at
 5-year age intervals. These tables allow clinicians to determine
@@ -1080,7 +1077,8 @@ format_pooled_sem_paths_gt(
 
 @fig-sem-forest displays sex-stratified path coefficients from
 multi-group models
-(@tbl-sem-paths-by-sex). The multigroup analyses revealed
+(detailed in @tbl-sem-paths-by-sex). The multigroup analyses
+revealed
 sex differences in brain-cognition associations.
 
 For general cognition (*g*), HC~RES~ -> *g* was not significant in
@@ -1125,7 +1123,8 @@ and younger participants were disproportionately larger at
 older ages. HVR showed a stronger quadratic effect
 ($\beta$ = `r safe_round(hvr_age_sq$est.std, 3)`) than
 HC~RES~
-($\beta$ = `r safe_round(hc_res_age_sq$est.std, 3)`),
+($\beta$ = `r safe_round(hc_res_age_sq$est.std, 3)`;
+@tbl-sem-covariate-effects),
 consistent with HVR capturing both hippocampal and
 ventricular age-related changes, both of which accelerate
 at older ages. Cognitive factors showed comparable quadratic
@@ -1507,6 +1506,8 @@ complex SEM specifications that raw HC could not.
 
 The following appendices provide supplementary tables and figures supporting the analyses presented in this chapter, including the cognitive test battery, normative centile tables, model parameters, and sensitivity analyses.
 
+\clearpage
+
 ### Appendix A: Cognitive Battery and Covariates {.unnumbered}
 
 ```{r}
@@ -1605,6 +1606,8 @@ data.table(
   tab_header(title = "SEM Model Covariates") |>
   gt_pdf_style()
 ```
+
+\clearpage
 
 ### Appendix B: Normative Centile Tables {.unnumbered}
 
@@ -1720,6 +1723,8 @@ format_centile_hemisphere_gt(
 )
 ```
 
+\clearpage
+
 ### Appendix C: Model Results {.unnumbered}
 
 ```{r}
@@ -1791,6 +1796,8 @@ format_sem_covariates_gt(
   covar_dt, model_name = "HVR Model"
 )
 ```
+
+\clearpage
 
 ### Appendix D: Sensitivity Analyses {.unnumbered}
 

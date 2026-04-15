@@ -28,6 +28,14 @@
   {0pt}{}
 \titlespacing*{name=\chapter,numberless}{0pt}{20pt}{30pt}
 
+% Keep appendix subheaders with their content
+\usepackage{needspace}
+
+% Widen number column in LoF/LoT for S-prefixed two-digit numbers
+\usepackage{tocloft}
+\setlength{\cftfignumwidth}{3.5em}
+\setlength{\cfttabnumwidth}{3.5em}
+
 % Single-spacing for section/subsection headings
 % (prevents 1.5 linestretch from bloating multi-line titles)
 \titleformat{\section}

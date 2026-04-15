@@ -1,12 +1,45 @@
 # Acknowledgements {.unnumbered}
 
-[Official McGill Guidelines](https://www.mcgill.ca/gps/thesis/thesis-guidelines/preparation):
-Among other acknowledgements, the student is required to declare the extent
-to which assistance (paid or unpaid) has been given by members of staff,
-fellow students, research assistants, technicians, or others in the
-collection of materials and data, the design and construction of apparatus,
-the performance of experiments, the analysis of data, and the preparation
-of the thesis (including editorial help).
+My doctorate began with an email from Professor Louis Collins and ends with this thesis that would not exist without him.
+For that first email, in which he believed in me and never stopped;
+for each of the weekly meetings, where his guidance, support, and encouragement made me believe in myself;
+and for all his advice and comments on presentations, posters, grant applications, and this thesis,
+I am, and will be, immensely grateful.
+His incomparable mentorship, characterized by his enthusiasm, dedication, and kindness, will forever guide me toward being
+not only a great researcher, but a better person.
 
-- In addition, it is appropriate to recognize the supervision and advice
-  given by the thesis supervisor(s) and advisors.
+I would like to thank Professor Sylvia Villeneuve, who served on my
+committee and whose guidance shaped the clinical direction of this
+thesis. Her belief in me and my work extended beyond the committee
+role. Even before moving on to the next stage of my career, she
+has welcomed me into her lab and offered me the support and guidance
+that convince me that the luck I have had with regard to mentorship will carry on.
+I am also grateful to my committee members Professors Mallar Chakravarty and Danilo Bzdok,
+whose insightful advice strengthened all four manuscripts that
+comprise this thesis.
+
+My thanks to Dr. Vladimir Fonov, whose technical expertise was
+foundational to this work: his own quality control tool became
+the basis for Qrater, and the convolutional neural network he
+designed was adapted and trained for the hippocampal and ventricular
+segmentation used throughout this thesis. I am equally grateful to
+Dr. Dorothee Schoemaker, who proposed the hippocampal-to-ventricle
+ratio, the measure on which this entire thesis rests. To my
+labmates, past and present, who helped test and refine Qrater
+through literally tens of thousands of images; to my co-authors, who reviewed and
+strengthened each manuscript; and to the technical team behind the
+Brain Imaging Centre, this work would not have been possible
+without you.
+
+This investigation was supported by the Canadian Institutes of
+Health Research, the International Progressive MS Alliance, and a
+generous donation from the Famille Louise & André Charron.
+
+To Professors Mahsa Dadar and Yashar Zeighami and their laboratory, thank you for your professional camaraderie.
+I appreciate each and every one of your team photos that I have crashed.
+
+My heartfelt appreciation to Aliza Brzesinski, my favourite colleague; Alda Profka, my first family in Canada;
+and Sonny Vazquez, who taught me that friendship knows no distance nor borders; to all of you, thank you.
+
+Last, but definitely not least, to my parents and my siblings, whose love and affection kept me warm during
+the coldest winters: Gracias y los amo.
