@@ -2897,7 +2897,7 @@ require_output(
 )
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### EDT Linearity and Simulation Validation
 
 The linear time specification was validated via LME
@@ -3084,7 +3084,7 @@ p_edt <- ggplot(
 p_yrs / p_edt
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### SE-Constrained LGCM Validation
 
 A Monte Carlo simulation
@@ -3139,7 +3139,7 @@ sim_text <- paste(
 performance, validating the SE-constrained
 specification used in the primary analyses.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### LME Covariate Effects
 
 Full covariate effects from the sex-stratified
@@ -3191,10 +3191,10 @@ adjustments, EDT specification checks, and an
 amyloid-negative CU control analysis. Full details
 follow.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### LME Sensitivity
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### HC z-score (Total Hippocampal Volume)
 
 HC z-score effects were generally weaker than HVR
@@ -3342,7 +3342,7 @@ hc_synth_text <- sprintf(
 
 `r hc_synth_text`
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### Attrition Analysis
 
 Baseline characteristics were compared between
@@ -3497,7 +3497,7 @@ if (nrow(frs_row) > 0) {
 
 `r logistic_text``r frs_dir_text`
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### Raw Brain Measure Sensitivity
 
 The LME 3-way interaction was repeated using raw
@@ -3645,7 +3645,7 @@ raw_hc_note <- if (!any(sig_hc)) {
 
 `r raw_meas_text`. `r raw_concord_text``r raw_hc_note`
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### EDT Moderation of LME Effects
 
 A 4-way interaction (cardiovascular risk × HVR ×
@@ -3711,7 +3711,7 @@ cardiovascular risk effects on HVR-cognition
 coupling are relatively stable across disease
 stages.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### EDT Stage Sensitivity
 
 Analyses were restricted to early and middle EDT
@@ -3787,10 +3787,10 @@ edt_sens_text <- paste(
 
 `r edt_sens_text`.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Amyloid-Negative CU Control
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### LME 3-Way Interaction
 
 ```{r}
@@ -3833,7 +3833,7 @@ effects are carried by the age component of the
 score, which co-varies with AD pathology
 (@fig-lme-forest-ch6).
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### LGCM Mediation
 
 ```{r}

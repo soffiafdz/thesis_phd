@@ -2987,7 +2987,7 @@ tbl_s1
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Cross-validation ANOVA results
 
 ```{r}
@@ -3043,7 +3043,7 @@ tbl_s2
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Post-hoc comparisons (Side differences)
 
 ```{r}
@@ -3174,7 +3174,7 @@ tbl_s3
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Post-hoc comparisons (Accuracy, Dice, Kappa)
 
 ```{r}
@@ -3262,7 +3262,7 @@ tbl_s4
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Post-hoc comparisons (Sensitivity, Specificity)
 
 ```{r}
@@ -3413,7 +3413,7 @@ tbl_s6
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Out-of-sample validation ANOVA
 
 ```{r}
@@ -3476,7 +3476,7 @@ tbl_s7
 
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Out-of-sample validation segmentation performance
 
 ```{r}
@@ -3566,7 +3566,7 @@ if (!is.null(supp_validation_data)) {
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Out-of-sample validation volume correlations
 
 ```{r}
@@ -3639,7 +3639,7 @@ if (!is.null(val_vols)) {
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Out-of-sample validation Bland-Altman plots
 
 ```{r}
@@ -3894,7 +3894,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Permutation tests - NLPB
 
 ```{r}
@@ -4041,7 +4041,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Permutation tests - CNN
 
 ```{r}
@@ -4188,7 +4188,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Permutation tests - FreeSurfer
 
 ```{r}
@@ -4335,7 +4335,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Permutation tests - CNN vs FreeSurfer HVR
 
 ```{r}

@@ -1774,10 +1774,10 @@ The following appendices provide technical documentation, quality control protoc
 
 Qrater is a python application designed to facilitate the rating of quality control (QC) images within a web browser. This report describes in detail the technical aspects of Qrater's including its architecture and the technologies used.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Architecture
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### Core Technologies {.unnumbered}
 
 - Qrater web service
@@ -1790,7 +1790,7 @@ Qrater is a python application designed to facilitate the rating of quality cont
     - pyMySQL 1.0.2. Data management in Qrater is handled through this MySQL client library written in Python. This data includes, but it's not limited to imaging data and their metadata, registered users, and QC labels and qualitative comments.
     - SQLAlchemy 1.4.20. This ORM python library manages Qrater's database operations and interactions.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Containerization and deployment {.unnumbered}
 
 Qrater, the Flask-based web application, is available
@@ -1801,19 +1801,19 @@ Qrater's full deployment, however, relies on the use of other services. These de
 
 To streamline the deployment of these three interconnected services, we utilize Docker Compose. Docker Compose manages the multiple Docker containers needed for Qrater with a single configuration file. This setup allows that the Flask application, the MySQL database, Redis, and the multiple worker instances are correctly configured and can communicate seamlessly with each other.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Remote Access and Security
 
 Once Qrater is running, it is accessible on a specific port of the computer it is running on. With SSH port forwarding, remote access is possible giving the possibility to multiple users to access the application on the host from different locations.
 
 Qrater contains different measures to not compromise data security. To use Qrater, each user has to register within the application with a username and a password. When loading data, it can be marked as private restricting its access only to specific users. The data contained in private datasets including its ratings will be accessible only to those selected by the data owner.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Frontend Development
 
 The interface of Qrater is built using Bootstrap, a front-end framework that offers pre-designed components and a responsive grid system. This ensures the application is visually consistent and works across different devices, web browsers and screen sizes.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### Image Viewer {.unnumbered}
 
 Qrater's built-in image viewer includes several features written in JavaScript to aid in the QC process:
@@ -1822,7 +1822,7 @@ Qrater's built-in image viewer includes several features written in JavaScript t
 - Magnifying glass: There is a feature to activate a magnifying glass over the image. It is moved by the cursor and the level of zooming can be adjusted.
 - Keyboard key-bindings: These shortcuts are implemented to improve the efficiency of the QC process, allowing users to perform actions quickly without relying on the mouse. These were coded using the mousetrap library.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 ##### Data Management {.unnumbered}
 
 QC data can be accessed within the browser in the form of tables, using jQuery's DataTables plugin, which provides functionalities like:
@@ -1832,7 +1832,7 @@ QC data can be accessed within the browser in the form of tables, using jQuery's
 - Filtering: The plugin supports filtering options to narrow down data sets based on criteria.
 - Searching: A search box allows users to quickly locate specific records within the data table.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Conclusion
 
 In conclusion, Qrater is a practical and efficient tool designed to simplify the rating of quality control (QC) images through a user-friendly web interface. Its utilization of Flask, Gunicorn, Redis, and Docker Compose ensures robust performance and seamless integration of essential services, making it a reliable solution for managing QC processes and data effectively.
@@ -1855,7 +1855,7 @@ knitr::include_graphics(
   suppressWarnings()
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### QC Protocol - Raw MRI
 
 The task was designed to assess whether the trainees could accurately QC raw MRI. Once everyone had finished the QC of the selected cases, they would receive the QC labels assigned by the expert. Some brief explanations on the reasoning behind the more challenging cases were also shared. A secondary goal was to assure matching levels of strictness between all raters before moving forward with the QC of large datasets as ADNI and UKBiobank.
@@ -1870,7 +1870,7 @@ The overall QC criteria consisted of:
 - Intensity non-uniformity artifacts: Our implementation of N3 or N4 might not be able to deal with severe non-uniformity, therefore, those cases should fail. Trainees should include a "non-uniformity artifact" comment. Problematic cases often have one of two issues: 1) the lowest slices are affected by signal loss (due to the imperfect volume excitation pulse), or 2) there's a very strong AP inhomogeneity due to the nose or forehead being very close to the coil, and thus having a very bright signal.
 - Data should not be failed if the GM/WM contrast is diminished. Nonetheless, the trainee should leave a "low GM/WM contrast" comment.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### QC Protocol - Linear Registration
 
 For the QC of linear registration of MRI to a standard template, the criteria to pass or fail an image was the following:
@@ -1902,14 +1902,14 @@ Contour problems to ignore (in most cases), summarized:
 - There is no tentorium contour line in sagittal slices near the midline in the ADNI template contours.
 - Look for the occipital-cerebellar notch in the contour pressing into the anterior tentorium viewed from the sagittal perspective near the midline.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### QC Protocol - Skull Segmentation
 
 The main goal of the skull segmentation was to use its output as a feature in longitudinal registration. The QC task was done in order to build a library for the training of an automatic tool. QC labels were limited to "Pass" and "Fail".
 
 A successful segmentation was defined as having at least 95% of the top half of the skull properly segmented. Up to three holes of less than 2 cm2 were allowed for a segmentation to pass QC.
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Training Video Summaries
 
 The training videos used in this study cannot be shared
@@ -1951,7 +1951,7 @@ ggplot(acq_count_plot,
         panel.grid = element_blank())
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Time Measurements of Raters for QC of the Balanced Dataset of Raw MRI
 
 ```{r}
@@ -2048,7 +2048,7 @@ acq_99_summ |>
   style_manuscript_table(table_type = "supplementary")
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Time Measurements of Raters for Raw MRI QC of the ADNI Dataset
 
 ```{r}
@@ -2193,7 +2193,7 @@ acquis_summ[, .(
   style_manuscript_table(table_type = "supplementary")
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Post-Hoc Analysis of Time Differences by QC Label in the ADNI Data
 
 ```{r}
@@ -2281,7 +2281,7 @@ posthoc_dt[, .(
   style_manuscript_table(table_type = "supplementary")
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Matrix of Detailed Inter-Rater Agreement of the Linear Registration QC Task
 
 ```{r}
@@ -2307,7 +2307,7 @@ ggplot(reg_count_plot,
         panel.grid = element_blank())
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Time Measurements of Raters for QC of the Balanced Dataset of Linear Registration
 
 ```{r}
@@ -2402,7 +2402,7 @@ reg_99_summ |>
   style_manuscript_table(table_type = "supplementary")
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Change Before and After Protocol Refinement of Linear Registration
 
 ```{r}
@@ -2537,7 +2537,7 @@ rbindlist(list(
   style_manuscript_table(table_type = "supplementary")
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Time Measurements for the Linear Registration QC of the ADNI Data
 
 ```{r}
@@ -2652,7 +2652,7 @@ regis_summ |>
   style_manuscript_table(table_type = "supplementary")
 ```
 
-\needspace{10\baselineskip}
+\FloatBarrier\needspace{12\baselineskip}
 #### Time Measurements of Experts for the Skull Segmentation QC of the ADNI Data
 
 ```{r}
