@@ -2987,7 +2987,7 @@ tbl_s1
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Cross-validation ANOVA results
 
 ```{r}
@@ -3043,7 +3043,7 @@ tbl_s2
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Post-hoc comparisons (Side differences)
 
 ```{r}
@@ -3174,7 +3174,7 @@ tbl_s3
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Post-hoc comparisons (Accuracy, Dice, Kappa)
 
 ```{r}
@@ -3262,7 +3262,7 @@ tbl_s4
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Post-hoc comparisons (Sensitivity, Specificity)
 
 ```{r}
@@ -3413,7 +3413,7 @@ tbl_s6
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Out-of-sample validation ANOVA
 
 ```{r}
@@ -3476,7 +3476,7 @@ tbl_s7
 
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Out-of-sample validation segmentation performance
 
 ```{r}
@@ -3566,7 +3566,7 @@ if (!is.null(supp_validation_data)) {
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Out-of-sample validation volume correlations
 
 ```{r}
@@ -3639,7 +3639,7 @@ if (!is.null(val_vols)) {
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Out-of-sample validation Bland-Altman plots
 
 ```{r}
@@ -3894,7 +3894,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Permutation tests - NLPB
 
 ```{r}
@@ -4041,7 +4041,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Permutation tests - CNN
 
 ```{r}
@@ -4188,7 +4188,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Permutation tests - FreeSurfer
 
 ```{r}
@@ -4335,7 +4335,7 @@ if (file.exists(perms_rds)) {
 ```
 
 
-\FloatBarrier\needspace{12\baselineskip}
+\clearpage
 #### Permutation tests - CNN vs FreeSurfer HVR
 
 ```{r}
