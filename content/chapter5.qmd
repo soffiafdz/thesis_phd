@@ -68,7 +68,13 @@ structure in a disease-enriched population.
 
 The following manuscript has been uploaded as a
 preprint on bioRxiv and will be submitted to
-*Human Brain Mapping*.
+*Human Brain Mapping*:
+Fernandez-Lozano, S., & Collins, D. L. (2026).
+Hippocampal-to-Ventricle Ratio as a
+Head-Size-Independent Biomarker: Sex Differences and
+Cognitive Associations in 27,680 UK Biobank
+Participants. *bioRxiv*, 2026.04.13.718285.
+https://doi.org/10.64898/2026.04.13.718285
 
 \clearpage
 

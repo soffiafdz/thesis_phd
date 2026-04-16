@@ -133,8 +133,14 @@ genuine biological variation. The chapter further establishes sex-specific
 normative aging curves using generalized additive models
 for location, scale, and shape (GAMLSS), which are
 subsequently transferred to the clinical dataset in
-Chapter 6. Chapter 5 has been submitted to
-*Human Brain Mapping*.
+Chapter 6. Chapter 5 has been uploaded as a preprint
+on bioRxiv and will be submitted to *Human Brain
+Mapping*: Fernandez-Lozano, S., & Collins, D. L.
+(2026). Hippocampal-to-Ventricle Ratio as a
+Head-Size-Independent Biomarker: Sex Differences and
+Cognitive Associations in 27,680 UK Biobank
+Participants. *bioRxiv*, 2026.04.13.718285.
+doi:10.64898/2026.04.13.718285
 
 **Chapter 6** applies the HVR normative framework
 developed in Chapter 5 to investigate the relationship
