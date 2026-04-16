@@ -96,8 +96,9 @@ Framingham Risk Score from genuine cerebrovascular
 effects, addressing a source of bias that affects any
 longitudinal study using this composite risk measure.
 
-The following manuscript has been uploaded as a
-preprint on bioRxiv and will be submitted to
+The following manuscript is ready for submission; it
+is in the process of being uploaded as a preprint to
+bioRxiv and will be submitted to
 *Alzheimer's & Dementia*.
 
 \clearpage

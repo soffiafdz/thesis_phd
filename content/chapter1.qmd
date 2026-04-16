@@ -161,7 +161,9 @@ chapter demonstrates moderation without mediation:
 hippocampal-cognitive coupling persists regardless of
 cardiovascular risk measurement, while the FRS fails to
 mediate the relationship between vascular burden and
-hippocampal decline. Chapter 6 has been submitted to
+hippocampal decline. Chapter 6 is ready for
+submission; it is in the process of being uploaded
+as a preprint to bioRxiv and will be submitted to
 *Alzheimer's & Dementia*.
 
 Together, these four studies progress from quality
