@@ -15,10 +15,12 @@ key-points:
   - Males show steeper cross-sectional age-related HVR reductions; sex-specific normative centile curves are provided for clinical application
 author:
   - name: Sofia Fernandez-Lozano
+    orcid: 0000-0003-2288-8111
     affiliations:
       - ref: bic
       - ref: ipn
   - name: D. Louis Collins
+    orcid: 0000-0002-8432-7021
     affiliations:
       - ref: bic
       - ref: ipn
@@ -46,7 +48,10 @@ affiliations:
     country: Canada
 date: today
 abstract: |
-  Hippocampal volume is a key biomarker for Alzheimer's disease and brain aging, yet reported sex differences vary substantially depending on head-size adjustment methods. We examined whether the hippocampal-to-ventricle ratio (HVR), a self-normalizing measure, provides more consistent sex difference estimates than conventional adjustment approaches. Using a subset of UK Biobank structural MRI data (N = 27,680; 56% female; ages 45--82), we compared sex differences across four adjustment methods (unadjusted, proportions, stereotaxic, residualized) and in samples matched on age and on intracranial volume (ICV). Hippocampal sex differences reversed direction across methods, ranging from $d = -0.89$ (males larger, unadjusted) to $d = 0.58$ (females larger, proportions), with a range of 1.5 standard deviations across analytical choices. In contrast, HVR showed a consistent female advantage ($d = 0.52$) that persisted in the ICV-matched subsample ($d = 0.19$), confirming this effect is not a head-size artifact. Males exhibited steeper cross-sectional age-related HVR differences ($1.7\times$ female rate, $p < 10^{-50}$), consistent with males showing ventricular expansion at younger ages. Structural equation modeling revealed that HVR predicted general cognition comparably to hippocampal volume ($\beta = 0.04$, overlapping CIs), and unlike residualized hippocampal volume, HVR maintained significant brain-cognition associations in both sexes. We provide sex-specific normative centile curves for clinical application. These findings indicate that apparent hippocampal sex differences largely reflect methodological choices rather than biology, while HVR captures consistent morphological variation related to brain aging that may have clinical utility.
+  **Introduction:** Hippocampal volume is a key biomarker for Alzheimer's disease and brain aging, yet reported sex differences vary substantially depending on head-size adjustment methods. We examined whether the hippocampal-to-ventricle ratio (HVR), a self-normalizing measure, provides more consistent sex difference estimates than conventional adjustment approaches.
+  **Methods:** Using a subset of UK Biobank structural MRI data (N = 27,680; 56.2% female; ages 45--82), we compared sex differences across four adjustment methods (unadjusted, proportions, stereotaxic, residualized) and in samples matched on age and on intracranial volume (ICV). Cross-sectional age patterns were modeled with GAMLSS, and brain--cognition associations were estimated via structural equation modeling on a bifactor cognitive model.
+  **Results:** Hippocampal sex differences reversed direction across methods, ranging from $d = -0.89$ (males larger, unadjusted) to $d = 0.58$ (females larger, proportions), with a range of 1.5 standard deviations across analytical choices. In contrast, HVR showed a consistent female advantage ($d = 0.52$) that persisted in the ICV-matched subsample ($d = 0.18$), confirming this effect is not a head-size artifact. Males exhibited steeper cross-sectional age-related HVR differences ($1.7\times$ female rate, $p < 10^{-50}$), consistent with males showing ventricular expansion at younger ages. HVR predicted general cognition comparably to hippocampal volume ($\beta = 0.04$, overlapping CIs), and unlike residualized hippocampal volume, HVR maintained significant brain--cognition associations in both sexes.
+  **Conclusion:** Apparent hippocampal sex differences largely reflect methodological choices rather than biology, while HVR captures consistent morphological variation related to brain aging that may have clinical utility. We provide sex-specific normative centile curves for clinical application.
 format:
   html:
     toc: true
@@ -106,7 +111,7 @@ execute:
   message: false
   eval: true
 bibliography: references.bib
-csl: human-brain-mapping.csl
+csl: apa.csl
 ---
 
 ```{r}
@@ -150,7 +155,7 @@ We addressed three questions: (1) Do hippocampal sex differences vary across hea
 
 ## Data Source and Participants
 
-Data were obtained from UK Biobank (Application 45551) [@sudlow_uk_2015; @miller_multimodal_2016]. The initial imaging sample comprised approximately `r format(n_initial_imaging, big.mark=",")` participants with T1-weighted structural MRI. After exclusions (detailed below), the final analytic sample included N = `r format(n_primary, big.mark=",")` participants aged `r age_min` to `r age_max` years. With this sample size, we had >99% power to detect small effects (d = 0.10) and >80% power to detect very small effects (d = 0.05) for two-group comparisons at $\alpha$ = .05.
+Data were obtained from UK Biobank (Application 45551) [@sudlow_uk_2015; @miller_multimodal_2016]. The initial imaging sample comprised `r format(n_initial_imaging, big.mark=",")` participants with T1-weighted structural MRI. After exclusions (detailed below), the final analytic sample included N = `r format(n_primary, big.mark=",")` participants aged `r age_min` to `r age_max` years. With this sample size, we had >99% power to detect small effects (d = 0.10) and >80% power to detect very small effects (d = 0.05) for two-group comparisons at $\alpha$ = .05.
 
 Three additional subsamples were defined for specific analyses (@fig-prisma; @tbl-demographics). The **England subsample** (N = `r format(n_england, big.mark=",")`) comprised participants assessed at UK Biobank centres in England and was used for SEM analyses requiring the Index of Multiple Deprivation (IMDP), which is not comparable across UK countries. This subsample provides adequate power for detecting standardized path coefficients $\geq$ 0.02. The **ICV-matched subsample** (N = `r format(n_matched_pairs * 2, big.mark=",")`) comprised female--male pairs matched on age ($\pm 1$ year) and ICV ($\pm 25$ cc) drawn from the primary sample, and was used to isolate sex effects from head-size confounding (see @sec-sex-diff-methods). The **longitudinal subsample** (N = 2,935) comprised participants from the primary sample who also had a follow-up imaging session (ses-3), with a mean intersession interval of 2.7 years (SD = 1.1; range: 1.5--5.0). This subsample was used as a sensitivity check for normative model calibration (see @sec-age-patterns-methods).
 
@@ -180,46 +185,56 @@ Participants were excluded if they had any of the following ICD-10 diagnoses rec
                     fill=black!3, dashed},
   arrow/.style={-{Stealth[length=5pt]}, thick, black!70}
 ]
-  % Main flow (top to bottom)
+  % Main flow (top to bottom). All counts are unique participants;
+  % sex-stratified Ns from R/scripts/audit_sex_balance.R.
   \node[process] (initial)
-    {UK Biobank Imaging Cohort\\[2pt]\textbf{N\,=\,47,398}};
+    {UK Biobank Imaging Cohort\\[2pt]\textbf{N\,=\,42,898}\\[-1pt]{\scriptsize F:\,22,594\,|\,M:\,20,304}};
 
   \node[decision, below=of initial] (qc)
     {Quality control filter};
 
   \node[process, below=of qc] (passed)
-    {Passed all processing\\[2pt]\textbf{n\,=\,38,567}};
+    {Passed all processing\\[2pt]\textbf{n\,=\,33,911}\\[-1pt]{\scriptsize F:\,19,193\,|\,M:\,14,718}};
 
   \node[decision, below=of passed] (gq)
     {ICD-10 exclusion:\\G00--G99, Q00--Q07};
 
   \node[sample, below=of gq] (sensitivity)
-    {Sensitivity sample\\[2pt]\textbf{N\,=\,30,032}};
+    {Sensitivity sample\\[2pt]\textbf{N\,=\,30,032}\\[-1pt]{\scriptsize F:\,16,894\,|\,M:\,13,138}};
 
   \node[decision, below=of sensitivity] (f)
     {ICD-10 exclusion:\\F00--F99};
 
   \node[sample, below=of f] (primary)
-    {\textbf{Primary sample}\\[2pt]\textbf{N\,=\,27,680}};
+    {\textbf{Primary sample}\\[2pt]\textbf{N\,=\,27,680}\\[-1pt]{\scriptsize F:\,15,555\,|\,M:\,12,125}};
+
+  \node[decision, below=of primary] (edu)
+    {Missing education or\\site data};
+
+  \node[sample, below=of edu] (gamlss)
+    {GAMLSS sample\\[2pt]\textbf{N\,=\,27,434}\\[-1pt]{\scriptsize F:\,15,412\,|\,M:\,12,022}};
 
   % Exclusion boxes (right side)
   \node[excluded, right=of qc] (exc1)
-    {Excluded\\[2pt]n\,=\,8,831};
+    {Excluded\\[2pt]n\,=\,8,987};
 
   \node[excluded, right=of gq] (exc2)
-    {Excluded\\[2pt]n\,=\,8,535};
+    {Excluded\\[2pt]n\,=\,3,879};
 
   \node[excluded, right=of f] (exc3)
     {Excluded\\[2pt]n\,=\,2,352};
 
-  % Subsamples (below primary, three across)
-  \node[subsample, below=1.2cm of primary, xshift=-4.2cm] (england)
+  \node[excluded, right=of edu] (exc4)
+    {Excluded\\[2pt]n\,=\,246};
+
+  % Subsamples (below GAMLSS, three across)
+  \node[subsample, below=1.2cm of gamlss, xshift=-4.2cm] (england)
     {England only\\[2pt]\textit{N\,=\,25,172}\\[-1pt]{\scriptsize(SEM analyses)}};
 
-  \node[subsample, below=1.2cm of primary] (matched)
+  \node[subsample, below=1.2cm of gamlss] (matched)
     {ICV-matched\\[2pt]\textit{N\,=\,9,500}\\[-1pt]{\scriptsize(Sex differences)}};
 
-  \node[subsample, below=1.2cm of primary, xshift=4.2cm] (longitudinal)
+  \node[subsample, below=1.2cm of gamlss, xshift=4.2cm] (longitudinal)
     {Longitudinal\\[2pt]\textit{N\,=\,2,935}\\[-1pt]{\scriptsize(Normative calibration)}};
 
   % Arrows
@@ -232,13 +247,16 @@ Participants were excluded if they had any of the following ICD-10 diagnoses rec
   \draw[arrow] (sensitivity) -- (f);
   \draw[arrow] (f) -- (primary);
   \draw[arrow] (f) -- (exc3);
-  \draw[arrow, dashed] (primary.south) -- ++(0,-0.35cm) -| (england.north);
-  \draw[arrow, dashed] (primary.south) -- (matched.north);
-  \draw[arrow, dashed] (primary.south) -- ++(0,-0.35cm) -| (longitudinal.north);
+  \draw[arrow] (primary) -- (edu);
+  \draw[arrow] (edu) -- (gamlss);
+  \draw[arrow] (edu) -- (exc4);
+  \draw[arrow, dashed] (gamlss.south) -- ++(0,-0.35cm) -| (england.north);
+  \draw[arrow, dashed] (gamlss.south) -- (matched.north);
+  \draw[arrow, dashed] (gamlss.south) -- ++(0,-0.35cm) -| (longitudinal.north);
 \end{tikzpicture}
 ```
 
-**Participant selection flow.** Dashed boxes indicate analytic subsamples derived from the primary sample.
+**Participant selection flow.** All counts are unique participants; F and M values give female and male sub-counts at each stage. Dashed boxes indicate analytic subsamples derived from the GAMLSS sample.
 :::
 
 ### Quality Control
@@ -520,7 +538,7 @@ The cognitive bifactor model showed acceptable fit at all invariance levels, wit
 
 General cognition (*g*) was positively associated with all three brain measures (@tbl-sem-paths): unadjusted HC ($\beta$ = `r safe_round(hc_g$est.std, 3)` [95% CI: `r safe_round(hc_g$ci.lower, 3)`, `r safe_round(hc_g$ci.upper, 3)`]), HVR ($\beta$ = `r safe_round(hvr_g$est.std, 3)` [`r safe_round(hvr_g$ci.lower, 3)`, `r safe_round(hvr_g$ci.upper, 3)`]), and HC~RES~ ($\beta$ = `r safe_round(hc_res_g$est.std, 3)` [`r safe_round(hc_res_g$ci.lower, 3)`, `r safe_round(hc_res_g$ci.upper, 3)`]), all p < .001. Confidence intervals overlapped substantially, indicating no significant differences in predictive validity between measures. HVR showed numerically the strongest association with *g*, despite requiring no head-size adjustment.
 
-For processing speed (Speed~s~), HC showed the strongest effect ($\beta$ = `r safe_round(hc_speed$est.std, 3)`, p < .001), followed by HC~RES~ ($\beta$ = `r safe_round(hc_res_speed$est.std, 3)`, p = `r safe_round(hc_res_speed$pvalue, 3)`), with HVR trending but not significant ($\beta$ = `r safe_round(hvr_speed$est.std, 3)`, p = `r safe_round(hvr_speed$pvalue, 3)`). The memory-specific factor (Memory~s~) could not be reliably estimated in either sex and is therefore not reported here (see `r S("tbl-sem-loadings")` for factor loadings).
+For processing speed (Speed~s~), HC showed the strongest effect ($\beta$ = `r safe_round(hc_speed$est.std, 3)`, p = `r safe_round(hc_speed$pvalue, 3)`), followed by HC~RES~ ($\beta$ = `r safe_round(hc_res_speed$est.std, 3)`, p = `r safe_round(hc_res_speed$pvalue, 3)`), with HVR not significant ($\beta$ = `r safe_round(hvr_speed$est.std, 3)`, p = `r safe_round(hvr_speed$pvalue, 3)`). The memory-specific factor (Memory~s~) could not be reliably estimated in either sex and is therefore not reported here (see `r S("tbl-sem-loadings")` for factor loadings).
 
 ```{r}
 #| label: tbl-sem-paths
@@ -557,7 +575,7 @@ Site ICCs ranged from 0.004 to 0.012 (Supporting Information, `r S("tbl-site-adj
 
 ### Hemisphere Comparison
 
-Sex difference effect sizes were largely symmetrical across hemispheres for the individual volumes (`r S("tbl-hemisphere")`, `r S("fig-hemisphere")`). Residualized hippocampal volume showed significant effects bilaterally (left d = −0.14, right d = −0.16) with overlapping confidence intervals, indicating no lateralized sex difference. Lateral ventricles similarly showed a male advantage in both hemispheres with nearly identical effect sizes (left d = 0.48, right d = 0.48). However, HVR showed a lateralized pattern: the right hemisphere exhibited a significant female advantage (d = 0.05 [0.03, 0.07]), while the left hemisphere effect was non-significant (d = −0.01 [−0.03, 0.02]).
+Sex differences by hemisphere are reported in `r S("tbl-hemisphere")` and `r S("fig-hemisphere")`. Lateral ventricles showed a consistent male advantage with nearly identical effect sizes across hemispheres (left d = `r round(lv_res_l$ESTIMATE, 2)`, right d = `r round(lv_res_r$ESTIMATE, 2)`), and HVR showed a symmetric female advantage (left d = `r round(hvr_non_l$ESTIMATE, 2)`, right d = `r round(hvr_non_r$ESTIMATE, 2)`). Residualized hippocampal volume showed a small right-lateralized pattern: the left hemisphere effect was non-significant (d = `r round(hc_res_l$ESTIMATE, 2)` [`r round(hc_res_l$CI_LOWER, 2)`, `r round(hc_res_l$CI_UPPER, 2)`]) while the right hemisphere reached a small female advantage (d = `r round(hc_res_r$ESTIMATE, 2)` [`r round(hc_res_r$CI_LOWER, 2)`, `r round(hc_res_r$CI_UPPER, 2)`]). The bilateral consistency of LV and HVR supports the use of bilateral measures rather than hemisphere-specific values for clinical application.
 
 ### Inclusion of Psychiatric Diagnoses (F-Codes)
 
@@ -595,19 +613,19 @@ These sex-differential patterns indicate that HVR is not simply "residualized HC
 
 ## Sensitivity Analyses
 
-Low site ICCs (all < 0.05; `r S("tbl-site-adjusted")`) confirmed minimal scanner site contribution to variance, and effect sizes were stable after site adjustment; the ratio construction of HVR did not amplify site-related noise. Sex difference effect sizes were symmetrical across hemispheres for HC and LV; HVR showed a small lateralized pattern (right d = 0.05 vs. left d = −0.01), though the small magnitude and potential contribution of hemispheric segmentation biases [@fernandez-lozano_enhanced_2025] suggest bilateral HVR remains most robust for clinical application. Including participants with psychiatric diagnoses changed effect sizes minimally ($\Delta$d < 0.02; `r S("tbl-sensitivity")`, `r S("fig-sensitivity")`), consistent with the low prevalence of psychiatric diagnoses in this healthy volunteer cohort [@fry_comparison_2017].
+Low site ICCs (all < 0.05; `r S("tbl-site-adjusted")`) confirmed minimal scanner site contribution to variance, and effect sizes were stable after site adjustment; the ratio construction of HVR did not amplify site-related noise. Sex difference effect sizes were symmetric across hemispheres for LV and HVR; residualized HC showed a small right-lateralized pattern (right d = `r round(hc_res_r$ESTIMATE, 2)` vs. left d = `r round(hc_res_l$ESTIMATE, 2)` non-significant), though the small magnitude and potential contribution of hemispheric segmentation biases [@fernandez-lozano_enhanced_2025] suggest bilateral measures remain most robust for clinical application. Including participants with psychiatric diagnoses changed effect sizes minimally ($\Delta$d < 0.02; `r S("tbl-sensitivity")`, `r S("fig-sensitivity")`), consistent with the low prevalence of psychiatric diagnoses in this healthy volunteer cohort [@fry_comparison_2017].
 
 ## Limitations
 
-Design and sample constraints include the cross-sectional design, which cannot distinguish age effects from cohort effects or establish individual change trajectories, and HVR's conflation of hippocampal and ventricular contributions to observed differences. UK Biobank participants are healthier and more educated than the general population [@fry_comparison_2017], limiting generalizability to clinical populations. Some cognitive tests had incomplete data, and complete-case analyses may introduce selection bias. APOE genotype was unavailable, precluding examination of gene × sex interactions relevant to dementia risk.
+Design and sample constraints include the cross-sectional design, which cannot distinguish age effects from cohort effects or establish individual change trajectories, and HVR's conflation of hippocampal and ventricular contributions to observed differences. UK Biobank participants are healthier and more educated than the general population [@fry_comparison_2017], limiting generalizability to clinical populations. Some cognitive tests had incomplete data, and complete-case analyses may introduce selection bias. APOE genotype was unavailable, precluding examination of gene × sex interactions relevant to dementia risk. The final analytic sample is 56.2% female; because GAMLSS normative models were fit separately by sex, this imbalance does not bias the within-sex centile curves.
 
-Methodologically, the study did not include power-corrected proportions allometric adjustment [@sanchis-segura_effects_2020]. Imaging site clustering was not modeled in multigroup SEM because lavaan does not support this combination [@rosseel_lavaan_2012], though the minimal design effect across 4 sites makes sex comparisons conservative rather than biased. The bifactor model's memory-specific factor could not be reliably estimated in either sex—a common occurrence in bifactor models [@eid_anomalous_2017; @burns_application_2020]—indicating that memory variance was fully captured by *g*; brain-cognition paths involving Memory~s~ are therefore not reported. Ratios can exhibit non-normality and complex interpretation when numerator and denominator correlate differently with outcomes, though HVR showed approximately normal distributions here. All brain-cognition associations were small ($\beta$ = 0.02–0.04), explaining less than 1% of variance in cognitive performance. While statistically significant given the large sample, the practical and clinical significance of these associations remains to be established.
+Methodologically, the study did not include power-corrected proportions allometric adjustment [@sanchis-segura_effects_2020]. Imaging site clustering was not modeled in multigroup SEM because lavaan does not support this combination [@rosseel_lavaan_2012], though the minimal design effect across 4 sites makes sex comparisons conservative rather than biased. The bifactor model's memory-specific factor could not be reliably estimated in either sex—a common occurrence in bifactor models [@eid_anomalous_2017; @burns_application_2020]—indicating that memory variance was fully captured by *g*; brain-cognition paths involving Memory~s~ are therefore not reported. Ratios can exhibit non-normality and complex interpretation when numerator and denominator correlate differently with outcomes, though HVR showed approximately normal distributions here. All brain-cognition associations were small (all $\beta$ < 0.07), explaining less than 1% of variance in cognitive performance. While statistically significant given the large sample, the practical and clinical significance of these associations remains to be established.
 
 ## Future Directions
 
 The current findings motivate four lines of follow-up work. First, the UK Biobank repeat imaging subsample enables longitudinal validation of whether HVR predicts individual-level cognitive decline. Second, clinical validation in AD/MCI cohorts would assess HVR's diagnostic utility compared to clinical populations studied previously [@fernandez-lozano_enhanced_2025]. Third, longitudinal data could separate hippocampal and ventricular contributions to HVR changes, which the cross-sectional ratio conflates. Fourth, examining whether HVR × sex × APOE genotype predicts dementia conversion would address the gene × sex interactions that this study could not explore.
 
-## Conclusions
+# Conclusions
 
 In `r format(n_primary, big.mark=",")` UK Biobank participants (`r pct_female`% female), hippocampal sex differences reversed direction across adjustment methods (d range: `r round(abs(hc_d_range), 1)` SD), confirming their methodological determination. HVR demonstrated substantial head-size independence (r~ICV~ = `r round(r_hvr_icv, 2)`; `r icv_reduction_pct`% reduction vs. raw HC) and a consistent female advantage replicated in the ICV-matched subsample (d = `r round(matched_hvr$ESTIMATE_MTCH, 2)`). Males showed `r round(hvr_int$SLOPE_RATIO, 2)`× steeper age-related HVR differences (p = `r format(hvr_int$INTERACTION_P, scientific=TRUE, digits=2)`); sex-specific normative centile curves are provided for research application, pending validation in clinical populations. HVR predicted general cognition comparably to hippocampal volume (HVR → *g*: $\beta$ = `r safe_round(hvr_g$est.std, 3)` vs. HC → *g*: $\beta$ = `r safe_round(hc_g$est.std, 3)`, overlapping CIs), maintained predictive validity in both sexes while residualized HC lost significance in males (p = `r safe_round(hc_res_g_m$pvalue, 3)`), and supported more complex SEM specifications that raw HC could not.
 
@@ -617,7 +635,9 @@ S.F-L. conceived the study, developed the analysis pipeline, performed all analy
 
 # Acknowledgments {.unnumbered}
 
-This research has been conducted using the UK Biobank Resource under Application Number 45551. This investigation was supported in part by an award from the International Progressive MS Alliance (award reference number PA-1412-02420), a grant from the Canadian Institutes of Health Research, and a donation from the Famille Louise & Andre Charron.
+This research has been conducted using the UK Biobank Resource under Application Number 45551.
+
+This investigation was supported in part by an award from the International Progressive MS Alliance (award reference number PA-1412-02420), a grant from the Canadian Institutes of Health Research [Project Grant FRN 205819], and a donation from the Famille Louise & Andre Charron. The funders had no role in study design, data collection and analysis, decision to publish, or preparation of the manuscript.
 
 # Conflict of Interest Statement {.unnumbered}
 
