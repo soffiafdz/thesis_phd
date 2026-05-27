@@ -337,7 +337,9 @@ positron emission tomography (PET), other biological
 markers, and clinical and neuropsychological
 assessment can be combined to measure the progression
 of mild cognitive impairment (MCI) and early
-Alzheimer's disease (AD).
+Alzheimer's disease (AD). ADNI data were downloaded
+from the LONI-IDA portal between December 2025 and
+February 2026 (latest download: 10 February 2026).
 
 Data were drawn from ADNI phases 1, GO, 2, and 3.
 We included only amyloid-positive participants,
@@ -378,7 +380,13 @@ amyloid testing; the normative GAMLSS (Generalized
 Additive Models for Location, Scale, and Shape)
 models
 therefore reflect the general population rather than
-a confirmed amyloid-negative sample.
+a confirmed amyloid-negative sample. The UKB
+normative reference is sex-imbalanced (56.2%
+female), reflecting the source imaging cohort and
+quality-control filtering
+[@fernandez-lozano_hippocampal_2026]; sex-stratified
+GAMLSS fitting ensures within-sex z-score
+calibration is unaffected by this imbalance.
 
 ```{r}
 #| label: fig-consort-ch6
@@ -483,7 +491,7 @@ $$
   \text{VC}_L + \text{VC}_R}
 $$ {#eq-hvr-ch6}
 computed on bilateral summed native-space volumes
-[@schoemaker_hippocampal_ventricle_2019]. This ratio
+[@schoemaker2019]. This ratio
 captures hippocampal integrity relative to
 surrounding cerebrospinal fluid (CSF)-filled spaces,
 where hippocampal atrophy is accompanied by
@@ -1035,7 +1043,16 @@ the ADSP-PHC CFA scoring model, embedding known
 heteroscedastic measurement error directly rather
 than estimating it as a free parameter; this yields
 more precise latent slope estimates by separating
-true variance from measurement noise.
+true variance from measurement noise. For HVR,
+occasion-specific residual variances were freely
+estimated; a likelihood ratio test against an
+equality-constrained alternative (single residual
+variance pooled across timepoints) rejected the
+constraint ($\Delta\chi^2 = 35.0$, df = 5,
+$p < 10^{-5}$; Male × Memory × CVR~mimic~ cell),
+consistent with the biologically expected
+heteroscedasticity of brain atrophy variance over
+disease time [@grimm_residual_2010].
 
 We first attempted fully random quadratic models
 (6 latent factors per domain); when these did not
@@ -2334,24 +2351,22 @@ and Executive Function
 95% CI `r m_exf_da_ci`) ---
 confirming a consistent FRS advantage.
 
-**Females.** $\Delta_a$ was significantly positive
-for Language
-($\Delta_a$ = `r f_lan_da`,
-95% CI `r f_lan_da_ci`);
-Memory
-($\Delta_a$ = `r f_mem_da`,
-95% CI `r f_mem_da_ci`) and
-Executive Function
-($\Delta_a$ = `r f_exf_da`,
-95% CI `r f_exf_da_ci`)
-CIs narrowly included zero.
+**Females.** $\Delta_a$ was positive across all three
+domains
+(Memory $\Delta_a$ = `r f_mem_da`,
+95% CI `r f_mem_da_ci`;
+Language $\Delta_a$ = `r f_lan_da`,
+95% CI `r f_lan_da_ci`;
+Executive Function $\Delta_a$ = `r f_exf_da`,
+95% CI `r f_exf_da_ci`), but all three 95% BC CIs
+narrowly included zero.
 
 Paired bootstrap confirmed the a-path dissociation
 in `r n_of_total.fn(n_da_sig, 6L)` sex × domain
 models: $\Delta_a$
 (FRS − CVR~mimic~) was positive in every case, with
-95% BC CIs excluding zero in all but Female Memory
-and Female Executive Function.
+95% BC CIs excluding zero across all three male
+domains; no female domain reached significance.
 Male $\Delta_a$ estimates were consistent across
 domains
 (mean $\Delta_a$ = `r sprintf("%.4f", m_da_mean)`),
@@ -2615,7 +2630,7 @@ a reliable marker of cognitive decline
 [@kramer_longitudinal_2007; @oschwald_brain_2020]
 and extending earlier evidence that HVR captures
 hippocampal integrity more sensitively than raw
-volume [@schoemaker_hippocampal_ventricle_2019;
+volume [@schoemaker2019;
 @fernandez-lozano_enhanced_2025;
 @bruno_hippocampal_2016].
 

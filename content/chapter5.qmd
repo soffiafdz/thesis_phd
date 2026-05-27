@@ -92,7 +92,7 @@ depending on head-size adjustment methods. We examined whether the
 hippocampal-to-ventricle ratio (HVR), a self-normalizing measure,
 provides more consistent sex difference estimates than conventional
 adjustment approaches. Using a subset of UK Biobank structural MRI
-data (N = 27,680; 56% female; ages 45--82), we compared sex
+data (N = 27,680; 56.2% female; ages 45--82), we compared sex
 differences across four adjustment methods (unadjusted,
 proportions, stereotaxic, residualized) and in samples matched on
 age and on intracranial volume (ICV). Hippocampal sex differences
@@ -100,7 +100,7 @@ reversed direction across methods, ranging from Cohen's $d = -0.89$ (males
 larger, unadjusted) to $d = 0.58$ (females larger, proportions),
 with a range of 1.5 standard deviations across analytical choices.
 In contrast, HVR showed a consistent female advantage ($d = 0.52$)
-that persisted in the ICV-matched subsample ($d = 0.19$), confirming
+that persisted in the ICV-matched subsample ($d = 0.18$), confirming
 this effect is not a head-size artifact. Males exhibited steeper
 cross-sectional age-related HVR differences ($1.7\times$ female rate,
 $p < 10^{-50}$), consistent with males showing ventricular expansion at younger
@@ -210,7 +210,7 @@ associations to conventionally adjusted hippocampal volumes?
 
 Data were obtained from UK Biobank (Application 45551)
 [@sudlow_uk_2015; @miller_multimodal_2016]. The initial imaging
-sample comprised approximately
+sample comprised
 `r format(n_initial_imaging, big.mark=",")` participants with
 T1-weighted structural MRI. After exclusions (detailed below), the
 final analytic sample included
@@ -290,53 +290,69 @@ The full exclusion flow is shown in @fig-prisma.
                     fill=black!3, dashed},
   arrow/.style={-{Stealth[length=5pt]}, thick, black!70}
 ]
-  % Main flow (top to bottom)
+  % Main flow (top to bottom). All counts are unique participants;
+  % sex-stratified Ns from R/scripts/audit_sex_balance.R.
   \node[process] (initial)
     {UK Biobank Imaging Cohort\\[2pt]
-     \textbf{N\,=\,47,398}};
+     \textbf{N\,=\,42,898}\\[-1pt]
+     {\scriptsize F:\,22,594\,|\,M:\,20,304}};
 
   \node[decision, below=of initial] (qc)
     {Quality control filter};
 
   \node[process, below=of qc] (passed)
     {Passed all processing\\[2pt]
-     \textbf{n\,=\,38,567}};
+     \textbf{n\,=\,33,911}\\[-1pt]
+     {\scriptsize F:\,19,193\,|\,M:\,14,718}};
 
   \node[decision, below=of passed] (gq)
     {ICD-10 exclusion:\\G00--G99, Q00--Q07};
 
   \node[sample, below=of gq] (sensitivity)
     {Sensitivity sample\\[2pt]
-     \textbf{N\,=\,30,032}};
+     \textbf{N\,=\,30,032}\\[-1pt]
+     {\scriptsize F:\,16,894\,|\,M:\,13,138}};
 
   \node[decision, below=of sensitivity] (f)
     {ICD-10 exclusion:\\F00--F99};
 
   \node[sample, below=of f] (primary)
     {\textbf{Primary sample}\\[2pt]
-     \textbf{N\,=\,27,680}};
+     \textbf{N\,=\,27,680}\\[-1pt]
+     {\scriptsize F:\,15,555\,|\,M:\,12,125}};
+
+  \node[decision, below=of primary] (edu)
+    {Missing education or\\site data};
+
+  \node[sample, below=of edu] (gamlss)
+    {GAMLSS sample\\[2pt]
+     \textbf{N\,=\,27,434}\\[-1pt]
+     {\scriptsize F:\,15,412\,|\,M:\,12,022}};
 
   % Exclusion boxes (right side)
   \node[excluded, right=of qc] (exc1)
-    {Excluded\\[2pt]n\,=\,8,831};
+    {Excluded\\[2pt]n\,=\,8,987};
 
   \node[excluded, right=of gq] (exc2)
-    {Excluded\\[2pt]n\,=\,8,535};
+    {Excluded\\[2pt]n\,=\,3,879};
 
   \node[excluded, right=of f] (exc3)
     {Excluded\\[2pt]n\,=\,2,352};
 
-  % Subsamples (below primary, three across)
-  \node[subsample, below=1.2cm of primary,
+  \node[excluded, right=of edu] (exc4)
+    {Excluded\\[2pt]n\,=\,246};
+
+  % Subsamples (below GAMLSS, three across)
+  \node[subsample, below=1.2cm of gamlss,
         xshift=-4.2cm] (england)
     {England only\\[2pt]\textit{N\,=\,25,172}\\[-1pt]
      {\scriptsize(SEM analyses)}};
 
-  \node[subsample, below=1.2cm of primary] (matched)
+  \node[subsample, below=1.2cm of gamlss] (matched)
     {ICV-matched\\[2pt]\textit{N\,=\,9,500}\\[-1pt]
      {\scriptsize(Sex differences)}};
 
-  \node[subsample, below=1.2cm of primary,
+  \node[subsample, below=1.2cm of gamlss,
         xshift=4.2cm] (longitudinal)
     {Longitudinal\\[2pt]\textit{N\,=\,2,935}\\[-1pt]
      {\scriptsize(Normative calibration)}};
@@ -351,17 +367,22 @@ The full exclusion flow is shown in @fig-prisma.
   \draw[arrow] (sensitivity) -- (f);
   \draw[arrow] (f) -- (primary);
   \draw[arrow] (f) -- (exc3);
-  \draw[arrow, dashed] (primary.south)
+  \draw[arrow] (primary) -- (edu);
+  \draw[arrow] (edu) -- (gamlss);
+  \draw[arrow] (edu) -- (exc4);
+  \draw[arrow, dashed] (gamlss.south)
     -- ++(0,-0.35cm) -| (england.north);
-  \draw[arrow, dashed] (primary.south)
+  \draw[arrow, dashed] (gamlss.south)
     -- (matched.north);
-  \draw[arrow, dashed] (primary.south)
+  \draw[arrow, dashed] (gamlss.south)
     -- ++(0,-0.35cm) -| (longitudinal.north);
 \end{tikzpicture}
 ```
 
-**Participant selection flow.** Dashed boxes indicate analytic
-subsamples derived from the primary sample.
+**Participant selection flow.** All counts are unique participants;
+F and M values give female and male sub-counts at each stage.
+Dashed boxes indicate analytic subsamples derived from the GAMLSS
+sample.
 :::
 
 #### Quality Control
@@ -1059,11 +1080,12 @@ numerically the strongest association with *g*, despite requiring
 no head-size adjustment.
 
 For processing speed (Speed~s~), HC showed the strongest effect
-($\beta$ = `r safe_round(hc_speed$est.std, 3)`, p < .001),
+($\beta$ = `r safe_round(hc_speed$est.std, 3)`,
+p = `r safe_round(hc_speed$pvalue, 3)`),
 followed by HC~RES~
 ($\beta$ = `r safe_round(hc_res_speed$est.std, 3)`,
-p = `r safe_round(hc_res_speed$pvalue, 3)`), with HVR trending
-but not significant
+p = `r safe_round(hc_res_speed$pvalue, 3)`), with HVR not
+significant
 ($\beta$ = `r safe_round(hvr_speed$est.std, 3)`,
 p = `r safe_round(hvr_speed$pvalue, 3)`). The memory-specific
 factor (Memory~s~) could not be reliably estimated in either sex
@@ -1150,20 +1172,27 @@ Effect sizes remained consistent after site adjustment.
 
 #### Hemisphere Comparison
 
-Sex difference effect sizes were largely symmetrical across
-hemispheres for the individual volumes
-(@tbl-hemisphere, @fig-hemisphere). Residualized
-hippocampal volume showed significant effects bilaterally
-(left d = -0.14, right d = -0.16), with each point
-estimate falling within the other's confidence interval,
-indicating no lateralized sex difference. Lateral
-ventricles similarly showed a male advantage in both hemispheres
-with nearly identical effect sizes
-(left d = 0.48, right d = 0.48). However, HVR showed a
-lateralized pattern: the right hemisphere exhibited a significant
-female advantage (d = 0.05 [0.03, 0.07]), while the left
-hemisphere effect was non-significant
-(d = -0.01 [-0.03, 0.02]).
+Sex differences by hemisphere are reported in @tbl-hemisphere
+and @fig-hemisphere. Lateral ventricles showed a consistent
+male advantage with nearly identical effect sizes across
+hemispheres
+(left d = `r round(lv_res_l$ESTIMATE, 2)`,
+right d = `r round(lv_res_r$ESTIMATE, 2)`),
+and HVR showed a symmetric female advantage
+(left d = `r round(hvr_non_l$ESTIMATE, 2)`,
+right d = `r round(hvr_non_r$ESTIMATE, 2)`).
+Residualized hippocampal volume showed a small right-lateralized
+pattern: the left hemisphere effect was non-significant
+(d = `r round(hc_res_l$ESTIMATE, 2)`
+[`r round(hc_res_l$CI_LOWER, 2)`,
+`r round(hc_res_l$CI_UPPER, 2)`])
+while the right hemisphere reached a small female advantage
+(d = `r round(hc_res_r$ESTIMATE, 2)`
+[`r round(hc_res_r$CI_LOWER, 2)`,
+`r round(hc_res_r$CI_UPPER, 2)`]).
+The bilateral consistency of LV and HVR supports the use of
+bilateral measures rather than hemisphere-specific values for
+clinical application.
 
 #### Inclusion of Psychiatric Diagnoses (F-Codes)
 
@@ -1423,11 +1452,14 @@ Low site ICCs (all < 0.05; @tbl-site-adjusted) confirmed minimal
 scanner site contribution to variance, and effect sizes were stable
 after site adjustment; the ratio construction of HVR did not
 amplify site-related noise. Sex difference effect sizes were
-symmetrical across hemispheres for HC and LV; HVR showed a small
-lateralized pattern (right d = 0.05 vs. left d = -0.01), though
-the small magnitude and potential contribution of hemispheric
-segmentation biases [@fernandez-lozano_enhanced_2025] suggest
-bilateral HVR remains most robust for clinical application.
+symmetric across hemispheres for LV and HVR; residualized HC
+showed a small right-lateralized pattern
+(right d = `r round(hc_res_r$ESTIMATE, 2)` vs.
+left d = `r round(hc_res_l$ESTIMATE, 2)` non-significant),
+though the small magnitude and potential contribution of
+hemispheric segmentation biases
+[@fernandez-lozano_enhanced_2025] suggest bilateral measures
+remain most robust for clinical application.
 Including participants with psychiatric diagnoses changed effect
 sizes minimally
 ($\Delta$d < 0.02; @tbl-sensitivity, @fig-sensitivity), consistent
@@ -1445,7 +1477,10 @@ general population [@fry_comparison_2017], limiting
 generalizability to clinical populations. Some cognitive tests had
 incomplete data, and complete-case analyses may introduce selection
 bias. APOE genotype was unavailable, precluding examination of
-gene x sex interactions relevant to dementia risk.
+gene x sex interactions relevant to dementia risk. The final
+analytic sample is 56.2% female; because GAMLSS normative models
+were fit separately by sex, this imbalance does not bias the
+within-sex centile curves.
 
 Methodologically, the study did not include power-corrected
 proportions allometric adjustment [@sanchis-segura_effects_2020].
@@ -1461,7 +1496,7 @@ involving Memory~s~ are therefore not reported. Ratios can exhibit
 non-normality and complex interpretation when numerator and
 denominator correlate differently with outcomes, though HVR showed
 approximately normal distributions here. All brain-cognition
-associations were small ($\beta$ = 0.02--0.04), explaining less
+associations were small (all $\beta$ < 0.07), explaining less
 than 1% of variance in cognitive performance. While statistically
 significant given the large sample, the practical and clinical
 significance of these associations remains to be established.
