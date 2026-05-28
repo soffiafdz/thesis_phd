@@ -87,6 +87,14 @@
   line-height: 1.4;
 }
 
+.divider .divider-pub {
+  margin-top: 24px;
+  font-size: 0.62em;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .reveal section.divider > h1,
 .reveal section.divider > h2 {
   display: none;

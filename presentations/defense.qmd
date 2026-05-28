@@ -108,7 +108,7 @@ Alzheimer's:<br>the leading cause of dementia
 :::
 
 ::: {.slide-citation}
-Livingston et al., 2024 · Jack et al., 2024
+Image: Alzheimer's Association · Livingston et al., 2024 · Jack et al., 2024
 :::
 
 ::: {.notes}
@@ -145,6 +145,10 @@ Anchors clinical trials, diagnostic frameworks, and longitudinal studies.
 ![](thesis-figures/intro/hc_anatomy.png)
 :::
 
+:::
+
+::: {.slide-citation}
+Gray's Anatomy (Gray739) · Wikimedia Commons
 :::
 
 ::: {.notes}
@@ -250,7 +254,7 @@ Both structures scale with head size<br>— the ratio cancels it out.
 :::
 
 ::: {.slide-citation}
-Bruno et al., 2016 · Schoemaker et al., 2019
+Figure: adapted from Schoemaker et al., 2019 · Bruno et al., 2016
 :::
 
 ::: {.notes}
@@ -301,6 +305,10 @@ Qrater
 
 ::: {.divider-subtitle}
 A collaborative and centralized imaging quality-control web application
+:::
+
+::: {.divider-pub}
+Fernández-Lozano et al., Aperture Neuro 2024
 :::
 
 :::
@@ -365,6 +373,10 @@ Qrater — web-based, containerized, collaborative
 Flask + MySQL + Redis in Docker · rates any 2D rendering · 8+ concurrent users.
 :::
 
+::: {.slide-citation}
+Fernández-Lozano et al., Aperture Neuro 2024
+:::
+
 ::: {.notes}
 Qrater is a Flask app with a MySQL store and a Redis backend, all containerized in Docker — one command to deploy. Key design choice: it rates any 2D rendering, so it's task-agnostic. User accounts let multiple raters work the same dataset concurrently without stepping on each other.
 :::
@@ -413,6 +425,10 @@ Three QC tasks, three mosaic formats
 
 ::: {.slide-footer}
 60-slice mosaic each · 11 raters trained · gold standard set by senior experts.
+:::
+
+::: {.slide-citation}
+Fernández-Lozano et al., Aperture Neuro 2024
 :::
 
 ::: {.notes}
@@ -495,6 +511,10 @@ HVR Validation
 Automated CNN-based segmentation and clinical benchmarking in ADNI (N = 1,641)
 :::
 
+::: {.divider-pub}
+Fernández-Lozano et al., Human Brain Mapping 2025
+:::
+
 :::
 
 ::: {.notes}
@@ -561,6 +581,10 @@ Four method families · joint HC + th-CSF
 
 :::
 
+::: {.slide-citation}
+U-Net schematic · Ronneberger et al., 2015
+:::
+
 ::: {.notes}
 The training set is small but deeply curated — 80 manually-labelled scans using the Pruessner-Collins protocol — split 64/16 in 5-fold cross-validation. The out-of-sample 60 spans CH, MCI, AD (20 each), so we are stress-testing on the atrophy we care about. Then the trained methods are applied to 1641 ADNI baselines for the clinical comparison. Four method families: MALF (multi-atlas), NLPB (non-local patch-based), our 3D U-Net CNN, and three FreeSurfer versions for community reference. Transition: "first question — does the CNN reach manual quality?"
 :::
@@ -597,6 +621,10 @@ MALF and NLPB show systematic drift;<br>CNN doesn't.
 ![](thesis-figures/ch4_hvr/fig-correlation-1.png)
 :::
 
+:::
+
+::: {.slide-citation}
+Fernández-Lozano et al., Human Brain Mapping 2025
 :::
 
 ::: {.notes}
@@ -674,7 +702,46 @@ Fernández-Lozano et al., Human Brain Mapping 2025
 :::
 
 ::: {.notes}
-This is the brain–behavior payoff, shown for the AD group. Read the table: HVR's correlation with age is at least as strong as HC volume's for every segmentation method. The dramatic case is MALF — a noisy segmentation. There, HC volume has essentially no relationship with age, rho minus 0.03, not significant; take the ratio and HVR recovers a strong minus 0.38. So even a poor segmentation carries a rescuable age signal once you self-normalize. The full picture — CH and MCI groups, plus the memory and global-cognition associations — is in the backup slides. Transition: "one last methods question — does this scale reliably?"
+This is the brain–behavior payoff, shown for the AD group. Read the table: HVR's correlation with age is at least as strong as HC volume's for every segmentation method. The dramatic case is MALF — a noisy segmentation. There, HC volume has essentially no relationship with age, rho minus 0.03, not significant; take the ratio and HVR recovers a strong minus 0.38. So even a poor segmentation carries a rescuable age signal once you self-normalize. The CH and MCI groups are in the backup slides. Transition: "and the same rescue extends to global cognition."
+:::
+
+## {.fig-hero data-menu-title="Ch4 · Cognition associations"}
+
+::: {.eyebrow}
+Chapter 4 · Brain–behavior associations
+:::
+
+::: {.slide-title}
+The same rescue holds for global cognition
+:::
+
+::: {.slide-subtitle}
+Correlation with ADAS-13 (lower = better) · AD group
+:::
+
+::: {.slide-body}
+
+| Segmentation | HCvol–ADAS ρ | HVR–ADAS ρ |
+|---|:---:|:---:|
+| [**MALF**]{.accent} | [**+0.04**]{.accent} (n.s.) | [**−0.30**]{.accent} |
+| NLPB | −0.17 | −0.27 |
+| CNN | −0.22 | −0.30 |
+| FreeSurfer v6.0 | −0.22 | −0.28 |
+
+: {tbl-colwidths="[40,30,30]"}
+
+:::
+
+::: {.slide-footer}
+HVR ρ all significant (p < 0.001) · HCvol significant except MALF (n.s.) · memory (RAVLT) in supp.
+:::
+
+::: {.slide-citation}
+Fernández-Lozano et al., Human Brain Mapping 2025
+:::
+
+::: {.notes}
+The same pattern extends from age to global cognition, measured by ADAS-13 — and remember, lower ADAS means better cognition, so a negative correlation is the expected direction. Read it exactly like the previous table: HVR's correlation with cognition is at least as strong as HC volume's for every method. MALF is again the dramatic case — HC volume is essentially uncorrelated with cognition, rho plus 0.04, not significant; HVR recovers minus 0.30. Memory, by RAVLT, points the same way but is weak across the board in this AD sample — those numbers are in the backup. Transition: "one last methods question — does this scale reliably?"
 :::
 
 ## {.big-number data-menu-title="Ch4 · Reliability"}
@@ -721,6 +788,10 @@ Sex Differences in UK Biobank
 HVR as a head-size-independent biomarker · N = 27,680 UKB participants
 :::
 
+::: {.divider-pub}
+Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+:::
+
 :::
 
 ::: {.notes}
@@ -759,6 +830,10 @@ Adjustment method drives the answer — does HVR sidestep this?
 ![](thesis-figures/ch5_ukb/prisma_flow.png)
 :::
 
+:::
+
+::: {.slide-citation}
+Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
 :::
 
 ::: {.notes}
@@ -856,6 +931,10 @@ HC reverses across methods · HVR doesn't
 
 :::
 
+::: {.slide-citation}
+Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+:::
+
 ::: {.notes}
 The headline figure. HC effect size swings from d = −0.89 (males larger, unadjusted) to d = +0.58 (females larger, proportions) — a 1.5-SD range driven entirely by analytical choice. HVR sits at d ≈ +0.52 regardless of which adjustment you apply, because its self-normalizing ratio cancels the ICV term. The triangles you saw on the previous slide are also plotted here — head-size-matched effects collapse for HC and shrink-but-persist for HVR, consistent across all four method families. The take-away: if your sex difference flips when you change the denominator, you weren't measuring biology. Transition: "and beyond this static snapshot, sex differences also play out across age."
 :::
@@ -890,6 +969,10 @@ Sits between [**HC (1.4x)**]{.accent} and [**LV (2x)**]{.accent}<br>HVR captures
 ![](thesis-figures/ch5_ukb/fig-age-trajectory-1.png)
 :::
 
+:::
+
+::: {.slide-citation}
+Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
 :::
 
 ::: {.notes}
@@ -960,6 +1043,10 @@ Standardized path coefficients by sex
 
 :::
 
+::: {.slide-citation}
+Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+:::
+
 ::: {.notes}
 Structural equation modeling for brain-cognition coupling, run separately by sex. HVR predicts general cognition significantly in both sexes (β ≈ 0.04, comparable to HC, overlapping CIs). The interesting failure is residualized HC: significant in females but not in males — the linear ICV adjustment is stripping out cognition-relevant variance specifically in males, where the ICV-HC coupling is steeper. This echoes prior work where hippocampal volume predicted memory in older women but not men (Zheng 2017). HVR's invariance preserves that male signal. Transition: "with HVR validated, we package it as a clinical reference."
 :::
@@ -996,6 +1083,10 @@ Transferred to ADNI in [**Chapter 6**]{.accent}<br>to z-score patients.
 
 :::
 
+::: {.slide-citation}
+Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+:::
+
 ::: {.notes}
 We fit sex-specific GAMLSS centile curves for HVR, HC, and LV across ages 45–82, following the brain-charting tradition (Bethlehem 2022, Coupé 2019). Curves are well-calibrated on a held-out 20% — empirical centile coverage matches nominal. The deliverable is a reference patients can be z-scored against — and that's exactly what Chapter 6 does, transferring these UKB-derived norms to the ADNI cohort to harmonize HVR across studies. Transition: "and that brings us to the final chapter — does cardiovascular risk push patients off these centiles?"
 :::
@@ -1014,6 +1105,10 @@ Cardiovascular Risk and HVR&#8209;Cognitive Coupling
 
 ::: {.divider-subtitle}
 Does cardiovascular risk drive brain–cognition decline — or just track age?
+:::
+
+::: {.divider-pub}
+Fernández-Lozano et al., bioRxiv [screening]
 :::
 
 :::
@@ -1054,6 +1149,10 @@ Longitudinal MRI + cognition along the AD continuum
 
 :::
 
+::: {.slide-citation}
+Fernández-Lozano et al., bioRxiv [screening]
+:::
+
 ::: {.notes}
 ADNI gives us the clinical anchor — longitudinal MRI plus cognition across the AD continuum. Primary cohort: 923 amyloid-positive participants spanning CU, MCI, and AD. Critical sensitivity cohort: 317 amyloid-negative cognitively unimpaired controls — same scanner, same protocols, no AD pathology — we'll use them as a counterfactual at the end. All analyses are sex-stratified, since FRS has different age weightings for men and women.
 :::
@@ -1086,6 +1185,10 @@ A−/CU validates the transfer with a small calibration offset (older sample) �
 ![](thesis-figures/ch6_cvr/fig-normative-validation-ch6-1.png)
 :::
 
+:::
+
+::: {.slide-citation}
+Fernández-Lozano et al., bioRxiv [screening]
 :::
 
 ::: {.notes}
@@ -1220,6 +1323,10 @@ CVR~mimic~–FRS *r* ≈ [**0.3–0.5**]{.accent} — shared CV indicators retai
 
 :::
 
+::: {.slide-citation}
+Fernández-Lozano et al., bioRxiv [screening]
+:::
+
 ::: {.notes}
 Quick sanity check before we use it. Left panel: FRS plotted against age — a steep upward climb, as expected. Right panel: CVRₙ against age — essentially flat, correlation near zero, by construction. And the CVRₙ–FRS correlation in the 0.3–0.5 range confirms we haven't thrown the cardiovascular signal out with the age bathwater. The two scores carry the same underlying CV biomarker content; only the age weighting differs. Transition: "and before we look at cognitive outcomes, a brief note on how cognition is measured here."
 :::
@@ -1341,6 +1448,10 @@ CVR~mimic~ sig in [**Female Executive only**]{.accent}.
 
 :::
 
+::: {.slide-citation}
+Fernández-Lozano et al., bioRxiv [screening]
+:::
+
 ::: {.notes}
 Q2 switches frameworks: from LGCM mediation to LME moderation. Does CVR *modify* the HVR–cognition coupling — does cardiovascular burden change how much hippocampal decline costs you cognitively? Same pattern as Q1: the 3-way Years × CVR × HVR interaction is significant in all 6 cells for FRS and survives FDR. For CVRₙ it survives in just one — Female Executive Function — which echoes Villeneuve 2011 showing vascular burden selectively impairs executive function in women with MCI. Transition: "but here's the surprise — what happens when there's no amyloid in the brain?"
 :::
@@ -1379,6 +1490,10 @@ Without amyloid driving atrophy,<br>a [**genuine cardiovascular signal**]{.accen
 
 :::
 
+::: {.slide-citation}
+Fernández-Lozano et al., bioRxiv [screening]
+:::
+
 ::: {.notes}
 This is the pivotal sensitivity test. Re-run the same LME models in the 317 amyloid-negative controls — the pattern flips. FRS no longer survives multiple-comparison correction; CVRₙ becomes significant. The interpretation: in amyloid-positive AD, hippocampal atrophy is so dominated by neurodegeneration that a true cardiovascular signal gets drowned out, while FRS still "predicts" because of its age content. Pull amyloid out of the picture and the genuine, age-independent CV effect surfaces — exactly what you'd expect if CVRₙ is real and FRS was just tracking age.
 :::
@@ -1413,6 +1528,10 @@ A neurodegenerative signal, not vascular.
 ![](thesis-figures/ch6_cvr/fig-coupling-ch6-1.png)
 :::
 
+:::
+
+::: {.slide-citation}
+Fernández-Lozano et al., bioRxiv [screening]
 :::
 
 ::: {.notes}
@@ -1454,7 +1573,7 @@ A cognitive-reserve-like mechanism
 :::
 
 ::: {.slide-citation}
-Stern 2012 · Rabin et al., 2018 · Iadecola 2020
+Figure: Fernández-Lozano et al., bioRxiv [screening] · Concept: Stern 2012 · Rabin et al., 2018 · Iadecola 2020
 :::
 
 ::: {.notes}
