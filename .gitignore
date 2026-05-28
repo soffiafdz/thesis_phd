@@ -12,3 +12,8 @@ source/paper2/data/rds/adnimerge_baseline.rds
 source/paper2/tables
 source/paper4/data
 source/paper4/outputs
+
+# Slide deck mockups/briefs (not part of the committed deck)
+presentations/mockups/
+presentations/mockups_preview.pdf
+presentations/content_briefs/
