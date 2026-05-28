@@ -603,42 +603,39 @@ MALF and NLPB show systematic drift;<br>CNN doesn't.
 Dice 0.94 to 0.96 against manual labels — that is at the rater-noise floor. Volumetric Spearman correlation with manual is 0.99. Across all five performance metrics — Dice, kappa, accuracy, sensitivity, specificity — CNN significantly outperforms both MALF and NLPB. The robust ANOVA confirms this with effect sizes psi above 0.04 for HC and 0.15 for the ventricle. Crucially the CNN scatter sits tight on the identity line — MALF and NLPB show systematic over- or under-segmentation drift, especially in atrophied brains. Transition: "so the CNN is the best segmenter — but what about the biomarker itself?"
 :::
 
-## {.fig-leftright data-menu-title="Ch4 · HVR rescues"}
-
-::: {.slide-body}
-
-::: {.header-col}
+## {.fig-hero data-menu-title="Ch4 · HVR rescues effect sizes"}
 
 ::: {.eyebrow}
 Chapter 4 · The defining property
 :::
 
 ::: {.slide-title}
-HVR amplifies effect sizes across **all** methods
+HVR amplifies effect sizes across all methods
 :::
 
 ::: {.slide-subtitle}
-CH:AD discrimination, every segmentation tool
+CH:AD discrimination · Δ = Cohen's d
 :::
 
-::: {.body-text}
-[**MALF**]{.subhead} gains [**+57%**]{.accent} (Δ −0.78 → −1.24).
+::: {.slide-body}
 
-[**CNN**]{.subhead} reaches Δ = [**−1.86**]{.accent}.
+| Segmentation | HCvol Δ | HVR Δ |
+|---|:---:|:---:|
+| [**MALF**]{.accent} | [**−0.78**]{.accent} | [**−1.24**]{.accent} |
+| NLPB | −1.54 | −1.73 |
+| CNN | −1.85 | −1.86 |
+| FreeSurfer v6.0 | −1.76 | −2.02 |
 
-Even a poor segmentation produces rescuable clinical signal once you take the ratio.
+: {tbl-colwidths="[40,30,30]"}
+
 :::
 
-:::
-
-::: {.fig-col}
-![](thesis-figures/ch4_hvr/fig-similarity-hvr-1.png)
-:::
-
+::: {.slide-footer}
+HVR ≥ HCvol for every method · biggest gain where segmentation is weakest (MALF, +59%).
 :::
 
 ::: {.notes}
-This is the defining property of HVR. With HC volume alone, MALF gives a weak Δ of −0.78 — it is the underperformer. Take the ratio with the temporal horn and that effect size lifts to −1.24, a 57 percent gain. Every other method also gains: NLPB goes to −1.73, CNN to −1.86, FreeSurfer v6 reaches −2.02 — only the MALF improvement is statistically significant but the direction is unanimous. The point is not that MALF is broken, it is that the ratio captures the same ex-vacuo atrophy signal even when the segmentation is noisy. Transition: "and the same pattern extends from group discrimination to age associations."
+This is the defining property of HVR. With HC volume alone, MALF gives a weak Δ of −0.78 — it is the underperformer. Take the ratio with the temporal horn and that effect size lifts to −1.24, a 59 percent gain. Every other method also gains: NLPB goes to −1.73, CNN to −1.86, FreeSurfer v6 reaches −2.02 — only the MALF improvement is statistically significant but the direction is unanimous. The point is not that MALF is broken, it is that the ratio captures the same ex-vacuo atrophy signal even when the segmentation is noisy. Transition: "and the same pattern extends from group discrimination to age associations."
 :::
 
 ## {.fig-hero data-menu-title="Ch4 · Age associations"}
@@ -1277,38 +1274,35 @@ Kang et al., 2023 (ADSP-PHC composites)
 Brief detour before the results. ADNI doesn't use a single cognitive score — it uses three domain composites from the ADSP-PHC harmonization project: Memory, Language, Executive Function. Each composite pools several individual tests, co-calibrated via bifactor item banking across four large cohorts (ADNI, ACT, ROS/MAP, NACC) so scores are comparable across studies. Each composite arrives at the LGCM with its own measurement-error estimate from the CFA — that SE² is fixed into the residual variance, so the model doesn't have to estimate measurement noise from sparse longitudinal data. This is why subsequent slides report "6/6 models" — 3 domains × 2 sexes. Transition: "with cognition operationalized, here's the first mediation question."
 :::
 
-## {.fig-leftright data-menu-title="Ch6 · Mediation money"}
-
-::: {.slide-body}
-
-::: {.header-col}
+## {.fig-hero data-menu-title="Ch6 · Mediation a-path"}
 
 ::: {.eyebrow}
-Chapter 6 · Q1<br>— does CVR cause hippocampal atrophy?
+Chapter 6 · Q1 — does cardiovascular risk drive atrophy?
 :::
 
 ::: {.slide-title}
-FRS predicts HC decline;<br>CVR~mimic~ doesn't
+FRS predicts HVR decline; CVR~mimic~ doesn't
 :::
 
 ::: {.slide-subtitle}
-Latent growth curve models · 3 cognitive domains × 2 sexes
+LGCM a-path (risk → HVR slope) · 6 models = 3 domains × 2 sexes
 :::
 
-::: {.body-text}
-[**FRS → HVR decline**]{.subhead} sig in [**6 / 6**]{.accent} models.
+::: {.slide-body}
 
-[**CVR~mimic~ → HVR decline**]{.subhead} sig in [**0 / 6**]{.accent} models.
+| Cognitive domain | FRS → HVR (F / M) | CVR~mimic~ → HVR (F / M) |
+|---|:---:|:---:|
+| Memory | ✓ / ✓ | ✗ / ✗ |
+| Language | ✓ / ✓ | ✗ / ✗ |
+| Executive | ✓ / ✓ | ✗ / ✗ |
+| [**Total**]{.accent} | [**6 / 6**]{.accent} | [**0 / 6**]{.accent} |
 
-Strip age from the score:<br> [cardiovascular effect disappears]{.accent}.
+: {tbl-colwidths="[34,33,33]"}
+
 :::
 
-:::
-
-::: {.fig-col}
-![](thesis-figures/ch6_cvr/fig-mediation-ch6-1.png)
-:::
-
+::: {.slide-footer}
+✓ = a-path bootstrap 95% CI excludes 0 · strip age from the score and the cardiovascular → atrophy effect vanishes.
 :::
 
 ::: {.notes}
