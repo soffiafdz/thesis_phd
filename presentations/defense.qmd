@@ -966,7 +966,7 @@ Sits between [**HC (1.4x)**]{.accent} and [**LV (2x)**]{.accent}<br>HVR captures
 :::
 
 ::: {.fig-col}
-![](thesis-figures/ch5_ukb/fig-age-trajectory-1.png)
+![](thesis-figures/ch5_ukb/fig-age-trajectory-hchvr.png)
 :::
 
 :::
@@ -1011,36 +1011,34 @@ Rosseel et al., 2012 · Cheung & Rensvold, 2002
 A brief detour through the cognitive measurement model so the next slide's path coefficients make sense. UKB's touchscreen battery has 12 tests across memory, speed, executive function, reasoning. Bifactor SEM extracts a general-cognition factor g that loads on all 12, plus orthogonal domain-specific factors (Memory_s on 3 memory items, Speed_s on 3 speed items). The analytic question becomes: for each brain measure → g path, what's the standardized β? And does it hold up sex-stratified? Multi-group invariance (configural → metric → scalar → strict, all ΔCFI ≤ 0.01) confirms the model means the same thing in both sexes, validating the comparison. Transition: "with that scaffolding in place, the result is the cleaner story."
 :::
 
-## {.fig-leftright data-menu-title="Ch5 · Brain–cognition"}
-
-::: {.slide-body}
-
-::: {.header-col}
+## {.fig-hero data-menu-title="Ch5 · Brain–cognition"}
 
 ::: {.eyebrow}
 Chapter 5 · Functional validity
 :::
 
 ::: {.slide-title}
-HVR predicts cognition in both sexes; residualized HC fails in males
+HVR predicts general cognition in both sexes; residualized HC fails in males
 :::
 
 ::: {.slide-subtitle}
-Standardized path coefficients by sex
+Standardized path → general cognition (g) · significance by sex
 :::
 
-::: {.body-text}
-[**HVR → cognition**]{.subhead} — sig in [**both sexes**]{.accent} (F · M).
+::: {.slide-body}
 
-[**Residualized HC → cognition**]{.subhead} — sig in [**females only**]{.accent} — the linear adjustment strips cognition-relevant signal in males.
+| Brain measure → g | Female | Male |
+|---|:---:|:---:|
+| [**HVR**]{.accent} | ✓ | ✓ |
+| HC (Res) | ✓ | [**✗**]{.accent} |
+| HC (raw) | ✓ | ✓ |
+
+: {tbl-colwidths="[44,28,28]"}
+
 :::
 
-:::
-
-::: {.fig-col}
-![](thesis-figures/ch5_ukb/fig-sem-forest-1.png)
-:::
-
+::: {.slide-footer}
+✓ = standardized path significant (p < 0.05) · the linear ICV adjustment strips cognition-relevant signal in males; HVR's self-normalization preserves it.
 :::
 
 ::: {.slide-citation}
@@ -1078,7 +1076,7 @@ Transferred to ADNI in [**Chapter 6**]{.accent}<br>to z-score patients.
 :::
 
 ::: {.fig-col}
-![](thesis-figures/ch5_ukb/fig-normative-centiles-1.png)
+![](thesis-figures/ch5_ukb/fig-normative-centiles-hvr-fm.png)
 :::
 
 :::
