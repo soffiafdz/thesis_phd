@@ -1157,34 +1157,28 @@ Fernández-Lozano, 2026
 ADNI gives us the clinical anchor — longitudinal MRI plus cognition across the AD continuum. Primary cohort: 923 amyloid-positive participants spanning CU, MCI, and AD. Critical sensitivity cohort: 317 amyloid-negative cognitively unimpaired controls — same scanner, same protocols, no AD pathology — we'll use them as a counterfactual at the end. All analyses are sex-stratified, since FRS has different age weightings for men and women.
 :::
 
-## {.fig-leftright data-menu-title="Ch6 · Norm transfer"}
-
-::: {.slide-body}
-
-::: {.header-col}
+## {.fig-hero data-menu-title="Ch6 · Norm transfer"}
 
 ::: {.eyebrow}
 Chapter 6 · Bridge from Chapter 5
 :::
 
 ::: {.slide-title}
-HVR z-scored against<br>sex-specific normative model
+HVR z-scored against sex-specific normative model
 :::
 
 ::: {.slide-subtitle}
 Ch 5 GAMLSS centiles transferred from UKB to ADNI
 :::
 
-::: {.body-text}
-A−/CU validates the transfer with a small calibration offset (older sample) — within-ADNI comparisons remain valid.
-:::
+::: {.slide-body}
+
+![](thesis-figures/ch6_cvr/fig-norm-zdist-ch6.png)
 
 :::
 
-::: {.fig-col}
-![](thesis-figures/ch6_cvr/fig-normative-validation-ch6-1.png)
-:::
-
+::: {.slide-footer}
+A−/CU controls sit near the expected 0 (small offset, older sample) — within-ADNI comparisons remain valid.
 :::
 
 ::: {.slide-citation}
@@ -1221,6 +1215,38 @@ A 10-year cardiovascular-event composite — age is the heaviest input
 
 ::: {.notes}
 Here's the core problem. The Framingham formula was built and validated for midlife, where it works beautifully. But its log-hazard coefficients on age — 3.06 for men, 2.33 for women (D'Agostino 2008) — are the heaviest inputs in the score. In ADNI, where age variance is restricted to roughly 55–90, age ends up explaining most of FRS variance. So when prior work reports "FRS predicts brain decline," it could just as easily read "age predicts brain decline." Pencina 2019 and Ko 2020 quantify how much of FRS's predictive performance in elderly samples is just age.
+:::
+
+## {.fig-hero data-menu-title="Ch6 · FRS ceiling"}
+
+::: {.eyebrow}
+Chapter 6 · The problem with FRS in elderly cohorts
+:::
+
+::: {.slide-title}
+FRS also saturates — most women hit the ceiling
+:::
+
+::: {.slide-subtitle}
+The 10-year risk score caps at 30% · distribution in ADNI
+:::
+
+::: {.slide-body}
+
+![](thesis-figures/ch6_cvr/fig-frs-ceiling-ch6.png)
+
+:::
+
+::: {.slide-footer}
+[**75% of women**]{.accent} and 28% of men pile up at the 30% ceiling — FRS can no longer rank risk where it matters.
+:::
+
+::: {.slide-citation}
+Fernández-Lozano, 2026
+:::
+
+::: {.notes}
+A second, independent problem with FRS in this cohort: it saturates. The Framingham score caps at a 30 percent ten-year risk, and in ADNI most participants are already there — 75 percent of women and 28 percent of men sit at the ceiling. Once you are at the ceiling, FRS has no resolution left: it cannot tell moderate from severe cardiovascular burden in exactly the people we care about. So between the age-domination we just saw and this ceiling, raw FRS is the wrong instrument here. That motivates reconstructing cardiovascular risk as a continuous latent factor — which is what the MIMIC model does.
 :::
 
 ## {.fig-sidebar data-menu-title="Ch6 · Why MIMIC"}
@@ -1289,11 +1315,7 @@ Age explains a tiny slice of latent cardiovascular risk — the residual ζ is C
 The MIMIC equation is just one line: latent CVR equals gamma times age-z plus a residual zeta. Gamma is 0.125, so age explains 1.6% of latent CVR variance — the rest comes from the biomarker indicators. That residual zeta — the part of latent CVR that's *not* age — is what I call CVRₙ. It still correlates with FRS at roughly 0.3–0.5 because they share the same biomarker indicators; what they don't share is the age weighting. So we have two measures of "cardiovascular risk" identical in content but different in their age contamination — a clean instrumental contrast.
 :::
 
-## {.fig-leftright data-menu-title="Ch6 · CVR validation"}
-
-::: {.slide-body}
-
-::: {.header-col}
+## {.fig-hero data-menu-title="Ch6 · CVR validation"}
 
 ::: {.eyebrow}
 Chapter 6 · Validation
@@ -1304,23 +1326,17 @@ CVR~mimic~ is age-orthogonal by construction
 :::
 
 ::: {.slide-subtitle}
-Same cardiovascular signal as FRS — age stripped
+FRS climbs with age (*r* = 0.33); CVR~mimic~ is flat (*r* = 0.03)
 :::
 
-::: {.body-text}
-[**FRS vs age**]{.subhead} — climbs steeply.
+::: {.slide-body}
 
-[**CVR~mimic~ vs age**]{.subhead} — flat (*r* ≈ 0).
-
-CVR~mimic~–FRS *r* ≈ [**0.3–0.5**]{.accent} — shared CV indicators retained.
-:::
+![](thesis-figures/ch6_cvr/fig-cvr-ageortho-ch6.png)
 
 :::
 
-::: {.fig-col}
-![](thesis-figures/ch6_cvr/fig-cvr-validation-ch6-1.png)
-:::
-
+::: {.slide-footer}
+Same cardiovascular signal as FRS (*r* ≈ [**0.3–0.5**]{.accent}) — age stripped.
 :::
 
 ::: {.slide-citation}
@@ -1498,34 +1514,28 @@ Fernández-Lozano, 2026
 This is the pivotal sensitivity test. Re-run the same LME models in the 317 amyloid-negative controls — the pattern flips. FRS no longer survives multiple-comparison correction; CVRₙ becomes significant. The interpretation: in amyloid-positive AD, hippocampal atrophy is so dominated by neurodegeneration that a true cardiovascular signal gets drowned out, while FRS still "predicts" because of its age content. Pull amyloid out of the picture and the genuine, age-independent CV effect surfaces — exactly what you'd expect if CVRₙ is real and FRS was just tracking age.
 :::
 
-## {.fig-leftright data-menu-title="Ch6 · Coupling"}
-
-::: {.slide-body}
-
-::: {.header-col}
+## {.fig-pure data-menu-title="Ch6 · Coupling"}
 
 ::: {.eyebrow}
 Chapter 6 · The robust finding
 :::
 
 ::: {.slide-title}
-HVR decline → cognitive decline, regardless of which CVR you use
+The divergence is upstream
 :::
 
 ::: {.slide-subtitle}
-Hippocampal–cognitive coupling, predictor-agnostic
+The b-path (HVR slope → cognitive slope) is identical under both predictors
 :::
 
-::: {.body-text}
-Sig in [**4–6 of 6 cells**]{.accent} for<br>[**both**]{.accent} FRS and CVR~mimic~ models.
+::: {.slide-body}
 
-A neurodegenerative signal, not vascular.
-:::
+::: {.text-col-full style="max-width: 900px; margin: 30px auto 0; text-align: center;"}
 
-:::
+**FRS model** — b-path significant in [**4 of 6**]{.accent} cells.<br>
+**CVR~mimic~ model** — significant in the [**same 4 of 6**]{.accent} cells.
 
-::: {.fig-col}
-![](thesis-figures/ch6_cvr/fig-coupling-ch6-1.png)
+So FRS and CVR~mimic~ diverge *only* on the a-path ([**6 / 6**]{.accent} vs [**0 / 6**]{.accent}). The downstream coupling — hippocampal decline → cognitive decline — is real and predictor-agnostic: a neurodegenerative signal, not vascular.
 :::
 
 :::
@@ -1535,7 +1545,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-One result that doesn't care which CVR you use: the HVR-slope → cognitive-slope path — the b-path in the LGCM. It's significant in 4–6 of 6 cells for *both* FRS and CVRₙ. Whatever you index cardiovascular risk with, hippocampal decline still predicts cognitive decline. That's the neurodegenerative signal — robust, predictor-agnostic, and exactly what we'd expect if HVR is capturing AD-relevant atrophy rather than vascular damage.
+The contrast localizes cleanly. The b-path — hippocampal decline to cognitive decline — is significant in the same 4 of 6 cells (memory and executive in both sexes; not language) whether you model FRS or CVRₙ. It is identical. So the place where FRS and CVRₙ diverge is purely the a-path we just saw: the upstream cardiovascular-to-atrophy link, which is where the age artifact lives. Downstream, hippocampal decline predicts cognitive decline regardless of how you index cardiovascular risk — the neurodegenerative signal, robust and predictor-agnostic, exactly what we would expect if HVR captures AD-relevant atrophy rather than vascular damage.
 :::
 
 ## {.fig-leftright data-menu-title="Ch6 · Reserve"}
