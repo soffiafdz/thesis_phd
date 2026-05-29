@@ -308,7 +308,7 @@ A collaborative and centralized imaging quality-control web application
 :::
 
 ::: {.divider-pub}
-Fernández-Lozano et al., Aperture Neuro 2024
+Fernández-Lozano S, Dadar M, Morrison C, Manera A, Andrews D, Rajabli R, Madge V, St-Onge E, Shaffie N, Livadas A, Fonov VS, Collins DL; for the ADNI. QRATER: a collaborative and centralized imaging quality control web-based application. *Aperture Neuro*. 2024;4. doi:10.52294/001c.118616
 :::
 
 :::
@@ -374,7 +374,7 @@ Flask + MySQL + Redis in Docker · rates any 2D rendering · 8+ concurrent users
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., Aperture Neuro 2024
+Fernández-Lozano, 2024
 :::
 
 ::: {.notes}
@@ -428,7 +428,7 @@ Three QC tasks, three mosaic formats
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., Aperture Neuro 2024
+Fernández-Lozano, 2024
 :::
 
 ::: {.notes}
@@ -488,7 +488,7 @@ Released on DockerHub + GitHub
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., Aperture Neuro 2024
+Fernández-Lozano, 2024
 :::
 
 ::: {.notes}
@@ -512,7 +512,7 @@ Automated CNN-based segmentation and clinical benchmarking in ADNI (N = 1,641)
 :::
 
 ::: {.divider-pub}
-Fernández-Lozano et al., Human Brain Mapping 2025
+Fernández-Lozano S, Fonov VS, Schoemaker D, Pruessner JC, Potvin O, Duchesne S, Collins DL; for the ADNI. Enhanced Detection of Age-Related and Cognitive Declines Using Automated Hippocampal-to-Ventricle Ratio in Alzheimer's Patients. *Human Brain Mapping*. 2025;46(11). doi:10.1002/hbm.70265
 :::
 
 :::
@@ -624,7 +624,7 @@ MALF and NLPB show systematic drift;<br>CNN doesn't.
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., Human Brain Mapping 2025
+Fernández-Lozano, 2025
 :::
 
 ::: {.notes}
@@ -698,7 +698,7 @@ All ρ significant (p < 0.001) except MALF HCvol (n.s.) · HVR ≥ HC for every 
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., Human Brain Mapping 2025
+Fernández-Lozano, 2025
 :::
 
 ::: {.notes}
@@ -737,7 +737,7 @@ HVR ρ all significant (p < 0.001) · HCvol significant except MALF (n.s.) · me
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., Human Brain Mapping 2025
+Fernández-Lozano, 2025
 :::
 
 ::: {.notes}
@@ -769,7 +769,7 @@ Two failures out of 1641 — one MCI, one AD — that is 0.1 percent. MALF and F
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., Human Brain Mapping 2025
+Fernández-Lozano, 2025
 :::
 
 # {.divider data-menu-title="Ch5 divider"}
@@ -789,7 +789,7 @@ HVR as a head-size-independent biomarker · N = 27,680 UKB participants
 :::
 
 ::: {.divider-pub}
-Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+Fernández-Lozano S, Collins DL. Hippocampal-to-Ventricle Ratio as a Head-Size-Independent Biomarker: Sex Differences and Cognitive Associations in 27,680 UK Biobank Participants. *bioRxiv*. 2026. doi:10.64898/2026.04.13.718285
 :::
 
 :::
@@ -833,7 +833,7 @@ Adjustment method drives the answer — does HVR sidestep this?
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -932,7 +932,7 @@ HC reverses across methods · HVR doesn't
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -972,7 +972,7 @@ Sits between [**HC (1.4x)**]{.accent} and [**LV (2x)**]{.accent}<br>HVR captures
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1044,7 +1044,7 @@ Standardized path coefficients by sex
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1084,7 +1084,7 @@ Transferred to ADNI in [**Chapter 6**]{.accent}<br>to z-score patients.
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano & Collins, bioRxiv 2026.04.13.718285
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1108,7 +1108,7 @@ Does cardiovascular risk drive brain–cognition decline — or just track age?
 :::
 
 ::: {.divider-pub}
-Fernández-Lozano et al., bioRxiv [screening]
+Fernández-Lozano S, Villeneuve S, Collins DL; for the ADNI. Cardiovascular risk and hippocampal-cognitive coupling in Alzheimer's disease. *bioRxiv* [screening]; to be submitted to *Alzheimer's & Dementia*. 2026
 :::
 
 :::
@@ -1150,7 +1150,7 @@ Longitudinal MRI + cognition along the AD continuum
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., bioRxiv [screening]
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1188,7 +1188,7 @@ A−/CU validates the transfer with a small calibration offset (older sample) �
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., bioRxiv [screening]
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1324,7 +1324,7 @@ CVR~mimic~–FRS *r* ≈ [**0.3–0.5**]{.accent} — shared CV indicators retai
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., bioRxiv [screening]
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1449,7 +1449,7 @@ CVR~mimic~ sig in [**Female Executive only**]{.accent}.
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., bioRxiv [screening]
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1491,7 +1491,7 @@ Without amyloid driving atrophy,<br>a [**genuine cardiovascular signal**]{.accen
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., bioRxiv [screening]
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1531,7 +1531,7 @@ A neurodegenerative signal, not vascular.
 :::
 
 ::: {.slide-citation}
-Fernández-Lozano et al., bioRxiv [screening]
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
@@ -1573,7 +1573,7 @@ A cognitive-reserve-like mechanism
 :::
 
 ::: {.slide-citation}
-Figure: Fernández-Lozano et al., bioRxiv [screening] · Concept: Stern 2012 · Rabin et al., 2018 · Iadecola 2020
+Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
