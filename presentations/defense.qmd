@@ -114,7 +114,7 @@ Image: Alzheimer's Association · Livingston et al., 2024 · Jack et al., 2024
 :::
 
 ::: {.notes}
-"On the right, a healthy brain beside an advanced Alzheimer's brain — cortex thinning, ventricles ballooning. It's the leading cause of dementia: 55 million cases today, 139 million by 2050. The frameworks define AD by amyloid, tau, and neurodegeneration — and structural MRI sits at that last one, the N. That's what HVR measures."
+"On the right, a healthy brain next to an advanced Alzheimer's brain — the cortex thins, the ventricles expand. It's the leading cause of dementia, and the frameworks define it by amyloid, tau, and neurodegeneration. Structural MRI captures that last one, and that's what HVR measures."
 :::
 
 ## {.fig-leftright data-menu-title="Why hippocampus"}
@@ -154,7 +154,7 @@ Gray's Anatomy (Gray739) · Wikimedia Commons
 :::
 
 ::: {.notes}
-"This is the hippocampus — highlighted here, deep in the medial temporal lobe. It's the reference structural marker in AD: it anchors clinical trials and diagnostic frameworks, and tau strikes it earliest. Normal aging trims it about 1.4 percent a year; AD nearly quadruples that."
+"This is the hippocampus, highlighted here in the medial temporal lobe. It's the structural marker we rely on most in AD, and it's where tau strikes first. Normal aging shrinks it about 1.4 percent a year; in AD that's closer to five."
 :::
 
 ## {.big-number data-menu-title="Variability problem"}
@@ -180,7 +180,7 @@ Lupien et al., 2007 · Bruno et al., 2016
 :::
 
 ::: {.notes}
-"The first problem is this number: up to a quarter of healthy young adults have hippocampi as small as the average 70-year-old. That overlap makes raw volume a noisy predictor — you can't tell a congenitally small hippocampus from a shrinking one. It's what motivates the normative models in Chapter 5."
+"This number is the first problem: up to a quarter of healthy young adults have a hippocampus as small as the average 70-year-old. With that much overlap, raw volume can't tell a naturally small hippocampus from one that's shrinking."
 :::
 
 ## {.fig-leftright data-menu-title="Head-size confound"}
@@ -220,7 +220,7 @@ Pintzka et al., 2015 · O'Brien et al., 2011 · Voevodskaya et al., 2014
 :::
 
 ::: {.notes}
-"Men have 10-to-12 percent larger heads, and the hippocampus scales with head size, so the correction matters. The two panels are the same data — top uses proportions, bottom residuals — and the sex-difference bars flip sign between them, a full 1.5-SD swing from analytical choice alone. And it's not just the correction — even how the hippocampus is segmented shifts these differences. No consensus on either."
+"Men have larger heads, the hippocampus scales with head size, so the correction matters. These two panels are the same data — top uses proportions, bottom residuals — and the sex-difference bars flip sign between them, a 1.5-SD swing from the method alone. And there's still no consensus on which is right."
 :::
 
 ## {.fig-leftright data-menu-title="HVR concept"}
@@ -260,7 +260,7 @@ Figure: adapted from Schoemaker et al., 2019 · Bruno et al., 2016
 :::
 
 ::: {.notes}
-"The solution — the formula at top, and below it a coronal slice with the hippocampus in red, surrounding CSF in blue. HVR exploits ex-vacuo dilation: as the red shrinks, the blue expands to fill the void, so both move together and amplify the signal. And since both scale with head size, their ratio cancels it — a dimensionless index, zero to one."
+"Our solution is the formula at the top, and below it a slice with the hippocampus in red and the surrounding CSF in blue. As the hippocampus shrinks, the CSF expands to fill the space, so the ratio amplifies the atrophy — and since both scale with head size, the ratio cancels it out. One number, between zero and one."
 
 [builds on Heister's HOC; Schoemaker 2019 broadened the CSF compartment]
 :::
@@ -292,7 +292,7 @@ From concept to clinical inference
 :::
 
 ::: {.notes}
-"Each block solves one problem in the pipeline. Chapter 3, trustworthy data. Chapter 4 automates HVR and validates it against manual segmentation. Chapter 5 takes it to population scale and builds sex-specific normative curves. Chapter 6 takes those curves into the clinic: does cardiovascular risk actually drive brain-cognition decline? Concept to clinical inference."
+"Each chapter solves one problem. Chapter 3, trustworthy data. Chapter 4 automates HVR and validates it against manual tracing. Chapter 5 takes it to population scale and builds sex-specific normative curves. And Chapter 6 takes those into the clinic, to ask whether cardiovascular risk really drives decline. Concept to clinical inference."
 :::
 
 # {.divider data-menu-title="Ch3 divider"}
@@ -318,7 +318,7 @@ Fernández-Lozano&nbsp;S, Dadar&nbsp;M, Morrison&nbsp;C, Manera&nbsp;A, Andrews&
 :::
 
 ::: {.notes}
-"Before any biomarker work, we needed clean data — and visual QC was the rate-limiting step. Chapter 3 is the tool that unblocked it."
+"Before any biomarker work, we needed clean data, and visual QC was the bottleneck. Chapter 3 is the tool that fixed that."
 
 [move fast through this one]
 :::
@@ -358,7 +358,7 @@ Visual QC was the bottleneck
 :::
 
 ::: {.notes}
-"Visual inspection is still the QC gold standard, but the tools were fragmented — single-user, modality-specific, nothing built for many raters on one dataset at throughput. We needed one tool people could use in parallel."
+"Visual inspection is still the gold standard for QC, but the existing tools were fragmented — single-user, or tied to one modality. We needed something many raters could use on one dataset, in parallel."
 :::
 
 ## {.fig-triptych data-menu-title="Ch3 · Qrater + tasks"}
@@ -412,7 +412,7 @@ Fernández-Lozano, 2024
 :::
 
 ::: {.notes}
-"Qrater is a containerized web app that rates any 2D rendering, so it's task-agnostic. Here are the three tasks we tested, rising in complexity: raw T1 on the left, linear registration centre with the template in red, skull segmentation right. Each is a mosaic — the trick that collapses a 3D volume into one rateable image. Eleven raters judged each against a senior-expert gold standard."
+"Qrater is a containerized web app that rates any 2D image, so it works for any task. We tested three, increasing in difficulty: raw T1 on the left, linear registration in the centre, skull segmentation on the right. Each is a mosaic — that's what lets a whole 3D volume be rated as one image. Eleven raters judged each against a senior-expert gold standard."
 :::
 
 ## {.fig-hero data-menu-title="Ch3 · Speedup"}
@@ -440,7 +440,7 @@ Per-task speedup vs conventional viewer
 :::
 
 ::: {.notes}
-"The Speedup column scales with task complexity. Raw MRI is barely faster — 1.1× — since a clean T1 is already quick. But skull segmentation, the bottom row, is about 20× — sixty seconds a scan down to three, same accuracy. The mosaic removes the slice-by-slice scrolling."
+"The speedup grows with the task. Raw MRI is barely faster, because a clean T1 is quick anyway. But skull segmentation, the bottom row, is about 20 times faster — sixty seconds a scan down to three, at the same accuracy. The mosaic removes the slice-by-slice scrolling."
 :::
 
 ## {.big-number data-menu-title="Ch3 · Adoption"}
@@ -472,7 +472,7 @@ Fernández-Lozano, 2024
 :::
 
 ::: {.notes}
-"That number — over 250,000 images rated on our instance now. Open-sourced on GitHub and DockerHub, used by labs beyond the original project. And the payoff for this thesis is the QC'd ADNI cohort it produced — the data feeding Chapters 4 and 6."
+"Over 250,000 images rated on our instance now. It's open-sourced on GitHub and DockerHub, and used by labs beyond the original project. For this thesis specifically, it produced the quality-controlled ADNI cohort that Chapters 4 and 6 rely on."
 :::
 
 # {.divider data-menu-title="Ch4 divider"}
@@ -498,7 +498,7 @@ Fernández-Lozano&nbsp;S, Fonov&nbsp;VS, Schoemaker&nbsp;D, Pruessner&nbsp;JC, P
 :::
 
 ::: {.notes}
-"Chapter 4, the methods workhorse. Two questions: can we automate HVR at scale, and does the ratio still amplify clinical signal once segmentation is automated?"
+"Chapter 4 is the methods chapter. Two questions: can we automate HVR at scale, and does the ratio still amplify clinical signal once the segmentation is automated?"
 
 [methods story: CNN matches manual · biomarker story: HVR rescues effect sizes]
 :::
@@ -524,7 +524,7 @@ Manual segmentation doesn't scale
 :::
 
 ::: {.notes}
-"That number is the motivation — two hours per subject to hand-trace the hippocampus and temporal horn. Times 1,641 ADNI scans, let alone 28,000 in UK Biobank, the manual route is dead on arrival."
+"The motivation is simple: it takes about two hours per subject to hand-trace the hippocampus and temporal horn. Times 1,641 ADNI scans — let alone 28,000 in UK Biobank — and doing it by hand just isn't possible."
 :::
 
 ## {.fig-leftright data-menu-title="Ch4 · Study design"}
@@ -568,7 +568,7 @@ U-Net schematic · Ronneberger et al., 2015
 :::
 
 ::: {.notes}
-"The figure is our segmenter — a 3D U-Net, image tile in, segmentation map out. We train on 80 manually-labelled scans, and the out-of-sample set spans controls, MCI, and AD, so we test on the atrophy we care about. Then we pit four methods — MALF, NLPB, this CNN, and FreeSurfer — on 1,641 ADNI baselines."
+"The figure is our segmenter, a 3D U-Net: image in, segmentation out. We train it on 80 manually-labelled scans, and the held-out set spans controls, MCI, and AD. Then we compare four methods — MALF, NLPB, this CNN, and FreeSurfer — on 1,641 ADNI baselines."
 :::
 
 ## {.fig-leftright data-menu-title="Ch4 · CNN matches manual"}
@@ -610,7 +610,7 @@ Fernández-Lozano, 2025
 :::
 
 ::: {.notes}
-"Each point is one subject — manual volume on the y, automated on the x. Follow the CNN in blue: tight on the identity line, correlation 0.99, Dice 0.94 to 0.96 — the rater-noise floor. MALF and NLPB drift off the line, especially in the atrophied range that matters most. The CNN wins on every metric."
+"Each point is one subject — manual volume against automated. The CNN, in blue, sits right on the identity line: correlation 0.99, essentially rater-level. MALF and NLPB drift off it, especially in the atrophied range that matters most. The CNN comes out ahead on every metric."
 :::
 
 ## {.fig-hero data-menu-title="Ch4 · HVR rescues effect sizes"}
@@ -645,7 +645,7 @@ HVR ≥ HCvol for every method · biggest gain where segmentation is weakest (MA
 :::
 
 ::: {.notes}
-"The table is each method's effect size for separating controls from AD — HC volume middle, HVR right. Read across any row: the right is always bigger. The top row is the punchline — MALF, the weakest, goes from a feeble −0.78 to −1.24 as a ratio, a 59 percent gain. The ratio captures the atrophy signal even when segmentation is noisy."
+"Each method's effect size separating controls from AD — volume in the middle, HVR on the right. The right is bigger in every row. MALF is the clearest case: a weak −0.78 with volume, but −1.24 as a ratio. The ratio recovers the signal even when the segmentation is poor."
 :::
 
 ## {.fig-hero data-menu-title="Ch4 · Age associations"}
@@ -684,7 +684,7 @@ Fernández-Lozano, 2025
 :::
 
 ::: {.notes}
-"The brain-behavior payoff, AD group. Left two columns are correlation with age, right two with cognition on ADAS — where lower is better, so negative is the right direction. Everywhere, the HVR column beats or ties the volume column beside it. MALF is again striking: volume is uncorrelated with both, yet the ratio recovers a strong minus 0.38 and minus 0.30. Discrimination, age, cognition — same rescue."
+"The link to behavior, in the AD group. Left two columns are correlation with age, right two with cognition — where lower is better, so we expect negatives. In every pair, HVR matches or beats volume. MALF stands out again: volume is uncorrelated, but the ratio recovers a clear signal. Same story across discrimination, age, and cognition."
 
 [CH/MCI groups and memory/RAVLT in backup]
 :::
@@ -710,7 +710,7 @@ CNN holds at biobank scale
 :::
 
 ::: {.notes}
-"And it's robust — the CNN's failure rate at scale is two scans out of 1,641, a tenth of a percent, versus about 1.5 percent for the others. Most accurate and most reliable — and it ships as a Docker container, the exact pipeline I run on 27,000 UK Biobank scans in Chapter 5 and the ADNI cohort in Chapter 6."
+"It's also reliable: the CNN failed on two scans out of 1,641, against about 1.5 percent for the others. Most accurate, most reliable, and it ships as a Docker container — the same pipeline I run on 27,000 UK Biobank scans in Chapter 5 and the ADNI cohort in Chapter 6."
 :::
 
 ::: {.slide-citation}
@@ -740,7 +740,7 @@ Fernández-Lozano&nbsp;S, Collins&nbsp;DL. Hippocampal-to-Ventricle Ratio as a H
 :::
 
 ::: {.notes}
-"From clinical validation to our largest sample — nearly 28,000 healthy UK Biobank participants. The hook is a long-standing controversy: hippocampal sex differences flip direction depending on head-size correction — a perfect stress test for HVR's head-size independence."
+"From clinical validation we move to our largest sample — nearly 28,000 healthy UK Biobank participants. The motivation is a long-standing controversy: reported hippocampal sex differences flip direction depending on the head-size correction. A good stress test for whether HVR really is head-size independent."
 
 [hook = the controversy on the next slide]
 :::
@@ -784,7 +784,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"The flow chart traces our sample down through QC to 27,680 participants, and the three branches at the bottom are our three orthogonal tests: adjustment-method comparison, ICV-matched pairs, brain-cognition SEM. The controversy in one line: after head-size correction, sex classification from the brain drops from over 80 percent to about 60 — so much of the 'sex difference' may be artifact."
+"The flow chart shows how we reach our sample, 27,680 participants, and the three branches at the bottom are our three tests: the adjustment-method comparison, the ICV-matched pairs, and the brain-cognition SEM. The controversy itself: once you correct for head size, you can classify sex from the brain only about 60 percent of the time, down from over 80. So a lot of the 'sex difference' may be artifact."
 :::
 
 ## {.fig-sidebar data-menu-title="Ch5 · Four methods"}
@@ -819,7 +819,7 @@ Each assumes something different about how brain volume scales with head size
 :::
 
 ::: {.notes}
-"The right column is the assumption each correction bakes in — proportions assumes perfect scaling, stereotaxic warps to a template, residualization assumes a linear fit. No consensus on which is right, and they give contradictory answers on the same region. That's the ambiguity HVR is built to sidestep."
+"The right column is the assumption behind each correction — proportions assumes perfect scaling, stereotaxic warps to a template, residualization assumes a linear fit. There's no agreement on which is right, and they can give opposite answers for the same region. That's the ambiguity HVR is meant to avoid."
 :::
 
 ## {.big-number data-menu-title="Ch5 · Matched proof"}
@@ -843,7 +843,7 @@ Match on head size: HC collapses, HVR persists
 :::
 
 ::: {.notes}
-"The single tightest test: 4,750 pairs matched on age and head size, so head size can't drive anything. The raw hippocampal difference collapses from minus 0.89 to zero — pure artifact. HVR drops too, to this 0.18, but stays significant. What survives is biology — and next we'll see it hold across every correction method."
+"The tightest test: 4,750 pairs matched on age and head size, so head size can't be driving anything. The raw hippocampal difference falls from minus 0.89 to essentially zero — it was artifact. HVR drops too, to this 0.18, but stays significant. What's left after matching is biology — and next we'll see it hold across every correction."
 :::
 
 ## {.fig-leftright data-menu-title="Ch5 · The reversal"}
@@ -883,7 +883,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"The headline. Each row is the sex difference for one measure-and-method; zero is no difference, right favors females. The hippocampus rows scatter all across — minus 0.89 unadjusted, plus 0.58 with proportions, a 1.5-SD swing from the method alone. But the top row, HVR, sits steady near plus 0.52 whatever the adjustment. If your sex difference flips when you change the denominator, you weren't measuring biology."
+"Each row is the sex difference for one measure and method; zero is no difference. The hippocampus rows are scattered all over — minus 0.89 unadjusted, plus 0.58 with proportions, a 1.5-SD swing from the method alone. The top row, HVR, stays near plus 0.52 whatever the adjustment. If your sex difference flips when you change the denominator, you weren't measuring biology."
 :::
 
 ## {.fig-leftright data-menu-title="Ch5 · Age × sex"}
@@ -923,7 +923,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"Now across age. Follow the purple HVR line — it climbs steadily, so men and women diverge more with age. The male HVR slope is 1.7× steeper than female. That 1.7 sits between the hippocampus at 1.4 and the ventricle at 2.0 — just what you'd expect if HVR integrates both. So HVR doesn't only hold at one age; it tracks a sex-differential trajectory."
+"Now over age. The purple HVR line climbs steadily, so the sexes separate more with age — the male slope is 1.7 times steeper. That sits between the hippocampus at 1.4 and the ventricle at 2.0, which is what you'd expect if HVR reflects both. So HVR doesn't just hold at one age; it tracks the divergence over time."
 :::
 
 ## {.fig-hero data-menu-title="Ch5 · Brain–cognition"}
@@ -961,7 +961,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"We reduce UK Biobank's 12 cognitive tests to a single general-cognition factor with a bifactor SEM, then ask whether each brain measure predicts it, by sex. The grid is the answer: check is significant, cross is not. Top row, HVR: checks in both sexes. But the residualized-HC row — check for women, red cross for men. The linear head-size adjustment strips cognition-relevant signal specifically in males. HVR keeps it."
+"We reduce UK Biobank's 12 cognitive tests to one general-cognition factor, then ask whether each brain measure predicts it, by sex. In the grid, a check means significant. HVR, top row, is significant in both sexes. But residualized HC is significant for women and not men — the linear correction removes cognition-relevant signal in men specifically. HVR keeps it."
 :::
 
 ## {.fig-leftright data-menu-title="Ch5 · Centiles"}
@@ -1001,7 +1001,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"The deliverable — sex-specific normative curves, females red on the left, males blue on the right, HVR on top with hippocampus and ventricle below. Each band is the percentiles across age; you read off where a patient falls. And these are exactly the curves Chapter 6 transfers into ADNI to z-score patients."
+"The deliverable: sex-specific normative curves — females red on the left, males blue on the right, HVR on top with hippocampus and ventricle below. Each band is the percentiles across age, so you see where a patient falls. And these are the curves Chapter 6 transfers into ADNI to z-score patients."
 :::
 
 # {.divider data-menu-title="Ch6 divider"}
@@ -1027,7 +1027,7 @@ Fernández-Lozano&nbsp;S, Villeneuve&nbsp;S, Collins&nbsp;DL; for the ADNI. Card
 :::
 
 ::: {.notes}
-"The capstone takes the normative HVR into ADNI to ask a loaded question. Many studies link the Framingham Risk Score to brain decline — but Framingham is dominated by age. So is that a true cardiovascular effect, or age in disguise?"
+"The last chapter takes the normative HVR into ADNI to ask a loaded question. A lot of studies link the Framingham Risk Score to brain decline, but Framingham is dominated by age. So is that a real cardiovascular effect, or just age in disguise?"
 
 [in prep, Alzheimer's & Dementia; medRxiv in progress]
 :::
@@ -1069,7 +1069,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"Two cohorts out of ADNI. The main branch is the primary cohort — 923 amyloid-positive, spanning normal, MCI, and AD. The highlighted side branch is the critical one: 317 amyloid-negative, cognitively-unimpaired controls — our counterfactual at the very end. Everything downstream is sex-stratified, since Framingham weights age differently by sex."
+"Two cohorts come out of ADNI. The main branch is the primary cohort, 923 amyloid-positive across normal, MCI, and AD. The highlighted branch matters for later: 317 amyloid-negative, cognitively-unimpaired controls, our counterfactual at the end. Everything is done by sex, since Framingham weights age differently for men and women."
 :::
 
 ## {.fig-hero data-menu-title="Ch6 · Norm transfer"}
@@ -1101,7 +1101,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"The bridge from Chapter 5: we z-score every ADNI scan against the UK Biobank model. The two histograms are our healthy controls — HVR left, volume right — and the check is whether they sit near the dashed 'expected zero.' They do, with a small offset since ADNI runs older. The norms transferred cleanly enough that within-ADNI comparisons stay valid."
+"This connects back to Chapter 5: we z-score every ADNI scan against the UK Biobank model. The histograms are our healthy controls, HVR on the left and volume on the right, and we check whether they sit near zero. They do, with a small offset because ADNI is older. So the norms carried over well enough for comparisons within ADNI."
 :::
 
 ## {.big-number data-menu-title="Ch6 · FRS age-confound"}
@@ -1129,7 +1129,7 @@ Dominated by age — and saturated — in an elderly cohort
 :::
 
 ::: {.notes}
-"Two problems, one slide. First, the numbers — these age coefficients are the heaviest inputs in the Framingham formula, so in an elderly cohort age explains most of the variance. 'Framingham predicts brain decline' could just as easily read 'age predicts brain decline.' Second, it saturates: capped at 30 percent, with 75 percent of women and 28 percent of men already at that ceiling, where it can't rank risk at all. Either way, raw Framingham is the wrong instrument."
+"Two problems. First, these age coefficients are the heaviest inputs in the Framingham formula, so in an older cohort age explains most of the score — 'Framingham predicts brain decline' could just as easily read 'age predicts brain decline.' Second, it saturates: capped at 30 percent, with 75 percent of women and 28 percent of men already at the ceiling, where it can't tell anyone apart. Either way, raw Framingham is the wrong tool here."
 
 [ceiling histograms in backup]
 :::
@@ -1169,7 +1169,7 @@ Age is an internal weight, not an external confounder
 :::
 
 ::: {.notes}
-"Two approaches. Left, with the cross, is the naive fix — add age as a covariate. It fails, because age is inside the formula by design; regressing it out leaves the age-weighting baked in. Right, with the check, is ours: a MIMIC model treats age as a cause of a latent cardiovascular factor built from the raw biomarkers, so age is removed at the latent level, before the score exists."
+"Two approaches. On the left, the naive fix — add age as a covariate. That fails, because age is built into the formula; regressing it out afterwards leaves the weighting inside. On the right, ours: a MIMIC model treats age as a cause of a latent cardiovascular factor built from the raw biomarkers, so age comes out before the score is even formed."
 :::
 
 ## {.big-number data-menu-title="Ch6 · MIMIC equation"}
@@ -1197,7 +1197,7 @@ Age explains a tiny slice of latent cardiovascular risk — the residual ζ is C
 :::
 
 ::: {.notes}
-"The model is the line in the title — latent risk equals gamma times age, plus a residual. The big number is the payoff: age explains just 1.6 percent of that latent factor; the rest is biomarkers. That residual is CVR-mimic. It still correlates 0.3 to 0.5 with Framingham, since they share biomarkers — what they don't share is age."
+"The model is the line in the title: latent risk equals gamma times age, plus a residual. Age explains only 1.6 percent of that factor — the rest is biomarkers. The residual is what I call CVR-mimic. It still correlates with Framingham, because they share biomarkers; what they don't share is age."
 :::
 
 ## {.fig-hero data-menu-title="Ch6 · CVR validation"}
@@ -1229,7 +1229,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"A quick sanity check. On the left, Framingham climbs steeply with age. On the right, CVR-mimic is flat — near zero, by construction. And their 0.3-to-0.5 correlation confirms we didn't throw the cardiovascular signal out with the age bathwater."
+"A quick check that it worked. On the left, Framingham climbs steeply with age. On the right, CVR-mimic is flat, near zero, by construction. And their correlation of 0.3 to 0.5 tells us we kept the cardiovascular signal — we only removed the age."
 :::
 
 ## {.fig-pure data-menu-title="Ch6 · Cognition setup"}
@@ -1279,7 +1279,7 @@ Kang et al., 2023 (ADSP-PHC composites)
 :::
 
 ::: {.notes}
-"A brief detour on the outcomes. The three columns are the cognitive composites — memory, language, executive function. They're Kang's ADSP-PHC harmonization, co-calibrated across cohorts onto one scale. My contribution is the line below: each composite enters the growth model carrying its own measurement-error estimate, so the model needn't estimate noise from sparse data. Three domains by two sexes is why you'll see 'six models.'"
+"A quick word on the outcomes — the three cognitive composites: memory, language, executive function. Those come from Kang's ADSP-PHC harmonization, calibrated across cohorts onto one scale. What I add is below: each enters the model carrying its own measurement error, so the model doesn't estimate that from sparse data. Three domains times two sexes is why you'll hear 'six models.'"
 :::
 
 ## {.fig-hero data-menu-title="Ch6 · Mediation a-path"}
@@ -1314,7 +1314,7 @@ LGCM a-path (risk → HVR slope) · 6 models = 3 domains × 2 sexes
 :::
 
 ::: {.notes}
-"The headline, and the grid makes it stark. Does cardiovascular risk cause hippocampal atrophy? Middle column Framingham, right CVR-mimic. Framingham is all checks — six of six. CVR-mimic is all crosses — zero of six. The only difference between them is age; strip it out and the effect vanishes. The prior literature was measuring an age-weighting artifact."
+"Does cardiovascular risk cause hippocampal atrophy? Framingham is significant in all six models — the middle column. CVR-mimic, in none — zero of six. The only thing separating them is age, so once you remove it, the effect is gone. The prior literature was measuring an age-weighting artifact."
 :::
 
 ## {.fig-leftright data-menu-title="Ch6 · LME forest"}
@@ -1354,7 +1354,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"Question two — moderation: does cardiovascular burden change how much hippocampal decline costs cognitively? Orange is Framingham, blue CVR-mimic; a point whose interval clears the dashed zero line is significant. Across both panels, the orange points clear zero in all six cells. The blue points mostly straddle zero — significant in just one, female executive function. Same as the a-path: Framingham dominates, age-adjusted risk is nearly null."
+"The second question is moderation: does cardiovascular burden change how much hippocampal decline costs you cognitively? Orange is Framingham, blue is CVR-mimic, significant when the interval clears the dashed zero line. The orange points clear it in all six cells; the blue ones mostly sit on zero — significant in just one, female executive function. Same picture as the a-path: Framingham dominates, age-adjusted risk is almost nothing."
 :::
 
 ## {.fig-leftright data-menu-title="Ch6 · A−/CU reversal"}
@@ -1396,7 +1396,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"The pivotal test. Same forest, re-run in the 317 amyloid-negative controls. Watch what flips: the orange Framingham points pull back across zero, no longer significant, while the blue CVR-mimic points now clear it. In amyloid-positive AD, atrophy is so dominated by neurodegeneration that a true cardiovascular signal is drowned out, and Framingham only 'predicts' through age. Pull amyloid out, and the genuine, age-independent effect finally surfaces."
+"The key test. Same forest, re-run in the 317 amyloid-negative controls, and the pattern flips: the orange Framingham points pull back across zero and lose significance, while the blue CVR-mimic points now clear it. In amyloid-positive AD, neurodegeneration so dominates the atrophy that a real cardiovascular signal gets buried, and Framingham only looks predictive through its age. Take amyloid out, and the genuine, age-independent effect shows up."
 :::
 
 ## {.fig-pure data-menu-title="Ch6 · Coupling"}
@@ -1430,7 +1430,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"To answer that, look at the link itself — the b-path, hippocampal decline to cognitive decline. It's significant in the same four of six cells whether you model Framingham or CVR-mimic — identical. So the two diverge only on the upstream a-path, where the age artifact lives. Downstream, the coupling holds regardless of risk measure — a robust, predictor-agnostic neurodegenerative signal, not vascular damage."
+"To answer that, look at the link itself — the b-path, hippocampal decline to cognitive decline. It's significant in the same four of six cells whether you use Framingham or CVR-mimic; identical there. So the two only differ on the upstream a-path, where the age artifact lives. Downstream, the coupling holds either way — a neurodegenerative signal, not vascular damage."
 :::
 
 ## {.fig-pure data-menu-title="Ch6 · Reserve"}
@@ -1464,7 +1464,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"Where it acts wraps up the chapter: CVR-mimic doesn't cause hippocampal decline — no mediation — but it modifies how much that decline costs cognitively, especially executive function in women. That's the signature of cognitive reserve: reducing the brain's capacity to maintain cognition at a given structural level. And the clinical punchline — cardiovascular burden is a modifiable, reserve-like target: manage it and you may not slow atrophy, but you preserve the cognition patients actually feel."
+"So where does it act? CVR-mimic doesn't cause the hippocampal decline — no mediation — but it changes how much that decline costs cognitively, especially executive function in women. That looks like cognitive reserve. And it matters clinically, because cardiovascular burden is modifiable: manage it, and you may not slow the atrophy, but you protect the cognition patients actually notice."
 :::
 
 # {.divider data-menu-title="Closing divider"}
@@ -1518,7 +1518,7 @@ What this thesis built
 :::
 
 ::: {.notes}
-"Four deliverables, one per chapter, each an open-source tool available today: Qrater, the automated HVR pipeline, the sex-specific normative curves, and the MIMIC age-adjusted cardiovascular framework. Three published or preprinted, as the journal names show, with Chapter 6 in preparation."
+"Four deliverables, one per chapter, all open-source: Qrater, the automated HVR pipeline, the sex-specific normative curves, and the MIMIC cardiovascular framework. Three are published or in preprint, and Chapter 6 is in preparation."
 
 [don't recap the chapters — the dividers did that]
 :::
@@ -1552,7 +1552,7 @@ Quality-controlled imaging → automated HVR segmentation → sex-specific norma
 :::
 
 ::: {.notes}
-"The arrow is the practical contribution end to end — quality-controlled imaging, automated HVR, normative z-scores, clinical inference. And the thread through all four chapters: methodological vigilance is how we tell artifacts from biology. The reversal of hippocampal sex differences, and the disappearance of cardiovascular effects after age adjustment, show that prior conclusions were, in part, products of the tools rather than neurobiology."
+"The arrow is the practical contribution, end to end: quality-controlled imaging, automated HVR, normative z-scores, clinical inference. And the thread through all four chapters is that being careful about method is how we separate artifact from biology. The sex differences that reversed, and the cardiovascular effects that vanished after adjusting for age, show that some earlier conclusions came from the tools, not the neurobiology."
 :::
 
 ## {.fig-pure data-menu-title="Thank you"}
@@ -1581,5 +1581,5 @@ My friends and family<br>
 :::
 
 ::: {.notes}
-"Thank you — to my supervisor and committee, to my coauthors, collaborators, and labmates, and to my friends and family. This work was supported by CIHR, the International Progressive MS Alliance, and the Charron family, and used data from ADNI. I'm happy to take your questions."
+"Thank you — to my supervisor and my committee, to my coauthors, collaborators, and labmates, and to my friends and family. This work was funded by CIHR, the International Progressive MS Alliance, and the Charron family, and used data from ADNI. I'd be glad to take your questions."
 :::
