@@ -94,7 +94,6 @@
   color: var(--muted);
   font-weight: 500;
   line-height: 1.5;
-  max-width: 900px;
 }
 
 .divider .divider-pub em {
@@ -421,6 +420,14 @@
   border-collapse: collapse;
   margin: 0 auto;
   border-spacing: 0;
+}
+
+/* Widen the short centered tables on fig-hero slides so columns
+   aren't pinched in the middle; wide tables (e.g. speedup) already
+   exceed this floor and are unaffected. */
+.reveal section.fig-hero .slide-body table {
+  min-width: 800px;
+  font-size: 0.86em;
 }
 
 .reveal table thead th {
