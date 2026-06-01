@@ -1184,7 +1184,7 @@ Age is an internal weight, not an external confounder
 
 ::: {.text-col}
 
-[**MIMIC SEM ✓**]{.subhead}
+[**MIMIC SEM ✓**]{.subhead}<br>[Multiple Indicators, Multiple Causes]{.accent}
 
 - Age as [*cause*]{.accent} of a latent CVR factor
 - BP · chol · diabetes · smoking → CVR
@@ -1195,7 +1195,7 @@ Age is an internal weight, not an external confounder
 :::
 
 ::: {.notes}
-"Two approaches. On the left, the naive fix — add age as a covariate. That fails, because age is built into the formula; regressing it out afterwards leaves the weighting inside. On the right, ours: a MIMIC model treats age as a cause of a latent cardiovascular factor built from the raw biomarkers, so age comes out before the score is even formed."
+"Two approaches. On the left, the naive fix — add age as a covariate. That fails, because age is built into the formula; regressing it out afterwards leaves the weighting inside. On the right, ours: a MIMIC model — Multiple Indicators, Multiple Causes — treats age as a cause of a latent cardiovascular factor built from the raw biomarkers, so age comes out before the score is even formed."
 :::
 
 ## {.big-number data-menu-title="Ch6 · MIMIC equation"}
@@ -1490,7 +1490,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"So where does it act? CVR-mimic doesn't cause the hippocampal decline — no mediation — but it changes how much that decline costs cognitively, especially executive function in women. That looks like cognitive reserve. And it matters clinically, because cardiovascular burden is modifiable: manage it, and you may not slow the atrophy, but you protect the cognition patients actually notice."
+"So where does it act? CVR-mimic doesn't cause the hippocampal decline — no mediation — but it changes how much that decline costs cognitively, especially executive function in women. That looks like cognitive reserve, and unlike amyloid or tau, cardiovascular burden is modifiable — which makes it a potential target for preserving cognition."
 :::
 
 # {.divider data-menu-title="Closing divider"}
@@ -1600,12 +1600,12 @@ My coauthors, collaborators, and labmates<br>
 My friends and family<br>
 
 [**Funding:**]{.accent} CIHR · International Progressive MS Alliance · Famille Charron<br>
-[**Data:**]{.accent} the ADNI investigators
+[**Data:**]{.accent} the ADNI investigators · UK Biobank
 
 :::
 
 :::
 
 ::: {.notes}
-"Thank you — to my supervisor and my committee, to my coauthors, collaborators, and labmates, and to my friends and family. This work was funded by CIHR, the International Progressive MS Alliance, and the Charron family, and used data from ADNI. I'd be glad to take your questions."
+"Thank you — to my supervisor and my committee, to my coauthors, collaborators, and labmates, and to my friends and family. This work was funded by CIHR, the International Progressive MS Alliance, and the Charron family, and used data from ADNI and UK Biobank. I'd be glad to take your questions."
 :::
