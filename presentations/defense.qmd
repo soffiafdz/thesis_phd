@@ -114,7 +114,7 @@ Image: Alzheimer's Association · Livingston et al., 2024 · Jack et al., 2024
 :::
 
 ::: {.notes}
-"On the right, a healthy brain next to an advanced Alzheimer's brain — the cortex thins, the ventricles expand. It's the leading cause of dementia, and the frameworks define it by amyloid, tau, and neurodegeneration. Structural MRI captures that last one, and that's what HVR measures."
+"Alzheimer's is the leading cause of dementia — 55 million cases today, 139 million by 2050, already over 800 billion dollars a year. Its pathology spans several systems: the 2018 NIA-AA framework had amyloid, tau, and neurodegeneration, and the 2024 update adds inflammation, synuclein, and vascular injury. Structural MRI captures that neurodegeneration — the thin cortex and enlarged ventricles you see on the right — and that's what HVR measures."
 :::
 
 ## {.fig-leftright data-menu-title="Why hippocampus"}
@@ -154,7 +154,7 @@ Gray's Anatomy (Gray739) · Wikimedia Commons
 :::
 
 ::: {.notes}
-"This is the hippocampus, highlighted here in the medial temporal lobe. It's the structural marker we rely on most in AD, and it's where tau strikes first. Normal aging shrinks it about 1.4 percent a year; in AD that's closer to five."
+"This is the hippocampus, highlighted here in the medial temporal lobe. It's the most-used structural marker in AD — it anchors clinical trials, diagnostic frameworks, and longitudinal studies — and it's where tau strikes first. Normal aging shrinks it about 1.4 percent a year; in AD that's closer to five."
 :::
 
 ## {.big-number data-menu-title="Variability problem"}
@@ -361,14 +361,40 @@ Visual QC was the bottleneck
 "Visual inspection is still the gold standard for QC, but the existing tools were fragmented — single-user, or tied to one modality. We needed something many raters could use on one dataset, in parallel."
 :::
 
-## {.fig-triptych data-menu-title="Ch3 · Qrater + tasks"}
+## {.fig-hero data-menu-title="Ch3 · Interface"}
 
 ::: {.eyebrow}
 Chapter 3 · The tool
 :::
 
 ::: {.slide-title}
-Qrater: three QC tasks, three mosaic formats
+Qrater — web-based, containerized, collaborative
+:::
+
+::: {.slide-body}
+![](thesis-figures/ch3_qrater/fig1_qrater_interface.png)
+:::
+
+::: {.slide-footer}
+Flask + MySQL + Redis in Docker · rates any 2D rendering · 8+ concurrent users.
+:::
+
+::: {.slide-citation}
+Fernández-Lozano, 2024
+:::
+
+::: {.notes}
+"This is Qrater, the tool I built for this. It's a containerized web app — Flask, MySQL, and Redis in Docker — that deploys in one command. It rates any 2D image, so it works for any task, and multiple raters can work the same dataset at once."
+:::
+
+## {.fig-triptych data-menu-title="Ch3 · Three tasks"}
+
+::: {.eyebrow}
+Chapter 3 · What we tested
+:::
+
+::: {.slide-title}
+Three QC tasks, three mosaic formats
 :::
 
 ::: {.slide-body}
@@ -404,7 +430,7 @@ Qrater: three QC tasks, three mosaic formats
 :::
 
 ::: {.slide-footer}
-Containerized web app, rates any 2D rendering · 60-slice mosaic each · 11 raters vs senior-expert gold standard.
+60-slice mosaic each · 11 raters vs senior-expert gold standard.
 :::
 
 ::: {.slide-citation}
@@ -412,7 +438,7 @@ Fernández-Lozano, 2024
 :::
 
 ::: {.notes}
-"Qrater is a containerized web app that rates any 2D image, so it works for any task. We tested three, increasing in difficulty: raw T1 on the left, linear registration in the centre, skull segmentation on the right. Each is a mosaic — that's what lets a whole 3D volume be rated as one image. Eleven raters judged each against a senior-expert gold standard."
+"We tested three tasks, increasing in difficulty: raw T1 on the left, linear registration in the centre with the template in red, skull segmentation on the right. Each is a mosaic — that's what lets a whole 3D volume be rated as one image. Eleven raters, two experts and nine trainees, judged each against a senior-expert gold standard."
 :::
 
 ## {.fig-hero data-menu-title="Ch3 · Speedup"}
@@ -498,7 +524,7 @@ Fernández-Lozano&nbsp;S, Fonov&nbsp;VS, Schoemaker&nbsp;D, Pruessner&nbsp;JC, P
 :::
 
 ::: {.notes}
-"Chapter 4 is the methods chapter. Two questions: can we automate HVR at scale, and does the ratio still amplify clinical signal once the segmentation is automated?"
+"Chapter 4 is the methods chapter. Two questions: can we automate HVR at scale, and — for the first time in clinical data — does the ratio actually amplify clinical signal?"
 
 [methods story: CNN matches manual · biomarker story: HVR rescues effect sizes]
 :::
@@ -610,7 +636,7 @@ Fernández-Lozano, 2025
 :::
 
 ::: {.notes}
-"Each point is one subject — manual volume against automated. The CNN, in blue, sits right on the identity line: correlation 0.99, essentially rater-level. MALF and NLPB drift off it, especially in the atrophied range that matters most. The CNN comes out ahead on every metric."
+"Each point is one subject — manual volume against automated. The CNN, in orange, sits right on the identity line: correlation 0.99, essentially rater-level. MALF in blue and NLPB in pink drift off it, especially in the atrophied range that matters most. The CNN comes out ahead on every metric."
 :::
 
 ## {.fig-hero data-menu-title="Ch4 · HVR rescues effect sizes"}
@@ -867,7 +893,7 @@ HC reverses across methods · HVR doesn't
 ::: {.body-text}
 [**HC**]{.subhead} swings d = −0.89 → +0.58<br>a [**1.5-SD**]{.accent} range across methods.
 
-[**HVR**]{.subhead} holds at d ≈ [**+0.52**]{.accent} (female advantage), regardless of adjustment.
+[**HVR**]{.subhead} a single [**self-normalized**]{.accent} value, d ≈ [**+0.52**]{.accent} (female advantage) — no correction to choose.
 :::
 
 :::
@@ -883,7 +909,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"Each row is the sex difference for one measure and method; zero is no difference. The hippocampus rows are scattered all over — minus 0.89 unadjusted, plus 0.58 with proportions, a 1.5-SD swing from the method alone. The top row, HVR, stays near plus 0.52 whatever the adjustment. If your sex difference flips when you change the denominator, you weren't measuring biology."
+"Each row is the sex difference for one measure and method; zero is no difference. The hippocampus appears four times, once per correction — and the values are scattered all over, from minus 0.89 unadjusted to plus 0.58 with proportions, a 1.5-SD swing that comes entirely from which method you pick. HVR is the single row at the top, because it's self-normalizing — there's no correction to choose. So the hippocampal answer depends on an arbitrary methodological choice, and HVR's doesn't."
 :::
 
 ## {.fig-leftright data-menu-title="Ch5 · Age × sex"}
@@ -923,7 +949,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"Now over age. The purple HVR line climbs steadily, so the sexes separate more with age — the male slope is 1.7 times steeper. That sits between the hippocampus at 1.4 and the ventricle at 2.0, which is what you'd expect if HVR reflects both. So HVR doesn't just hold at one age; it tracks the divergence over time."
+"Now over age. The purple HVR line climbs steadily, so the sexes separate more with age — the male slope is 1.7 times steeper. That sits between the hippocampus at 1.4 and the ventricle at 2.0, which is what you'd expect if HVR reflects both."
 :::
 
 ## {.fig-hero data-menu-title="Ch5 · Brain–cognition"}
@@ -1229,7 +1255,7 @@ Fernández-Lozano, 2026
 :::
 
 ::: {.notes}
-"A quick check that it worked. On the left, Framingham climbs steeply with age. On the right, CVR-mimic is flat, near zero, by construction. And their correlation of 0.3 to 0.5 tells us we kept the cardiovascular signal — we only removed the age."
+"A quick check that it worked. On the left, Framingham climbs steeply with age. On the right, CVR-mimic is flat against age, near zero, by construction. And CVR-mimic still correlates 0.3 to 0.5 with Framingham itself — so we kept the cardiovascular signal and only removed the age."
 :::
 
 ## {.fig-pure data-menu-title="Ch6 · Cognition setup"}
