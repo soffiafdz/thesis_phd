@@ -426,7 +426,7 @@
    aren't pinched in the middle; wide tables (e.g. speedup) already
    exceed this floor and are unaffected. */
 .reveal section.fig-hero .slide-body table {
-  min-width: 800px;
+  min-width: 940px;
   font-size: 0.86em;
 }
 
