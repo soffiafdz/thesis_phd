@@ -1,0 +1,35 @@
+%!
+% Ghostscript prefix file for producing a PDF/A-2b thesis PDF.
+% Used by scripts/make_pdfa.sh. Edit /Title and /Author if the
+% thesis title or author change.
+
+/ICCProfile (/usr/share/color/icc/ghostscript/srgb.icc)
+def
+
+[ /Title (The hippocampal-to-ventricle ratio: validation, normative modeling, and clinical application of a self-normalizing biomarker for brain aging)
+  /Author (Sofia Fernandez-Lozano)
+  /DOCINFO pdfmark
+
+[/_objdef {icc_PDFA} /type /stream /OBJ pdfmark
+[{icc_PDFA}
+<<
+  /N currentpagedevice /ProcessColorModel known {
+    currentpagedevice /ProcessColorModel get dup /DeviceGray eq
+    {pop 1} {
+      /DeviceRGB eq
+      {3}{4} ifelse
+    } ifelse
+  } {
+    (ERROR, unable to determine ProcessColorModel) == flush
+  } ifelse
+>> /PUT pdfmark
+[{icc_PDFA} ICCProfile (r) file /PUT pdfmark
+
+[/_objdef {OutputIntent_PDFA} /type /dict /OBJ pdfmark
+[{OutputIntent_PDFA} <<
+  /Type /OutputIntent
+  /S /GTS_PDFA1
+  /DestOutputProfile {icc_PDFA}
+  /OutputConditionIdentifier (sRGB)
+>> /PUT pdfmark
+[{Catalog} <</OutputIntents [ {OutputIntent_PDFA} ]>> /PUT pdfmark

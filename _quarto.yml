@@ -13,8 +13,8 @@ knitr:
     dev: "cairo_pdf"
 
 book:
-  title: "The Hippocampal-to-Ventricle Ratio: Validation, Normative Modeling, and Clinical Application of a Self-Normalizing Biomarker for Brain Aging"
-  output-file: Fernandez2026
+  title: "The hippocampal-to-ventricle ratio: validation, normative modeling, and clinical application of a self-normalizing biomarker for brain aging"
+  output-file: Fernandez-Lozano_Sofia_IPN_thesis
   author: "Sofía Fernández-Lozano"
 
   chapters:
