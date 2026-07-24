@@ -65,3 +65,19 @@ replay_pid*.log
 
 # --- Submission guidelines reference (not thesis source) ---
 /mythesis_guidelines_final_thesis_submission.pdf
+
+# --- Participant data & derived outputs from paper subtrees (kept local, NEVER committed) ---
+source/paper1/data/
+source/paper2/data/
+source/paper2/lists/
+source/paper3/data/
+source/paper3/outputs/
+source/paper3/models/
+source/paper3/logs/
+source/paper4/data/
+source/paper4/outputs/
+source/paper4/models/
+source/paper4/logs/
+source/paper4/ADNI_docs/
+source/paper4/docs/openmx_audit/
+source/paper4/icmje_coi_disclosure.docx
