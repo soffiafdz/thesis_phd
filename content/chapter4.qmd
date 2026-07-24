@@ -425,7 +425,8 @@ ADNI-2, and ADNI-GO cohorts.
 
 Training of the segmentation algorithms was done using manual HC
 labels and the surrounding temporal horns of the lateral
-ventricles ($N = 80$). This data and the manual segmentation
+ventricles from 80 cognitively healthy individuals ($N = 80$).
+This data and the manual segmentation
 protocol are identical to those described in Schoemaker et al.
 [@schoemaker2019; @collins2010]. The labels were segmented by
 trained neuroanatomical experts and are considered the ground
@@ -524,7 +525,7 @@ HCvol and calculated HVR for each of the different methods. HVR
 was calculated using HCvol and CSFvol:
 
 $$
-\text{HVR} = \frac{\text{HCvol}}{\text{HCvol} + \text{CSFvol}}
+\text{HVR} = \frac{\text{HCvol}}{\text{HCvol} + \text{CSFvol}}.
 $$ {#eq-hvr}
 When calculating HVR using the FreeSurfer volumes, CSFvol was
 defined as the volume of the inferior lateral ventricle. For
@@ -607,7 +608,7 @@ of the means is standardized only by the control's group
 standard deviation:
 
 $$
-\Delta = \frac{M_{AD} - M_{CN}}{\sigma_{CN}}
+\Delta = \frac{M_{AD} - M_{CN}}{\sigma_{CN}}.
 $$ {#eq-glass}
 The CIs were calculated using the
 bias-corrected-and-accelerated bootstrap method [@efron1987]
@@ -1342,7 +1343,7 @@ effect on the segmentation particularly for the MCI and AD
 groups. This side difference resulted significant in the robust
 two-way mixed ANOVA for kappa, $F(1, 25.03) = 8.48$, and
 sensitivity, $F(1, 25.12) = 8.47$; both FDR-adjusted
-$p = 0.37$.
+$p = 0.037$.
 Neither clinical group nor the interaction between group and
 clinical label were significant (@tbl-s7-ch4).
 
@@ -1770,7 +1771,7 @@ subscores of learning from RAVLT and the scores of ADAS13 for
 all four segmentation methods are presented in @fig-associations.
 The correlation coefficients for HVR are presented as well. All
 correlations and comparisons were corrected for multiple
-comparisons. We found a significant positive association
+comparisons. We found a significant negative association
 ($p < 0.001$) between HCvol and Age across all clinical groups
 for FreeSurfer ($N = 1589$), CNN ($N = 1612$), and NLPB
 ($N = 1600$); for MALF ($N = 1590$), the correlation was
@@ -1961,7 +1962,7 @@ if (!is.null(corr_data)) {
           inherit.aes = FALSE
         ) +
         ylim(-0.65, 0.5) +
-        scale_x_discrete(labels = c(
+        scale_x_discrete(expand = expansion(add = c(0.75, 0.9)), labels = c(
           "HCv" = paste0(
             "<span style='color: darkred;'>",
             "HCv</span>"
