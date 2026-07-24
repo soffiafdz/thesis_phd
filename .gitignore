@@ -1,5 +1,6 @@
 /.quarto/
 _book/
+_freeze/
 renv/library/
 renv/staging/
 renv/python/
@@ -17,3 +18,47 @@ source/paper4/outputs
 presentations/mockups/
 presentations/mockups_preview.pdf
 presentations/content_briefs/
+
+# --- Editor / R session junk ---
+.Rhistory
+.Renviron
+*.bak
+hs_err_pid*.log
+replay_pid*.log
+
+# --- Rendered figure outputs (regenerated from _freeze) ---
+/content/*_files/
+
+# --- Pipeline run logs ---
+/logs/
+
+# --- Symlink to external slides directory ---
+/slides_thesis-seminar
+
+# --- CONFIDENTIAL: examiner & supervisor feedback (never publish) ---
+/Fernandez_recommendation_submit.pdf
+/Olsen_ExternalAppraisal.pdf
+/Fernandez20260408 DLC chap 1-5 comments.pdf
+/ThesisFernandez2026 2026.03.24.pdf
+
+# --- Third-party unpublished work & reviews (not ours to share) ---
+/SNovozhilova_OHBM_2026_articleDraft.pdf
+/novozhilova_my_comments.html
+/novozhilova_template_review.html
+/past_examples/
+
+# --- Grants & awards (personal) ---
+/grants_submissions/
+/VAST_Fernandez_2026_complete.pdf
+/rising-stars-trainee-awards-2026.pdf
+
+# --- Defense preparation notes (personal) ---
+/defense_answers.md
+/defense_questions.md
+/defense_prep.html
+/presentations/defense_prep.html
+
+# --- Working/scratch bibliographies (unique uncited entries; kept local) ---
+/Background.bib
+/newch1.bib
+/newch2.bib
