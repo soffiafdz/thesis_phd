@@ -62,3 +62,6 @@ replay_pid*.log
 /Background.bib
 /newch1.bib
 /newch2.bib
+
+# --- Submission guidelines reference (not thesis source) ---
+/mythesis_guidelines_final_thesis_submission.pdf
