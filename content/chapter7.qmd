@@ -551,9 +551,9 @@ Finally, the normative framework was transferred to a
 clinical Alzheimer's disease cohort, revealing that the
 widely reported association between cardiovascular risk and
 brain atrophy is largely driven by age-confounding within
-the Framingham Risk Score --- a conclusion reinforced by a
+the Framingham Risk Score---a conclusion reinforced by a
 complementary analysis in amyloid-negative participants
-showing the reversed pattern --- while hippocampal-cognitive
+showing the reversed pattern---while hippocampal-cognitive
 coupling persists regardless of how cardiovascular risk is
 measured (Chapter 6).
 
@@ -576,9 +576,8 @@ risk score construction is not peripheral to scientific
 discovery but is itself how artifacts are distinguished from
 biology. The reversal of hippocampal sex differences across
 correction methods and the disappearance of cardiovascular
-risk effects upon age adjustment --- confirmed by the
-complementary reversal in amyloid-negative participants ---
-are not secondary findings; they show that the field's prior
+risk effects upon age adjustment---confirmed by the
+complementary reversal in amyloid-negative participants---are not secondary findings; they show that the field's prior
 conclusions on these topics were, in part, products of
 analytical tools rather than of the underlying
 neurobiology.
